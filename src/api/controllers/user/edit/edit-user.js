@@ -1,16 +1,6 @@
 import { User } from '../../../../models/index.js';
 import { validateEditUser } from '../../../validators/user.validator.js';
-import { errorHelper, logger, getText, turkishToEnglish } from '../../../../utils/index.js';
-import { awsAccessKey, awsSecretAccessKey, awsRegion, bucketName } from '../../../../config/index.js';
-import aws from 'aws-sdk';
-const { S3 } = aws;
-
-const s3 = new S3({
-  accessKeyId: awsAccessKey,
-  secretAccessKey: awsSecretAccessKey,
-  region: awsRegion,
-  signatureVersion: 'v4',
-});
+import { errorHelper, logger, getText } from '../../../../utils/index.js';
 
 export default async (req, res) => {
   const { error } = validateEditUser(req.body);
@@ -45,21 +35,6 @@ export default async (req, res) => {
   user.username = req.body.username;
   }
   let hasError = false;
-  if (req.file) {
-  const params = {
-    Bucket: bucketName,
-    Key: turkishToEnglish(user.name).replace(/\s/g, '').toLowerCase() + '/' + user._id + '/' + Date(Date.now()).toLowerCase().substring(0, 15).replace(/\s/g, '-'),
-    Body: req.file.buffer,
-    ContentType: req.file.mimetype,
-  };
-
-  await s3.upload(params).promise().then((data) => {
-    user.photoUrl = data.Location;
-  }).catch(err => {
-    hasError = true;
-    return res.status(500).json(errorHelper('00087', req, err.message)).end();
-  });
-  }
 
   if (!hasError) {
   await user.save().catch((err) => {
@@ -69,7 +44,7 @@ export default async (req, res) => {
   //NOTE: The only thing we should send to the front is the url of the uploaded photo. Front-end knows all other changes.
   logger('00086', req.user._id, getText('en', '00086'), 'Info', req);
   return res.status(200).json({
-    resultMessage: { en: getText('en', '00086'), tr: getText('tr', '00086') },
+    resultMessage: { en: getText('en', '00086') },
     resultCode: '00086',
     photoUrl: user.photoUrl
   });
@@ -107,7 +82,7 @@ export default async (req, res) => {
  *                  type: string
  *                language:
  *                  type: string
- *                  enum: ['tr', 'en']
+ *                  enum: ['en']
  *                gender:
  *                  type: string
  *                  enum: ['male', 'female', 'other']

@@ -27,7 +27,7 @@ const userSchema = new Schema({
   },
   language: {
     type: String,
-    enum: ['tr', 'en'],
+    enum: ['en'],
     default: 'en',
   },
   isPremium: {
@@ -101,7 +101,7 @@ export default User
 *           enum: ['user', 'admin', 'creator', 'reader']
 *         language:
 *           type: string
-*           enum: ['tr', 'en']
+*           enum: ['en']
 *         isPremium:
 *           type: boolean
 *         gender:

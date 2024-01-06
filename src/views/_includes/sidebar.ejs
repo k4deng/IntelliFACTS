@@ -1,0 +1,91 @@
+                <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+                    <!-- Sidebar - Brand -->
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+                        <div class="sidebar-brand-icon">
+                            <i class="fa-solid fa-bowling-ball"></i>
+                            <!--<img class="img-fluid p-3" src="/public/img/logo.png" alt="<%= site.name %> Logo">-->
+                        </div>
+                        <div class="sidebar-brand-text mx-3"><%= site.name %></div>
+                    </a>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
+
+                    <!-- Nav Item - Dashboard -->
+                    <li class="nav-item loc1">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Dashboard</span></a>
+                    </li>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+                        Add Stats
+                    </div>
+
+                    <!-- Nav Item - Charts -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stats/create">
+                            <i class="fas fa-fw fa-calendar-plus"></i>
+                            <span>Create Record</span></a>
+                    </li>
+
+                    <!-- Nav Item - Tables -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stats/obc/09-17-2023/edit">
+                            <i class="fas fa-fw fa-pen-to-square"></i>
+                            <span>Edit Last Record</span></a>
+                    </li>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+                        History
+                    </div>
+
+                    <!-- Nav Item - Charts -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-fw fa-globe"></i>
+                            <span>Overall Stats</span></a>
+                    </li>
+
+                    <!-- Nav Item - OBC Stats Collapse Menu -->
+                    <li class="nav-item">
+                      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOBC" aria-expanded="true" aria-controls="collapseOBC">
+                          <i class="fas fa-fw fa-building"></i>
+                          <span>OBC</span>
+                      </a>
+                      <div id="collapseOBC" class="collapse" aria-labelledby="headingOBC" data-parent="#accordionSidebar">
+                          <div class="bg-white py-2 collapse-inner rounded">
+                              <h6 class="collapse-header">Past OBC Stats:</h6>
+                              <a class="collapse-item" href="/stats/obc/09-17-2023">September 17th</a>
+                              <a class="collapse-item" href="/stats/obc/09-10-2023">September 10th</a>
+                              <a class="collapse-item" href="/stats/obc/09-03-2023">September 3rd</a>
+                              <a class="collapse-item" href="/stats/obc/all">View All</a>
+                          </div>
+                      </div>
+                    </li>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider d-none d-md-block">
+
+                    <!-- Sidebar Toggler (Sidebar) -->
+                    <div class="text-center d-none d-md-inline">
+                        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                    </div>
+
+                    <!-- Sidebar Message 
+                    <div class="sidebar-card d-none d-lg-flex">
+                        <img class="sidebar-card-illustration mb-2" src="/public/img/undraw_rocket.svg" alt="...">
+                        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
+                        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+                    </div> -->
+
+                </ul>

@@ -3,11 +3,11 @@ import cors from 'cors';
 import compression from 'compression';
 import morgan from 'morgan';
 import helmet from 'helmet';
+import ejs from 'ejs';
 import { prefix } from './../config/index.js';
 import routes from './../api/routes/index.js';
 import { logger } from '../utils/index.js';
 import { rateLimiter } from '../api/middlewares/index.js';
-import { jwtSecretKey } from '../config/index.js';
 import bodyParser from 'body-parser';
 
 export default (app) => {
@@ -20,11 +20,6 @@ export default (app) => {
     // console.log(ex);
     logger('00002', '', ex.message, 'Unhandled Rejection', '');
   });
-
-  if (!jwtSecretKey) {
-    logger('00003', '', 'Jwtprivatekey is not defined', 'Process-Env', '');
-    process.exit(1);
-  }
 
   app.enable('trust proxy');
   app.use(cors());
@@ -40,15 +35,9 @@ export default (app) => {
   app.use(rateLimiter);
   app.use(prefix, routes);
 
-  app.get('/', (_req, res) => {
-    return res.status(200).json({
-      resultMessage: {
-        en: 'Project is successfully working...',
-        tr: 'Proje başarılı bir şekilde çalışıyor...'
-      },
-      resultCode: '00004'
-    }).end();
-  });
+  app.engine("html", ejs.renderFile);
+  app.set("view engine", "html");
+  app.set('views', 'src/views');
 
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -82,8 +71,7 @@ export default (app) => {
     logger(resultCode, req?.user?._id ?? '', error.message, level, req);
     return res.json({
       resultMessage: {
-        en: error.message,
-        tr: error.message
+        en: error.message
       },
       resultCode: resultCode,
     });

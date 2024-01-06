@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("../_includes/head") %>
+
+    <title><%= site.name %> - Database</title>
+    <meta property="og:title" content="<%= site.name %> - Database">
+
+    <meta name="description" content="<%= site.desc %>">
+    <meta property="og:description" content="<%= site.desc %>">
+
+    <meta property="og:url" content="<%= site.url %>/admin/database">
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <%- include("../_includes/sidebar") %>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include("../_includes/topbar") %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Database Viewer</h1>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column -->
+                        <div class="col-12">
+
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Accordion -->
+                                <a href="#users" class="d-block card-header py-3 collapsed" data-toggle="collapse"
+                                    role="button" aria-expanded="false" aria-controls="users">
+                                    <h6 class="m-0 font-weight-bold text-primary">Users:</h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse" id="users">
+                                    <div class="card-body">
+                                        <pre><code><%- JSON.stringify(dbData.users, null, 2) %></code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column -->
+                        <div class="col-12">
+
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Accordion -->
+                                <a href="#stats" class="d-block card-header py-3 collapsed" data-toggle="collapse"
+                                    role="button" aria-expanded="false" aria-controls="stats">
+                                    <h6 class="m-0 font-weight-bold text-primary">Stats:</h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse" id="stats">
+                                    <div class="card-body">
+                                        <pre><code><%- JSON.stringify(dbData.stats, null, 2) %></code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column -->
+                        <div class="col-12">
+
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Accordion -->
+                                <a href="#presets" class="d-block card-header py-3 collapsed" data-toggle="collapse"
+                                    role="button" aria-expanded="false" aria-controls="presets">
+                                    <h6 class="m-0 font-weight-bold text-primary">Presets:</h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse" id="presets">
+                                    <div class="card-body">
+                                        <pre><code><%- JSON.stringify(dbData.presets, null, 2) %></code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include("../_includes/footer") %>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <%- include("../_includes/doc-end") %>
+
+</body>
+
+</html>
