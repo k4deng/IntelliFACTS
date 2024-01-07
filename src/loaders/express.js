@@ -4,11 +4,12 @@ import compression from 'compression';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import ejs from 'ejs';
-import { prefix } from './../config/index.js';
+import { client, prefix } from './../config/index.js';
 import routes from './../api/routes/index.js';
 import { logger } from '../utils/index.js';
-import { rateLimiter } from '../api/middlewares/index.js';
+import { rateLimiter, session } from '../api/middlewares/index.js';
 import bodyParser from 'body-parser';
+import { User } from '../models/index.js';
 
 export default (app) => {
   process.on('uncaughtException', async (error) => {
@@ -32,6 +33,7 @@ export default (app) => {
   app.disable('x-powered-by');
   app.disable('etag');
 
+  app.use(session);
   app.use(rateLimiter);
   app.use(prefix, routes);
 
@@ -52,7 +54,7 @@ export default (app) => {
   });
 
   app.use((_req, _res, next) => {
-    const error = new Error('Endpoint could not find!');
+    const error = new Error('Page not found!');
     error.status = 404;
     next(error);
   });
@@ -69,12 +71,12 @@ export default (app) => {
       level = 'Client Error';
     }
     logger(resultCode, req?.user?._id ?? '', error.message, level, req);
-    return res.json({
-      resultMessage: {
-        en: error.message
-      },
-      resultCode: resultCode,
+    return res.render("error.ejs", {
+      site: client,
+      user: req.session.user ? User.findOne({ _id: req.session.user }) : null,
+      errorNum: error.status || 500,
+      errorDesc: error.message,
+      errorSlug: `${resultCode}: ${level}`,
     });
-
   });
 }

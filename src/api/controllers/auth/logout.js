@@ -1,19 +1,19 @@
-import { Token } from '../../../../models/index.js';
-import { errorHelper, getText, logger } from '../../../../utils/index.js';
+import { errorHelper } from '../../../utils/index.js';
 
 export default async (req, res) => {
-  await Token.updateOne({ userId: req.user._id },
-    {
-      $set: { status: false, expiresIn: Date.now() }
-    })
-    .catch(err => {
-      return res.status(500).json(errorHelper('00049', req, err.message));
+  // clear the user from the session object and save.
+  // this will ensure that re-using the old session id
+  // does not have a logged-in user
+  req.session.user = null;
+  req.session.save((err) => {
+    if (err) return res.status(500).json(errorHelper('00049', req, err.message));
+
+    req.session.regenerate(function (err) {
+      // regenerate the session, which is good practice to help
+      // guard against forms of session fixation
+      return res.redirect('/');
     });
 
-  logger('00050', req.user._id, getText('en', '00050'), 'Info', req);
-  return res.status(200).json({
-    resultMessage: { en: getText('en', '00050') },
-    resultCode: '00050'
   });
 };
 

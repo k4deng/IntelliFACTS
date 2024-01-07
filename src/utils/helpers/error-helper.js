@@ -7,7 +7,7 @@ export default (code, req, errorMessage) => {
   if (!en[code]) key = 'generic.internalServerError';
 
   let userId = '';
-  if (req && req.user && req.user._id) userId = req.user._id;
+  if (req && req.session && req.session.user) userId = req.session.user;
 
   const enMessage = en[key];
 

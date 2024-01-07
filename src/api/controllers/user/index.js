@@ -1,7 +1,3 @@
-// AUTH
-export { default as login } from './auth/login.js'
-export { default as logout } from './auth/logout.js'
-
 // EDIT
 export { default as editUser } from './edit/edit-user.js'
 

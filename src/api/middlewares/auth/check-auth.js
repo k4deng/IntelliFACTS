@@ -1,32 +1,16 @@
 import { User, Token } from '../../../models/index.js';
 import { errorHelper } from '../../../utils/index.js';
-import pkg from 'mongoose';
-const { Types } = pkg;
 
 export default async (req, res, next) => {
-  let token = req.header('Authorization');
-  if (!token) return res.status(401).json(errorHelper('checkAuth.noToken', req));
-
-  if (token.includes('Bearer'))
-    token = req.header('Authorization').replace('Bearer ', '');
+  if (!req.session.user) return res.status(401).json(errorHelper('checkAuth.noSession', req));
 
   try {
-    if (!Types.ObjectId.isValid(req.user._id))
-      return res.status(400).json(errorHelper('checkAuth.invalidUserId', req));
-
-    const exists = await User.exists({ _id: req.user._id, isVerified: true, isActivated: true })
+    const exists = await User.exists({ _id: req.session.user })
       .catch((err) => {
         return res.status(500).json(errorHelper('generic.internalServerError', req, err.message));
       });
 
     if (!exists) return res.status(400).json(errorHelper('checkAuth.userNotFound', req));
-
-    const tokenExists = await Token.exists({ userId: req.user._id, status: true })
-      .catch((err) => {
-        return res.status(500).json(errorHelper('generic.internalServerError', req, err.message));
-      });
-
-    if (!tokenExists) return res.status(401).json(errorHelper('00011', req));
 
     next();
   } catch (err) {
