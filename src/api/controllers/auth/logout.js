@@ -8,7 +8,7 @@ export default async (req, res) => {
   req.session.save((err) => {
     if (err) return res.status(500).json(errorHelper('00049', req, err.message));
 
-    req.session.regenerate(function (err) {
+    req.session.regenerate(() => {
       // regenerate the session, which is good practice to help
       // guard against forms of session fixation
       return res.redirect('/');

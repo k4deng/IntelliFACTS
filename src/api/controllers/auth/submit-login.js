@@ -1,4 +1,4 @@
-import { User, Token } from '../../../models/index.js';
+import { User } from '../../../models/index.js';
 import { validateLogin } from '../../validators/user.validator.js';
 import { errorHelper, getText, logger } from '../../../utils/index.js';
 import bcrypt from 'bcryptjs';

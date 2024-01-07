@@ -1,4 +1,4 @@
-import { User, Token } from '../../../models/index.js';
+import { User } from '../../../models/index.js';
 import { errorHelper } from '../../../utils/index.js';
 
 export default async (req, res, next) => {
