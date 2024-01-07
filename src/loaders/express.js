@@ -10,6 +10,7 @@ import { logger } from '../utils/index.js';
 import { rateLimiter, session } from '../api/middlewares/index.js';
 import bodyParser from 'body-parser';
 import { User } from '../models/index.js';
+import router from "./../api/routes/index.js";
 
 export default (app) => {
   process.on('uncaughtException', async (error) => {
@@ -29,17 +30,16 @@ export default (app) => {
   app.use(morgan('dev'));
   app.use(helmet());
   app.use(compression());
-  app.use(express.static('public'));
   app.disable('x-powered-by');
   app.disable('etag');
-
-  app.use(session);
-  app.use(rateLimiter);
-  app.use(prefix, routes);
 
   app.engine("html", ejs.renderFile);
   app.set("view engine", "html");
   app.set('views', 'src/views');
+
+  app.use(session);
+  app.use(rateLimiter);
+  app.use(prefix, routes);
 
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

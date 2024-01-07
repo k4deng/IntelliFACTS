@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { serve, setup } from 'swagger-ui-express';
 import { docsPrefix, swaggerConfig } from '../../config/index.js';
@@ -11,6 +11,9 @@ const router = Router();
 const specDoc = swaggerJsdoc(swaggerConfig);
 router.use(docsPrefix, serve);
 router.get(docsPrefix, setup(specDoc, { explorer: true }));
+
+// Static files
+router.use('/public', express.static('src/public'));
 
 // Rest of routes
 router.use('/', home);

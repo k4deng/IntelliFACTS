@@ -722,11 +722,11 @@
 
                     <form class="form-padding" name="LoginForm" method="post" autocapitalize="none" autocorrect="off" action="">
                         <div class="styled-input">
-                            <input id="rw-district-code" class="trimmed-width" type="text" maxlength="100" autofocus="" required="" data-val="true" data-val-length="The field District must be a string with a minimum length of 1 and a maximum length of 20." data-val-length-max="20" data-val-length-min="1" data-val-required="The District field is required." name="District" value="">
+                            <input id="rw-district-code" class="trimmed-width" type="text" maxlength="100" autofocus="" required="" data-val="true" data-val-length="The field District must be a string with a minimum length of 1 and a maximum length of 20." data-val-length-max="20" data-val-length-min="1" data-val-required="The District field is required." name="District" <% if (data !== null) {%>value="<%= data.District %>"<%}%>>
                             <label class="trimmed-width"> District Code </label>
                         </div>
                         <div class="styled-input">
-                            <input id="rw-username" class="trimmed-width" type="text" maxlength="100" autofocus="" required="" data-val="true" data-val-length="The field Username must be a string with a minimum length of 1 and a maximum length of 50." data-val-length-max="50" data-val-length-min="1" data-val-required="The Username field is required." name="Username" value="">
+                            <input id="rw-username" class="trimmed-width" type="text" maxlength="100" autofocus="" required="" data-val="true" data-val-length="The field Username must be a string with a minimum length of 1 and a maximum length of 50." data-val-length-max="50" data-val-length-min="1" data-val-required="The Username field is required." name="Username" <% if (data !== null) {%>value="<%= data.Username %>"<%}%>">
                             <label class="trimmed-width"> Username </label>
                             <% if (message !== null) { %><span style="background-color: #d50000; height: 2px;width: 100%;"></span><% } %>
                         </div>

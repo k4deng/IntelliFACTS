@@ -3,18 +3,35 @@ import { validateLogin } from '../../validators/user.validator.js';
 import { errorHelper, getText, logger } from '../../../utils/index.js';
 import bcrypt from 'bcryptjs';
 const { compare } = bcrypt;
+import { loginUser } from '../../../utils/index.js';
 
 export default async (req, res) => {
   const { error } = validateLogin(req.body);
   if (error) {
-    let code = '00038';
-    if (error.details[0].message.includes('email'))
-      code = '00039';
-    else if (error.details[0].message.includes('password'))
-      code = '00040';
+    let code = 'submitLogin.provideAllFields';
 
-    return res.status(400).json(errorHelper(code, req, error.details[0].message));
+    if (error.details[0].message.includes('District'))
+      code = 'submitLogin.invalidDistrict';
+    else if (error.details[0].message.includes('Username'))
+      code = 'submitLogin.invalidUsername';
+    else if (error.details[0].message.includes('Password'))
+      code = 'submitLogin.invalidPassword';
+
+    return res.status(400).render("login.ejs", { message: errorHelper(code, req, error.details[0].message).resultMessage.en, data: req.body });
   }
+
+  // validation passed, try to log in the user
+  const loginRes = await loginUser(req.body.District, req.body.Username, req.body.Password)
+
+  // user login was not successful
+  if (loginRes.type === "error") {
+    errorHelper("submitLogin.loginUnsuccessful", req, loginRes.message);
+    return res.status(400).render("login.ejs", {message: loginRes.message, data: req.body})
+  }
+
+  // else login was successful
+
+  return res.status(200).json(loginRes)
 
   const user = await User.findOne({ email: req.body.email, isActivated: true, isVerified: true }).select('+password')
     .catch((err) => {
@@ -23,12 +40,6 @@ export default async (req, res) => {
 
   if (!user)
     return res.status(404).json(errorHelper('00042', req));
-
-  if (!user.isActivated)
-    return res.status(400).json(errorHelper('00043', req));
-
-  if (!user.isVerified)
-    return res.status(400).json(errorHelper('00044', req));
 
   const match = await compare(req.body.password, user.password);
   if (!match)
