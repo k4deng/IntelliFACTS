@@ -16,37 +16,3 @@ export default async (req, res) => {
 
   });
 };
-
-/**
- * @swagger
- * /user/logout:
- *    post:
- *      summary: Logout the User
- *      parameters:
- *        - in: header
- *          name: Authorization
- *          schema:
- *            type: string
- *          description: Put access token here
- *      tags:
- *        - User
- *      responses:
- *        "200":
- *          description: Successfully logged out.
- *          content:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Result'
- *        "401":
- *          description: Invalid token.
- *          content:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Result'
- *        "500":
- *          description: An internal server error occurred, please try again.
- *          content:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Result'
- */
