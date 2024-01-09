@@ -7,13 +7,13 @@ export default async (req, res, next) => {
   try {
     const exists = await User.exists({ _id: req.session.user })
       .catch((err) => {
-        return res.status(500).json(errorHelper('generic.internalServerError', req, err.message));
+        return res.status(500).json(errorHelper('checkAuth.userSearchError', req, err.message));
       });
 
     if (!exists) return res.status(400).json(errorHelper('checkAuth.userNotFound', req));
 
     next();
   } catch (err) {
-    return res.status(401).json(errorHelper('00012', req, err.message));
+    return res.status(401).json(errorHelper('checkAuth.invalidToken', req, err.message));
   }
 };

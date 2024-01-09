@@ -6,7 +6,7 @@ export default async (req, res) => {
   // does not have a logged-in user
   req.session.user = null;
   req.session.save((err) => {
-    if (err) return res.status(500).json(errorHelper('00049', req, err.message));
+    if (err) return res.status(500).json(errorHelper('logout.sessionSaveError', req, err.message));
 
     req.session.regenerate(() => {
       // regenerate the session, which is good practice to help

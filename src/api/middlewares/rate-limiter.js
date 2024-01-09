@@ -26,7 +26,7 @@ export default (req, res, next) => {
         site: client,
         user: req.session.user ? User.findOne({ _id: req.session.user }) : null,
         errorNum: 429,
-        errorDesc: errorHelper('00024', req, err.message).resultMessage.en,
+        errorDesc: errorHelper('rateLimiter.tooManyRequests', req, err.message).resultMessage.en,
         errorSlug: `Please slow down just a little bit!`,
       });
     });
