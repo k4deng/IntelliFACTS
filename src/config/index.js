@@ -7,11 +7,13 @@ import { config } from 'dotenv';
 const envFound = config();
 if (envFound.error) throw new Error("⚠️  Couldn't find .env file  ⚠️");
 
+export const nodeEnv = process.env.NODE_ENV || 'production';
+
 export const dbUri = process.env.DB_URI;
 export const dbName = process.env.DB_NAME;
 
-export const port = process.env.PORT || 3000;
-export const secure = process.env.SECURE || true;
+export const port = Number(process.env.PORT) || 3000;
+export const secure = process.env.SECURE ? (/true/i).test(process.env.SECURE) : true;
 export const domain = process.env.DOMAIN || 'localhost:' + this.port;
 
 export const client = {

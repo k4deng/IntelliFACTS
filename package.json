@@ -28,6 +28,7 @@
   },
   "scripts": {
     "start": "node src/app.js",
+    "start-dev": "set NODE_ENV=development && node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

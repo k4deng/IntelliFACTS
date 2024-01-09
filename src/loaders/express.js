@@ -4,13 +4,12 @@ import compression from 'compression';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import ejs from 'ejs';
-import { client, prefix } from './../config/index.js';
-import routes from './../api/routes/index.js';
+import { client, prefix, secure } from './../config/index.js';
+import router from './../api/routes/index.js';
 import { logger } from '../utils/index.js';
 import { rateLimiter, session } from '../api/middlewares/index.js';
 import bodyParser from 'body-parser';
 import { User } from '../models/index.js';
-import router from "./../api/routes/index.js";
 
 export default (app) => {
   process.on('uncaughtException', async (error) => {
@@ -28,7 +27,7 @@ export default (app) => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(morgan('dev'));
-  app.use(helmet());
+  if (secure === true) app.use(helmet());
   app.use(compression());
   app.disable('x-powered-by');
   app.disable('etag');
@@ -39,7 +38,7 @@ export default (app) => {
 
   app.use(session);
   app.use(rateLimiter);
-  app.use(prefix, routes);
+  app.use(prefix, router);
 
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
