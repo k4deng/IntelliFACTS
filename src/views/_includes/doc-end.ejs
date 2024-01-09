@@ -17,7 +17,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/logout">Logout</a>
+                    <a class="btn btn-primary" href="/auth/logout">Logout</a>
                 </div>
             </div>
         </div>
@@ -37,15 +37,13 @@
     <script>
         jQuery(document).ready(function($){
             // Get current path and find target link
-            const path = window.location.pathname
+            let path = window.location.pathname
             
             // Account for home page with empty path
-            if ( path == '' ) {
-                path = '/';
-            }
+            if ( path === '' ) path = '/';
             
             let target;
-            if (path == "/") target = $('.loc1');
+            if (path === "/") target = $('.loc1');
                 else target = $('a[href="'+path+'"]');
                 
             // Add active class to target link

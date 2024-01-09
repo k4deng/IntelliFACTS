@@ -1,8 +1,6 @@
 import { User } from '../../../models/index.js';
 import { validateLogin } from '../../validators/user.validator.js';
 import { errorHelper, getText, logger } from '../../../utils/index.js';
-import bcrypt from 'bcryptjs';
-const { compare } = bcrypt;
 import { loginUser } from '../../../utils/index.js';
 
 export default async (req, res) => {
@@ -67,13 +65,10 @@ export default async (req, res) => {
 
     req.session.user = user._id;
     req.session.save((err) => {
+      if (err) return res.status(500).json(errorHelper('submitLogin.sessionSaveError', req, err.message));
       logger('submitLogin.successfulLogin', user._id, getText('en', 'submitLogin.successfulLogin'), 'Info', req);
 
-      return res.status(200).json({
-        resultMessage: { en: getText('en', 'submitLogin.successfulLogin') },
-        resultCode: 'submitLogin.successfulLogin',
-        user
-      });
+      return res.status(200).redirect(req.query.redirect ?? '/')
     });
   });
 

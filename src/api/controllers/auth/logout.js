@@ -1,4 +1,4 @@
-import { errorHelper } from '../../../utils/index.js';
+import { errorHelper, getText, logger } from '../../../utils/index.js';
 
 export default async (req, res) => {
   // clear the user from the session object and save.
@@ -8,9 +8,8 @@ export default async (req, res) => {
   req.session.save((err) => {
     if (err) return res.status(500).json(errorHelper('logout.sessionSaveError', req, err.message));
 
-    req.session.regenerate(() => {
-      // regenerate the session, which is good practice to help
-      // guard against forms of session fixation
+    req.session.destroy(() => {
+      logger('logout.successful', '', getText('en', 'logout.successful'), 'Info', req);
       return res.redirect('/');
     });
 
