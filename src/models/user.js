@@ -5,7 +5,7 @@ const userSchema = new Schema({
   personId: {
     type: Number, required: true, unique: true
   },
-  username: {
+  userName: {
     type: String, required: true, unique: true
   },
   firstName: {
@@ -23,6 +23,21 @@ const userSchema = new Schema({
     default: 'user',
   },
 
+  needsLogin: {
+    type: Boolean,
+    default: false,
+  },
+  tokens: {
+    id_token: String,
+    access_token: String,
+    expires_in: Number,
+    token_type: String,
+    refresh_token: String,
+    scope: String,
+    issued_at: Number,
+    expiration_time: Number,
+  },
+
   photoUrl: {
     type: String,
     default:
@@ -36,9 +51,9 @@ const userSchema = new Schema({
   },
 
 },
-  {
-    timestamps: true
-  });
+{
+  timestamps: true
+});
 
 const User = model('User', userSchema)
 export default User
@@ -63,6 +78,8 @@ export default User
 *         type:
 *           type: string
 *           enum: ['user', 'admin', 'creator', 'reader']
+*         needsLogin:
+*           type: string
 *         photoUrl:
 *           type: string
 *         language:

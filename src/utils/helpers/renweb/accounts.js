@@ -4,9 +4,6 @@ import { load } from 'cheerio';
 import { createHash, randomBytes } from 'crypto';
 
 // helper functions
-function _parseJwt(token) {
-    return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-}
 function _base64URLEncode(str) {
     return str.toString("base64")
         .replace(/\+/g, "-")
@@ -16,17 +13,38 @@ function _base64URLEncode(str) {
 function _sha256(buffer) {
     return createHash("sha256").update(buffer).digest();
 }
+function _makeTokensRes(data){
+    const parseJwt = (token) => JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+    const parsedJwt = parseJwt(data.access_token);
+    const parsedUser = JSON.parse(parsedJwt.user)
+
+    return {
+        type: "success",
+        tokens: {
+            ...data,
+            issued_at: parsedJwt.iat,
+            expiration_time: parsedJwt.exp
+        },
+        user: {
+            personId: parsedUser.PersonId,
+            userName: parsedUser.UserName,
+            firstName: parsedUser.FirstName,
+            lastName: parsedUser.LastName,
+            role: parsedUser.Role,
+        }
+    }
+}
 
 export async function loginUser(districtCode, username, password){
     try {
 
         // generate unique secrets
-        const nonce = _base64URLEncode(randomBytes(32));
+        const nonce = _base64URLEncode(randomBytes(16));
         const code_verifier = _base64URLEncode(randomBytes(32));
         const code_challenge = _base64URLEncode(_sha256(code_verifier));
-        const state = _base64URLEncode(randomBytes(32));
+        const state = _base64URLEncode(randomBytes(16));
 
-        //make callback url (we use it twice so i make it here)
+        //make callback url (we use it twice, so I make it here)
         const returnUrl = "/connect/authorize/callback?"
             + `nonce=${nonce}`
             + "&response_type=code"
@@ -104,27 +122,46 @@ export async function loginUser(districtCode, username, password){
             data: res3PostData
         });
 
-        const parsedJwt = _parseJwt(res3.data.access_token);
-        const parsedUser = JSON.parse(parsedJwt.user)
-
-        return {
-            type: "success",
-            tokens: {
-                ...res3.data,
-                issued_at: parsedJwt.iat,
-                expiration_time: parsedJwt.exp
-            },
-            user: {
-                personId: parsedUser.PersonId,
-                userName: parsedUser.UserName,
-                firstName: parsedUser.FirstName,
-                lastName: parsedUser.LastName,
-                role: parsedUser.Role,
-            }
-        }
-
-
+        return _makeTokensRes(res3.data);
     } catch (error) {
-        console.error(error);
+        return {
+            type: "error",
+            message: error.toString()
+        }
+    }
+}
+
+export async function getAuthTokens(userId){
+    //check if tokens are expired, if not return them
+    const expiration_time = await authdb.get("tokens")?.expiration_time ?? 0;
+    if (expiration_time >= Math.floor(Date.now()/1000)) return await authdb.get("tokens");
+
+    //check if refresh token exists, if so use to refresh
+    const refresh_token = await authdb.get("tokens")?.refresh_token ?? null;
+    if (refresh_token !== null) return await refreshAuthTokens(refresh_token);
+}
+
+export async function refreshAuthTokens(refresh_token){
+    //use refresh token to get new auth tokens
+    try {
+        const res = await axios({
+            method: "post",
+            url: "https://accounts.renweb.com/connect/token",
+            headers: {
+                "Accept": "*/*",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "Accept-Encoding": "gzip, deflate",
+                "User-Agent": "CFNetwork/1485 Darwin/23.1.0",
+                "Accept-Language": "en-US,en;q=0.9"
+            },
+            data: `refresh_token=${refresh_token}&client_id=aware3&grant_type=refresh_token`
+        });
+
+        return _makeTokensRes(res.data);
+    } catch (error) {
+        return {
+            type: "error",
+            message: error.toString()
+        }
     }
 }
