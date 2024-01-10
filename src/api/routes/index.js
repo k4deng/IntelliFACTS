@@ -5,6 +5,8 @@ import { docsPrefix, swaggerConfig } from '../../config/index.js';
 import home from './home.js';
 import auth from './auth.js';
 import user from './user.js';
+import grades from './grades.js';
+import homework from './homework.js';
 const router = Router();
 
 // Serve docs
@@ -19,5 +21,7 @@ router.use('/public', express.static('src/public'));
 router.use('/', home);
 router.use('/auth', auth);
 router.use('/user', user);
+router.use('/grades', grades);
+router.use('/homework', homework);
 
 export default router;

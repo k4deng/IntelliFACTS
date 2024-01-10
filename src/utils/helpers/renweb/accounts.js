@@ -2,6 +2,7 @@ import axios from 'axios';
 import fetch from 'node-fetch';
 import { load } from 'cheerio';
 import { createHash, randomBytes } from 'crypto';
+import User from "../../../models/user.js";
 
 // helper functions
 function _base64URLEncode(str) {
@@ -132,13 +133,14 @@ export async function loginUser(districtCode, username, password){
 }
 
 export async function getAuthTokens(userId){
+    //get current tokens
+    const userTokens = await User.findOne({ _id: userId }).select("tokens").lean().exec();
+
     //check if tokens are expired, if not return them
-    const expiration_time = await authdb.get("tokens")?.expiration_time ?? 0;
-    if (expiration_time >= Math.floor(Date.now()/1000)) return await authdb.get("tokens");
+    if (userTokens.expiration_time >= Math.floor(Date.now()/1000)) return userTokens;
 
     //check if refresh token exists, if so use to refresh
-    const refresh_token = await authdb.get("tokens")?.refresh_token ?? null;
-    if (refresh_token !== null) return await refreshAuthTokens(refresh_token);
+    if (userTokens.refresh_token) return await refreshAuthTokens(userTokens.refresh_token);
 }
 
 export async function refreshAuthTokens(refresh_token){

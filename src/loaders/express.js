@@ -57,7 +57,7 @@ export default (app) => {
     next(error);
   });
 
-  app.use((error, req, res, _next) => {
+  app.use(async (error, req, res, _next) => {
     res.status(error.status || 500);
     let resultCode = '00015';
     let level = 'External Error';
@@ -71,7 +71,7 @@ export default (app) => {
     logger(resultCode, req?.user?._id ?? '', error.message, level, req);
     return res.render("error.ejs", {
       site: client,
-      user: req.session.user ? User.findOne({ _id: req.session.user }) : null,
+      user: req.session.user ? await User.findOne({ _id: req.session.user }) : null,
       errorNum: error.status || 500,
       errorDesc: error.message,
       errorSlug: `${resultCode}: ${level}`,

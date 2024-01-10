@@ -15,7 +15,7 @@ export default async (req, res) => {
     else if (error.details[0].message.includes('Password'))
       code = 'submitLogin.invalidPassword';
 
-    return res.status(400).render("login.ejs", { message: errorHelper(code, req, error.details[0].message).resultMessage.en, data: req.body });
+    return res.status(400).render("auth/login.ejs", { message: errorHelper(code, req, error.details[0].message).resultMessage.en, data: req.body });
   }
 
   // validation passed, try to log in the user
@@ -24,7 +24,7 @@ export default async (req, res) => {
   // user login was not successful
   if (loginRes.type === "error") {
     errorHelper("submitLogin.loginUnsuccessful", req, loginRes.message);
-    return res.status(400).render("login.ejs", { message: loginRes.message, data: req.body })
+    return res.status(400).render("auth/login.ejs", { message: loginRes.message, data: req.body })
   }
 
   // check for existing user

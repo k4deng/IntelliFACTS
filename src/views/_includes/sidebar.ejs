@@ -24,21 +24,29 @@
 
                     <!-- Heading -->
                     <div class="sidebar-heading">
-                        Add Stats
+                        Grades
                     </div>
 
-                    <!-- Nav Item - Charts -->
+                    <!-- Nav Item - Grades Overview -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/stats/create">
-                            <i class="fas fa-fw fa-calendar-plus"></i>
-                            <span>Create Record</span></a>
+                        <a class="nav-link" href="/grades/overview">
+                            <i class="fas fa-fw fa-rectangle-list"></i>
+                            <span>Grades Overview</span></a>
                     </li>
 
-                    <!-- Nav Item - Tables -->
+                    <!-- Nav Item - Class Grade Sheets -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/stats/obc/09-17-2023/edit">
-                            <i class="fas fa-fw fa-pen-to-square"></i>
-                            <span>Edit Last Record</span></a>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGradesSheet" aria-expanded="true" aria-controls="collapseGradesSheet">
+                            <i class="fas fa-fw fa-sheet-plastic"></i>
+                            <span>Class Grade Sheets</span>
+                        </a>
+                        <div id="collapseGradesSheet" class="collapse" aria-labelledby="collapseGradesSheet" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Classes:</h6>
+                                <a class="collapse-item" href="/grades/class/24055">J-BOARDGAMES - AM</a>
+                                <a class="collapse-item" href="/grades/class/24057">J-MOVIE - PM</a>
+                            </div>
+                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -46,31 +54,14 @@
 
                     <!-- Heading -->
                     <div class="sidebar-heading">
-                        History
+                        Homework
                     </div>
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-fw fa-globe"></i>
-                            <span>Overall Stats</span></a>
-                    </li>
-
-                    <!-- Nav Item - OBC Stats Collapse Menu -->
-                    <li class="nav-item">
-                      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOBC" aria-expanded="true" aria-controls="collapseOBC">
-                          <i class="fas fa-fw fa-building"></i>
-                          <span>OBC</span>
-                      </a>
-                      <div id="collapseOBC" class="collapse" aria-labelledby="headingOBC" data-parent="#accordionSidebar">
-                          <div class="bg-white py-2 collapse-inner rounded">
-                              <h6 class="collapse-header">Past OBC Stats:</h6>
-                              <a class="collapse-item" href="/stats/obc/09-17-2023">September 17th</a>
-                              <a class="collapse-item" href="/stats/obc/09-10-2023">September 10th</a>
-                              <a class="collapse-item" href="/stats/obc/09-03-2023">September 3rd</a>
-                              <a class="collapse-item" href="/stats/obc/all">View All</a>
-                          </div>
-                      </div>
+                        <a class="nav-link" href="/homework">
+                            <i class="fas fa-fw fa-laptop-file"></i>
+                            <span>Homework Grid</span></a>
                     </li>
 
                     <!-- Divider -->
