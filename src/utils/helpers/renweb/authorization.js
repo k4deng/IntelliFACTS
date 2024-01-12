@@ -4,6 +4,8 @@ import { load } from 'cheerio';
 import { createHash, randomBytes } from 'crypto';
 import User from "../../../models/user.js";
 
+//TODO: add proper error handling on ALL try catch blocks
+
 // helper functions
 function _base64URLEncode(str) {
     return str.toString("base64")
@@ -134,16 +136,16 @@ export async function loginUser(districtCode, username, password){
 
 export async function getAuthTokens(userId){
     //get current tokens
-    const userTokens = await User.findOne({ _id: userId }).select("tokens").lean().exec();
+    const user = await User.findOne({ _id: userId }).lean().exec();
 
     //check if tokens are expired, if not return them
-    if (userTokens.expiration_time >= Math.floor(Date.now()/1000)) return userTokens;
+    if (user.tokens.expiration_time >= Math.floor(Date.now()/1000)) return user.tokens;
 
     //check if refresh token exists, if so use to refresh
-    if (userTokens.refresh_token) return await refreshAuthTokens(userTokens.refresh_token);
+    if (user.tokens.refresh_token) return await refreshAuthTokens(userId, user.tokens.refresh_token);
 }
 
-export async function refreshAuthTokens(refresh_token){
+export async function refreshAuthTokens(userId, refresh_token){
     //use refresh token to get new auth tokens
     try {
         const res = await axios({
@@ -159,7 +161,43 @@ export async function refreshAuthTokens(refresh_token){
             data: `refresh_token=${refresh_token}&client_id=aware3&grant_type=refresh_token`
         });
 
-        return _makeTokensRes(res.data);
+        const tokensRes = _makeTokensRes(res.data)
+
+        //update user with new information
+        const mongooseUpdatedUser = {
+            personId: tokensRes.user.personId,
+            userName: tokensRes.user.userName,
+            firstName: tokensRes.user.firstName,
+            lastName: tokensRes.user.lastName,
+            role: tokensRes.user.role,
+            tokens: tokensRes.tokens
+        }
+        await User.findOneAndUpdate({ _id: userId }, mongooseUpdatedUser);
+        return tokensRes;
+    } catch (error) {
+        return {
+            type: "error",
+            message: error.toString()
+        }
+    }
+}
+
+export async function makeAuthRequest(userId, url){
+    try {
+        const { access_token } = await getAuthTokens(userId);
+
+        const res = await axios.get(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${access_token}`,
+                "Accept": "*/*",
+                "Accept-Language": "en-US,en;q=0.9",
+                "Accept-Encoding": "gzip, deflate",
+                "User-Agent": "CFNetwork/1410.0.3 Darwin/22.6.0",
+            }
+        });
+
+        return res.data;
     } catch (error) {
         return {
             type: "error",
