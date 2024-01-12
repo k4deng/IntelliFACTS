@@ -7,6 +7,7 @@ import auth from './auth.js';
 import user from './user.js';
 import grades from './grades.js';
 import homework from './homework.js';
+import admin from "./admin.js";
 const router = Router();
 
 // Serve docs
@@ -23,5 +24,6 @@ router.use('/auth', auth);
 router.use('/user', user);
 router.use('/grades', grades);
 router.use('/homework', homework);
+router.use('/admin', admin)
 
 export default router;

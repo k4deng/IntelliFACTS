@@ -11,6 +11,9 @@
     <meta property="og:description" content="<%= site.desc %>">
 
     <meta property="og:url" content="<%= site.url %>/admin/database">
+
+    <!-- Custom styles for this page -->
+    <link href="/public/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -52,7 +55,9 @@
                                 <!-- Card Content - Collapse -->
                                 <div class="collapse" id="users">
                                     <div class="card-body">
-                                        <pre><code><%- JSON.stringify(dbData.users, null, 2) %></code></pre>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0"></table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -67,14 +72,16 @@
 
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Accordion -->
-                                <a href="#stats" class="d-block card-header py-3 collapsed" data-toggle="collapse"
-                                    role="button" aria-expanded="false" aria-controls="stats">
-                                    <h6 class="m-0 font-weight-bold text-primary">Stats:</h6>
+                                <a href="#sessions" class="d-block card-header py-3 collapsed" data-toggle="collapse"
+                                   role="button" aria-expanded="false" aria-controls="users">
+                                    <h6 class="m-0 font-weight-bold text-primary">Sessions:</h6>
                                 </a>
                                 <!-- Card Content - Collapse -->
-                                <div class="collapse" id="stats">
+                                <div class="collapse" id="sessions">
                                     <div class="card-body">
-                                        <pre><code><%- JSON.stringify(dbData.stats, null, 2) %></code></pre>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="sessionsTable" width="100%" cellspacing="0"></table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -89,14 +96,16 @@
 
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Accordion -->
-                                <a href="#presets" class="d-block card-header py-3 collapsed" data-toggle="collapse"
-                                    role="button" aria-expanded="false" aria-controls="presets">
-                                    <h6 class="m-0 font-weight-bold text-primary">Presets:</h6>
+                                <a href="#rateLimits" class="d-block card-header py-3 collapsed" data-toggle="collapse"
+                                   role="button" aria-expanded="false" aria-controls="users">
+                                    <h6 class="m-0 font-weight-bold text-primary">Rate Limits:</h6>
                                 </a>
                                 <!-- Card Content - Collapse -->
-                                <div class="collapse" id="presets">
+                                <div class="collapse" id="rateLimits">
                                     <div class="card-body">
-                                        <pre><code><%- JSON.stringify(dbData.presets, null, 2) %></code></pre>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="rateLimitsTable" width="100%" cellspacing="0"></table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -121,6 +130,13 @@
     <!-- End of Page Wrapper -->
 
     <%- include("../_includes/doc-end") %>
+
+    <!-- Page level plugins -->
+    <script src="/public/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/public/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/public/js/custom/admin-datatables.js" id="admin-datatables.js" data="<%= data %>"></script>
 
 </body>
 
