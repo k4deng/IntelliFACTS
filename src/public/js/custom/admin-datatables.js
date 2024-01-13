@@ -3,8 +3,6 @@ $(document).ready(function() {
 
   const data = document.getElementById('admin-datatables.js').getAttribute('data');
 
-  JSON.parse(data)
-  
   let usersColumns = [];
   for (const key in JSON.parse(data).users[0]) usersColumns.push({ data: key, title: key });
   $('#usersTable').DataTable({

@@ -9,6 +9,21 @@
                         <div class="sidebar-brand-text mx-3"><%= site.name %></div>
                     </a>
 
+
+
+                    <!-- Sidebar Message -->
+                    <% if (user === null) { %>
+                        <hr class="sidebar-divider">
+
+                        <div class="sidebar-card d-none d-lg-flex">
+                            <img class="sidebar-card-illustration mb-2" src="/public/img/undraw_rocket.svg" alt="...">
+                            <p class="text-center mb-2"><strong><%= site.name %></strong> is packed with premium features, fun, and so much more!</p>
+                            <a class="btn btn-success btn-sm" href="/auth/login">Log in to get started!</a>
+                        </div>
+
+                        <hr class="sidebar-divider d-none d-md-block">
+                    <% } else { %>
+
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -19,12 +34,19 @@
                             <span>Dashboard</span></a>
                     </li>
 
+                    <!-- Nav Item - User Settings -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings/user">
+                            <i class="fas fa-fw fa-cog"></i>
+                            <span>User Settings</span></a>
+                    </li>
+
                     <!-- Divider -->
                     <hr class="sidebar-divider">
 
                     <!-- Heading -->
                     <div class="sidebar-heading">
-                        Grades
+                        FACTS Data
                     </div>
 
                     <!-- Nav Item - Grades Overview -->
@@ -34,34 +56,33 @@
                             <span>Grades Overview</span></a>
                     </li>
 
-                    <!-- Nav Item - Class Grade Sheets -->
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGradesSheet" aria-expanded="true" aria-controls="collapseGradesSheet">
-                            <i class="fas fa-fw fa-sheet-plastic"></i>
-                            <span>Class Grade Sheets</span>
-                        </a>
-                        <div id="collapseGradesSheet" class="collapse" aria-labelledby="collapseGradesSheet" data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Classes:</h6>
-                                <a class="collapse-item" href="/grades/class/24055">J-BOARDGAMES - AM</a>
-                                <a class="collapse-item" href="/grades/class/24057">J-MOVIE - PM</a>
-                            </div>
-                        </div>
-                    </li>
-
-                    <!-- Divider -->
-                    <hr class="sidebar-divider">
-
-                    <!-- Heading -->
-                    <div class="sidebar-heading">
-                        Homework
-                    </div>
-
-                    <!-- Nav Item - Charts -->
+                    <!-- Nav Item - Homework Grid -->
                     <li class="nav-item">
                         <a class="nav-link" href="/homework">
                             <i class="fas fa-fw fa-laptop-file"></i>
                             <span>Homework Grid</span></a>
+                    </li>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider d-none d-md-block">
+
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+                        Updater
+                    </div>
+
+                    <!-- Nav Item - Updater Settings -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings/updater">
+                            <i class="fas fa-fw fa-cog"></i>
+                            <span>Updater Settings</span></a>
+                    </li>
+
+                    <!-- Nav Item - Notifications -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/notifications">
+                            <i class="fas fa-fw fa-bell"></i>
+                            <span>Notifications</span></a>
                     </li>
 
                     <!-- Divider -->
@@ -72,11 +93,6 @@
                         <button class="rounded-circle border-0" id="sidebarToggle"></button>
                     </div>
 
-                    <!-- Sidebar Message 
-                    <div class="sidebar-card d-none d-lg-flex">
-                        <img class="sidebar-card-illustration mb-2" src="/public/img/undraw_rocket.svg" alt="...">
-                        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-                    </div> -->
+                    <% } %>
 
                 </ul>
