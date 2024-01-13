@@ -57,32 +57,3 @@ const userSchema = new Schema({
 
 const User = model('User', userSchema)
 export default User
-
-/**
-* @swagger
-* components:
-*   schemas:
-*     User:
-*       type: object
-*       properties:
-*         personId:
-*           type: number
-*         username:
-*           type: string
-*         firstName:
-*           type: string
-*         lastName:
-*           type: string
-*         role:
-*           type: string
-*         type:
-*           type: string
-*           enum: ['user', 'admin', 'creator', 'reader']
-*         needsLogin:
-*           type: string
-*         photoUrl:
-*           type: string
-*         language:
-*           type: string
-*           enum: ['en']
-*/

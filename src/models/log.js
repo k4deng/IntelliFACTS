@@ -14,9 +14,9 @@ const logSchema = new Schema({
   errorMessage: { type: String, required: true },
   ip: { type: String, required: true }
 },
-  {
-    timestamps: true
-  });
+{
+  timestamps: true
+});
 
 
 const Log = model('Log', logSchema)

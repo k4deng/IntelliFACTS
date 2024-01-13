@@ -11,50 +11,82 @@
     <meta property="og:description" content="<%= site.desc %>">
 
     <meta property="og:url" content="<%= site.url %>/grades/overview">
+
+    <!-- Custom styles for this page -->
+    <link href="/public/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
 
-<!-- Page Wrapper -->
-<div id="wrapper">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-    <!-- Sidebar -->
-    <%- include("../_includes/sidebar") %>
-    <!-- End of Sidebar -->
+        <!-- Sidebar -->
+        <%- include("../_includes/sidebar") %>
+        <!-- End of Sidebar -->
 
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Main Content -->
-        <div id="content">
+            <!-- Main Content -->
+            <div id="content">
 
-            <!-- Topbar -->
-            <%- include("../_includes/topbar") %>
-            <!-- End of Topbar -->
+                <!-- Topbar -->
+                <%- include("../_includes/topbar") %>
+                <!-- End of Topbar -->
 
-            <!-- Begin Page Content -->
-            <div class="container-fluid">
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Grades Overview</h1>
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Grades Overview</h1>
+
+                    <div class="row">
+
+                        <div class="col-xl-7 col-lg-9 col-md-12">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Overview</h6>
+
+                                </div>
+                                <div class="card-body">
+                                    <% for (const term of terms) { %>
+                                    <a href="/grades/overview?term=<%= term.legacyTermId %>" class="btn btn-primary mb-2 <% if (termQuery == term.legacyTermId) {%>disabled<%}%>"><%= term.termName %></a>
+                                    <% } %>
+                                    <div class="table-responsive">
+                                        <table id="overviewTable" class="table table-bordered" width="100%" cellspacing="0"></table>
+                                    </div>
+                                    <small>Tip: Click on the grade letter to view more details!</small>
+                                </div>
+                            </div>
+                        </div>
+
+                   </div>
+
+                </div>
+                <!-- /.container-fluid -->
 
             </div>
-            <!-- /.container-fluid -->
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include("../_includes/footer") %>
+            <!-- End of Footer -->
 
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <%- include("../_includes/footer") %>
-        <!-- End of Footer -->
+        <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Page Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
+    <%- include("../_includes/doc-end") %>
 
-<%- include("../_includes/doc-end") %>
+    <!-- Page level plugins -->
+    <script src="/public/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/public/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/public/js/custom/grades-overview-datatables.js" id="grades-overview-datatables.js" data="<%= data %>"></script>
 
 </body>
 

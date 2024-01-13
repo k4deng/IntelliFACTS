@@ -10,7 +10,7 @@ export function validateLogin(body) {
   return schema.validate(body);
 }
 
-export function validateEditUser(body) {
+export function validateEditUserSettings(body) {
   const schema = Joi.object({
     name: Joi.string().min(3).max(24),
     username: Joi.string().min(3).max(15),

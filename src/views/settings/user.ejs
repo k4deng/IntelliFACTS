@@ -10,7 +10,12 @@
     <meta name="description" content="<%= site.desc %>">
     <meta property="og:description" content="<%= site.desc %>">
 
-    <meta property="og:url" content="<%= site.url %>/user/settings">
+    <meta property="og:url" content="<%= site.url %>/settings">
+
+    <!-- Custom styles for this page -->
+    <link href="/public/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="/public/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
+    <link href="/public/vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -48,7 +53,7 @@
                                   <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
                               </div>
                               <div class="card-body">
-                                  <form role="form">
+                                  <form role="form" id="form1">
             
                                     <div class="form-group">
                                       <label>Text Input</label>
@@ -100,85 +105,65 @@
                                         <input type="checkbox"> 3
                                       </label>
                                     </div>
-                      
-                                    <button type="submit" class="btn btn-success">Submit Button</button>
-                                    <button type="reset" class="btn btn-danger">Reset Button</button>  
-                      
-                                  </form> 
-                              </div>
-                          </div>           
 
-                        </div>
-
-                        <!-- Content Column -->
-                        <div class="col-lg-6">
-
-                          <div class="card shadow mb-4">
-                              <div class="card-header py-3">
-                                  <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
-                              </div>
-                              <div class="card-body">
-                                  <form role="form">
-                      
                                     <div class="form-group">
                                       <label>Radio Buttons</label>
                                       <div class="radio">
-                                        <label>
-                                          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-                                          Radio  1
-                                        </label>
+                                          <label>
+                                              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                                              Radio  1
+                                          </label>
                                       </div>
-                                     <div class="radio">
-                                        <label>
-                                          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                                          Radio  2
-                                        </label>
+                                      <div class="radio">
+                                          <label>
+                                              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                              Radio  2
+                                          </label>
                                       </div>
-                                     <div class="radio">
-                                        <label>
-                                          <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">
-                                          Radio  3
-                                        </label>
+                                      <div class="radio">
+                                          <label>
+                                              <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">
+                                              Radio  3
+                                          </label>
                                       </div>
                                     </div>
-                      
+
                                     <div class="form-group">
                                       <label>Inline Radio Buttons</label>
                                       <label class="radio-inline">
-                                        <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked=""> 1
+                                          <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked=""> 1
                                       </label>
                                       <label class="radio-inline">
-                                        <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2"> 2
+                                          <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2"> 2
                                       </label>
                                       <label class="radio-inline">
-                                        <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="option3"> 3
+                                          <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="option3"> 3
                                       </label>
                                     </div>
-                      
+
                                     <div class="form-group">
                                       <label>Selects</label>
                                       <select class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
+                                          <option>1</option>
+                                          <option>2</option>
+                                          <option>3</option>
+                                          <option>4</option>
+                                          <option>5</option>
                                       </select>
                                     </div>
-                      
+
                                     <div class="form-group">
-                                      <label>Multiple Selects</label>
-                                      <select multiple="" class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                      </select>
-                                    </div>
+                                          <label>Multiple Selects</label>
+                                          <select multiple="" class="form-control">
+                                              <option>1</option>
+                                              <option>2</option>
+                                              <option>3</option>
+                                              <option>4</option>
+                                              <option>5</option>
+                                          </select>
+                                      </div>
                       
-                                    <button type="submit" class="btn btn-success">Submit Button</button>
-                                    <button type="reset" class="btn btn-danger">Reset Button</button>  
+                                    <button type="submit" class="btn btn-success">Save Settings</button>
                       
                                   </form> 
                               </div>
@@ -227,6 +212,10 @@
     <!-- End of Page Wrapper -->
 
     <%- include("../_includes/doc-end") %>
+
+    <!-- Page level custom scripts -->
+    <script src="/public/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="/public/js/custom/settings/user-ajax.js"></script>
 
 </body>
 

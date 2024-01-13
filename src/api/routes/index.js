@@ -4,7 +4,7 @@ import { serve, setup } from 'swagger-ui-express';
 import { docsPrefix, swaggerConfig } from '../../config/index.js';
 import home from './home.js';
 import auth from './auth.js';
-import user from './user.js';
+import settings from './settings.js';
 import grades from './grades.js';
 import homework from './homework.js';
 import admin from "./admin.js";
@@ -21,7 +21,7 @@ router.use('/public', express.static('src/public'));
 // Rest of routes
 router.use('/', home);
 router.use('/auth', auth);
-router.use('/user', user);
+router.use('/settings', settings);
 router.use('/grades', grades);
 router.use('/homework', homework);
 router.use('/admin', admin)
