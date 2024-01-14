@@ -86,7 +86,7 @@ function _makeClassDataRes(classData) {
  * Gets a class's grades page
  * @param {string} userId - The user's id
  * @param {string} classId - The class's id
- * @param {string} term - The term's id (optional)
+ * @param {string} [term] - The term's id (optional)
  * @returns {promise} - The HTML of the class's grades page
  */
 export async function getClassGradesPage(userId, classId, term){
@@ -123,7 +123,7 @@ export async function getClassGradesPage(userId, classId, term){
  * Gets a class's grades information
  * @param {string} userId - The user's id
  * @param {string} classId - The class's id
- * @param {string} term - The term's id (optional)
+ * @param {string} [term] - The term's id (optional)
  * @returns {promise} - The JSON of the class's grades information
  */
 export async function getClassGradesInfo(userId, classId, term){
@@ -151,7 +151,7 @@ export async function getClassGradesInfo(userId, classId, term){
 /**
  * Gets all classes grades information
  * @param {string} userId - The user's id
- * @param {string} term - The term's id (optional)
+ * @param {string} [term] - The term's id (optional)
  * @returns {promise} - The JSON of the classes' grades information
  */
 export async function getAllClassGradesInfo(userId, term){
@@ -192,7 +192,7 @@ export async function getAllClassGradesInfo(userId, term){
  * Gets a class's grades data
  * @param {string} userId - The user's id
  * @param {string} classId - The class's id
- * @param {string} term - The term's id (optional)
+ * @param {string} [term] - The term's id (optional)
  * @returns {promise} - The JSON of the class's grades data
  */
 export async function getClassGradesData(userId, classId, term){
@@ -215,7 +215,7 @@ export async function getClassGradesData(userId, classId, term){
 /**
  * Gets all classes grades data
  * @param {string} userId - The user's id
- * @param {string} term - The term's id (optional)
+ * @param {string} [term] - The term's id (optional)
  * @returns {promise} - The JSON of the classes' grades data
  */
 export async function getAllClassGradesData(userId, term){

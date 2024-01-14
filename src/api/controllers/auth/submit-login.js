@@ -1,4 +1,4 @@
-import { User } from '../../../models/index.js';
+import { Setting, UpdaterData, User } from '../../../models/index.js';
 import { validateLogin } from '../../validators/user.validator.js';
 import { errorHelper, getText, logger } from '../../../utils/index.js';
 import { loginUser } from '../../../utils/index.js';
@@ -33,7 +33,7 @@ export default async (req, res) => {
       return res.status(500).json(errorHelper('submitLogin.userSearchError', req, err.message));
     });
 
-  const mongooseUpdatedUser = {
+  const userData = {
     personId: loginRes.user.personId,
     userName: loginRes.user.userName,
     firstName: loginRes.user.firstName,
@@ -44,7 +44,7 @@ export default async (req, res) => {
 
   // exists, update user from login
   if (user) {
-    await User.findOneAndUpdate({ personId: loginRes.user.personId }, mongooseUpdatedUser)
+    await User.findOneAndUpdate({ personId: loginRes.user.personId }, userData)
       .catch((err) => {
         return res.status(500).json(errorHelper('submitLogin.userUpdateTokensError', req, err.message));
       });
@@ -52,10 +52,22 @@ export default async (req, res) => {
 
   // first time login, register user
   if (!user) {
-    user = new User(mongooseUpdatedUser);
-
+    // make user
+    user = new User(userData);
     user = await user.save().catch((err) => {
-      return res.status(500).json(errorHelper('submitLogin.userRegisterError', req, err.message));
+      return res.status(500).json(errorHelper('submitLogin.userCreateError', req, err.message));
+    });
+
+    // make settings
+    const settings = new Setting({ userId: user._id });
+    await settings.save().catch((err) => {
+      return res.status(500).json(errorHelper('submitLogin.settingsCreateError', req, err.message));
+    });
+
+    // make updater data
+    const updaterData = new UpdaterData({ userId: user._id });
+    await updaterData.save().catch((err) => {
+      return res.status(500).json(errorHelper('submitLogin.updaterDataCreateError', req, err.message));
     });
   }
 
