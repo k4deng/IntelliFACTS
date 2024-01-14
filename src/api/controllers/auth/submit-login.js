@@ -2,6 +2,7 @@ import { Setting, UpdaterData, User } from '../../../models/index.js';
 import { validateLogin } from '../../validators/user.validator.js';
 import { errorHelper, getText, logger } from '../../../utils/index.js';
 import { loginUser } from '../../../utils/index.js';
+import { novu } from "../../../updater/novu/helper.js";
 
 export default async (req, res) => {
   const { error } = validateLogin(req.body);
@@ -68,6 +69,14 @@ export default async (req, res) => {
     const updaterData = new UpdaterData({ userId: user._id });
     await updaterData.save().catch((err) => {
       return res.status(500).json(errorHelper('submitLogin.updaterDataCreateError', req, err.message));
+    });
+
+    // assign id to novu
+    await novu.subscribers.identify(user._id, {
+      firstName: user.firstName,
+      lastName: user.lastName,
+    }).catch((err) => {
+      return res.status(500).json(errorHelper('submitLogin.novuIdentifyError', req, err.message));
     });
   }
 
