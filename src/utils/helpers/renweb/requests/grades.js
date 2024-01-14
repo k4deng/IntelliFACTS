@@ -53,9 +53,8 @@ function _makeClassDataRes(classData) {
         data[category.title] = {
             title: category.title,
             description: category.description,
-            weight: category.weight,
-            //TODO: make settings to enable/disable individual notifications
-            //average: category.average, //commented out because it will trigger notifications for catavg changes which i don't want
+            weight: category.weight ?? 0,
+            average: category.average ?? "",
             assignments: {}
         };
 
