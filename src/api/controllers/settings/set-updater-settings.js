@@ -8,9 +8,17 @@ export default async (req, res) => {
     if (error) {
         let code = 'submitUpdaterSettings.provideAllFields';
 
-        if (error.details[0].message.includes('checkedElements.info'))
-            code = 'submitUpdaterSettings.invalidInfoCheckedElements';
-        if (error.details[0].message.includes('checkedElements.data'))
+        if (error.details[0].message.includes('enabled'))
+            code = 'submitUpdaterSettings.invalidEnabled';
+        if (error.details[0].message.includes('checkedElements'))
+            code = 'submitUpdaterSettings.invalidCheckedElements';
+        if (error.details[0].message.includes('notifications.title'))
+            code = 'submitUpdaterSettings.invalidNotificationTitle';
+        if (error.details[0].message.includes('.webhook" must be a valid uri'))
+            code = 'submitUpdaterSettings.invalidNotificationUri';
+        if (error.details[0].message.includes('notifications.sentElements'))
+            code = 'submitUpdaterSettings.invalidNotificationSentElements';
+        if (error.details[0].message.includes('checkFrequency'))
             code = 'submitUpdaterSettings.invalidDataCheckedElements';
 
         return res.json({
@@ -19,7 +27,7 @@ export default async (req, res) => {
         })
     }
 
-    await Setting.findOneAndUpdate({ userId: req.body.userId }, { updater: req.body.data })
+    await Setting.findOneAndUpdate({ userId: req.session.user }, { updater: req.body.data })
         .catch((err) => {
             return res.json({
                 status: "error",
@@ -29,6 +37,6 @@ export default async (req, res) => {
 
     return res.json({
         status: "success",
-        message: "Settings saved successfully!"
+        message: "Updater settings saved successfully!"
     })
 };

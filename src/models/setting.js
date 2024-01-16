@@ -4,7 +4,14 @@ const { Schema, model } = mongoose;
 const settingSchema = new Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, required: true },
   user: {
-    test: { type: String, default: 'test' }
+    classes: {
+      filteringType: {
+        type: String,
+        default: 'blacklist',
+        enum: ['whitelist', 'blacklist']
+      },
+      list: [Number]
+    }
   },
   updater: {
     enabled: { type: Boolean, default: false },
@@ -35,6 +42,28 @@ const settingSchema = new Schema({
           'Assignment Due Date Changed',
         ]
       }
+    },
+    notifications: {
+      type: [{
+        _id: false,
+        title: String,
+        webhook: String,
+        sentElements: [String]
+      }],
+      default: [{
+        title: 'Info',
+        webhook: '',
+        sentElements: []
+      },{
+        title: 'Data',
+        webhook: '',
+        sentElements: []
+      }]
+    },
+    checkFrequency: {
+      type: Number, // in minutes
+      default: 30,
+      enum: [ 5, 15, 30, 60, 360, 1440 ] // 5 minutes, 15 minutes, 30 minutes, 1 hour, 6 hours, 24 hours
     }
   },
 },

@@ -1,5 +1,11 @@
 $(document).ready(function($) {
-    async function submitForm(data){
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
+
+    async function submitUserForm(data){
         var Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -8,7 +14,7 @@ $(document).ready(function($) {
         });
 
         try {
-            const response = await fetch('', {
+            const response = await fetch('/settings/user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -29,12 +35,16 @@ $(document).ready(function($) {
         }
     }
 
-    $('#form1').on('submit', async (event) => {
+    $('#userSettingsForm').on('submit', async (event) => {
         event.preventDefault();
 
-        await submitForm({
-            name: 'John Doe',
-            age: 30
+        await submitUserForm({
+            data: {
+                classes: {
+                    filteringType: $('select[name="filteringType"]').val(),
+                    list: $('select[name="filteringList"]').val()
+                }
+            }
         });
 
     });

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("../_includes/head") %>
+
+    <title><%= site.name %> - Settings</title>
+    <meta property="og:title" content="<%= site.name %> - Settings">
+
+    <meta name="description" content="<%= site.desc %>">
+    <meta property="og:description" content="<%= site.desc %>">
+
+    <meta property="og:url" content="<%= site.url %>/settings">
+
+    <!-- Custom styles for this page -->
+    <link href="/public/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="/public/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
+    <link href="/public/vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
+    <link href="/public/vendor/select2/css/select2.min.css" rel="stylesheet">
+    <link href="/public/vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <%- include("../_includes/sidebar") %>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include("../_includes/topbar") %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Settings</h1>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column -->
+                        <div class="order-xl-1 col-xl-6">
+                            <!--Updater Settings-->
+                            <div class="card shadow mb-4">
+                              <form role="form" id="updaterSettingsForm">
+                                  <div class="card-header py-3">
+                                      <h6 class="m-0 font-weight-bold text-primary">Updater Settings</h6>
+                                  </div>
+                                  <div class="card-body">
+
+                                    <div class="form-group">
+                                        <label>Updater Enabled</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="updaterEnabled" <%= settings.updater.enabled ? "checked" : "" %>>
+                                            <label class="custom-control-label" for="updaterEnabled"></label>
+                                        </div>
+                                    </div>
+
+                                    <div id="updaterEnabledShowHide">
+
+                                        <div class="row">
+                                            <div class="form-group col-xl-5 col-md-6 col-sm-12">
+                                                <% moment.updateLocale('en', { relativeTime : { h: "hour", d:  "day" } }); %>
+                                                <label>Frequency</label>
+                                                <select class="custom-select" name="checkFrequency">
+                                                    <% for (const item of enums.checkFrequency) { %>
+                                                        <option value="<%= item %>" <%= settings.updater.checkFrequency === item ? "selected" : "" %>>Every <%= moment.duration(item, 'minutes').humanize() %></option>
+                                                    <% } %>
+                                                </select>
+                                                <p class="help-block">How often should the updater run</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Class Info Checked Elements</label>
+                                            <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Select to enter classes" name="checkedElements-info">
+                                                <% for (const item of enums.checkedElements.info) { %>
+                                                    <option value="<%= item %>" <%= settings.updater.checkedElements.info.includes(item) ? "selected" : "" %>><%= item %></option>
+                                                <% } %>
+                                            </select>
+                                            <p class="help-block">Enable and disable what elements are checked for when a class is updated.</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Class Data Checked Elements</label>
+                                            <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Select to enter classes" name="checkedElements-data">
+                                                <% for (const item of enums.checkedElements.data) { %>
+                                                    <option value="<%= item %>" <%= settings.updater.checkedElements.data.includes(item) ? "selected" : "" %>><%= item %></option>
+                                                <% } %>
+                                            </select>
+                                            <p class="help-block">Enable and disable what elements are checked for when a class is updated.</p>
+                                        </div>
+
+                                    </div>
+
+                                  </div>
+                                  <div class="card-footer">
+                                  <button type="submit" class="btn btn-success">Save Settings</button>
+                              </div>
+                              </form>
+
+                          </div>
+                        </div>
+
+                        <!-- Content Column-->
+                        <div class="order-xl-2 col-xl-6">
+                            <!-- Notifications Settings-->
+                            <div id="updaterEnabledShowHide">
+                                <div class="card shadow mb-4">
+                                    <form role="form" id="updaterSettingsForm">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Notification Settings</h6>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <div class="card border-left-primary my-2">
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label>Info Elements</label>
+                                                        <input class="form-control col-xl-5 col-md-6 col-sm-12 mb-3" type="text" placeholder="Notification Group Title" name="notification0Title" hidden="hidden" value="<%= settings.updater.notifications[0].title %>">
+                                                        <input class="form-control" type="text" placeholder="Discord Webhook URL" name="notification0Webhook" value="<%= settings.updater.notifications[0].webhook %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Elements sent to webhook" name="notification0SentElements">
+                                                            <% for (const item of enums.checkedElements.info) { %>
+                                                                <option value="<%= item %>" <%= settings.updater.notifications[0].sentElements.includes(item) ? "selected" : "" %>><%= item %></option>
+                                                            <% } %>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card border-left-primary my-2">
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label>Data Elements</label>
+                                                        <input class="form-control col-xl-5 col-md-6 col-sm-12 mb-3" type="text" placeholder="Notification Group Title" name="notification1Title" hidden="hidden" value="<%= settings.updater.notifications[1].title %>">
+                                                        <input class="form-control" type="text" placeholder="Discord Webhook URL" name="notification1Webhook" value="<%= settings.updater.notifications[1].webhook %>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Elements sent to webhook" name="notification1SentElements">
+                                                            <% for (const item of enums.checkedElements.data) { %>
+                                                                <option value="<%= item %>" <%= settings.updater.notifications[1].sentElements.includes(item) ? "selected" : "" %>><%= item %></option>
+                                                            <% } %>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-success">Save Settings</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- User Settings-->
+                            <div class="card shadow mb-4">
+                                <form role="form" id="userSettingsForm">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">User Settings</h6>
+                                    </div>
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="form-group col-xl-5 col-md-6 col-sm-12">
+                                                <label>Filtering Type</label>
+                                                <select class="custom-select" name="filteringType">
+                                                    <option value="whitelist" <%= settings.user.classes.filteringType === 'whitelist' ? 'selected' : '' %>>Whitelist</option>
+                                                    <option value="blacklist" <%= settings.user.classes.filteringType === 'blacklist' ? 'selected' : '' %>>Blacklist</option>
+                                                </select>
+                                                <p class="help-block">Filters classes shown in <%= site.name %></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Classes</label>
+                                            <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Select to enter classes" name="filteringList">
+                                                <% for (const [classId, className] of Object.entries(classes)) { %>
+                                                    <option value="<%= classId %>" <%= settings.user.classes.list.includes(classId) ? 'selected' : '' %>><%= className %></option>
+                                                <% } %>
+                                            </select>
+                                            <p class="help-block">Select classes to be affected by the filter type above<br>(Leave blank to do no filtering)</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-success">Save Settings</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include("../_includes/footer") %>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <%- include("../_includes/doc-end") %>
+
+    <!-- Page level custom scripts -->
+    <script src="/public/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="/public/vendor/select2/js/select2.full.min.js"></script>
+    <script src="/public/js/custom/settings/user.js"></script> <!-- select2 init is in here -->
+    <script src="/public/js/custom/settings/updater.js"></script>
+
+</body>
+
+</html>

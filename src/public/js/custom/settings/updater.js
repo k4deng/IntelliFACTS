@@ -3,9 +3,9 @@ $(document).ready(function($) {
     function updaterEnabledCheck(checked) {
         var ele = $('input[id="updaterEnabled"]')
         if (ele.is(':checked')) {
-            document.getElementById("allSettings").style.display = "";
+            $('div[id="updaterEnabledShowHide"]').show();
         } else {
-            document.getElementById("allSettings").style.display = "none";
+            $('div[id="updaterEnabledShowHide"]').hide();
         }
     }
 
@@ -15,7 +15,7 @@ $(document).ready(function($) {
         updaterEnabledCheck();
     });
 
-    async function submitForm(data){
+    async function submitUpdaterForm(data){
         var Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -24,7 +24,7 @@ $(document).ready(function($) {
         });
 
         try {
-            const response = await fetch('', {
+            const response = await fetch('/settings/updater', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -45,32 +45,29 @@ $(document).ready(function($) {
         }
     }
 
-    $('#updaterSettingsForm').on('submit', async (event) => {
+    $('form[id="updaterSettingsForm"]').on('submit', async (event) => {
         event.preventDefault();
 
-        const infoCheckboxesArray = [];
-        $('input[name="checkedElements-info"]:checked').each((num, input) => {
-            infoCheckboxesArray.push(input.value);
-        });
-
-        const dataCheckboxesArray = [];
-        $('input[name="checkedElements-data"]:checked').each((num, input) => {
-            dataCheckboxesArray.push(input.value);
-        });
-
-        await submitForm({
-            userId: document.getElementById('updater-ajax.js').getAttribute('user'),
+        await submitUpdaterForm({
             data: {
                 enabled: $('input[id="updaterEnabled"]').is(':checked'),
                 checkedElements: {
-                    info: infoCheckboxesArray,
-                    data: dataCheckboxesArray
-                }
+                    info: $('select[name="checkedElements-info"]').val(),
+                    data: $('select[name="checkedElements-data"]').val()
+                },
+                notifications: [{
+                    title: $('input[name="notification0Title"]').val(),
+                    webhook: $('input[name="notification0Webhook"]').val(),
+                    sentElements: $('select[name="notification0SentElements"]').val()
+                }, {
+                    title: $('input[name="notification1Title"]').val(),
+                    webhook: $('input[name="notification1Webhook"]').val(),
+                    sentElements: $('select[name="notification1SentElements"]').val()
+                }],
+                checkFrequency: $('select[name="checkFrequency"]').val()
             }
         });
 
     });
-
-
 
 });

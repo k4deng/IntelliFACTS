@@ -1,5 +1,6 @@
 import { makeAuthRequest } from "../authorization.js";
 import { schoolStudentInfo } from "./general.js";
+import { Setting } from "../../../../models/index.js";
 
 //TODO: add proper error handling on ALL try catch blocks
 
@@ -151,9 +152,10 @@ export async function getClassGradesInfo(userId, classId, term){
  * Gets all classes grades information
  * @param {string} userId - The user's id
  * @param {string} [term] - The term's id (optional)
+ * @param {boolean} [bypassFiltering] - Whether to bypass the user whitelist/blacklist or not
  * @returns {promise} - The JSON of the classes' grades information
  */
-export async function getAllClassGradesInfo(userId, term){
+export async function getAllClassGradesInfo(userId, term, bypassFiltering = false){
     try {
         const result = {};
 
@@ -169,9 +171,13 @@ export async function getAllClassGradesInfo(userId, term){
 
             //hide classes with grades disabled and check whitelist/blacklist
             if (classData.gradesDisabled == true) continue;
-            //TODO: add user settings for whitelist/blacklist
-            //if (config.classListType == 0 && config.classList[0] && !config.classList.includes(classData.classId)) continue;
-            //if (config.classListType == 1 && config.classList.includes(classData.classId)) continue;
+            if (!bypassFiltering) {
+                const { filteringType, list } = (await Setting.findOne({ userId: userId })).user.classes;
+                if (list[0]) { //if there is a list to start with
+                    if (filteringType === 'whitelist' && !list.includes(classData.classId)) continue;
+                    if (filteringType === 'blacklist' && list.includes(classData.classId)) continue;
+                }
+            }
 
             result[classData.classId] = _makeClassInfoRes(classData);
 
@@ -215,9 +221,10 @@ export async function getClassGradesData(userId, classId, term){
  * Gets all classes grades data
  * @param {string} userId - The user's id
  * @param {string} [term] - The term's id (optional)
+ * @param {boolean} [bypassFiltering] - Whether to bypass the user whitelist/blacklist or not
  * @returns {promise} - The JSON of the classes' grades data
  */
-export async function getAllClassGradesData(userId, term){
+export async function getAllClassGradesData(userId, term, bypassFiltering = false){
     try {
         const result = {};
 
@@ -231,15 +238,18 @@ export async function getAllClassGradesData(userId, term){
         //loop through classes
         for (const classInfo of  classesInfo) {
 
+            //hide classes with grades disabled and check whitelist/blacklist
+            if (classInfo.gradesDisabled == true) continue;
+            if (!bypassFiltering) {
+                const { filteringType, list } = (await Setting.findOne({ userId: userId })).user.classes;
+                if (list[0]) { //if there is a list to start with
+                    if (filteringType === 'whitelist' && !list.includes(classInfo.classId)) continue;
+                    if (filteringType === 'blacklist' && list.includes(classInfo.classId)) continue;
+                }
+            }
+
             //class data grades info
             const classData = await makeAuthRequest(userId, `https://nbsmobileapi.renweb.com/api/StudentClasses/v2/${ssInfo.defaultSchoolCode}/${ssInfo.defaultYearId}/${term ?? ssInfo.defaultTermId}/${ssInfo.defaultStudentId}/${classInfo.classId}`);
-
-            //hide classes with grades disabled and check whitelist/blacklist
-            if (classData.gradesDisabled == true) continue;
-            //TODO: add user settings for whitelist/blacklist
-            //if (config.classListType == 0 && config.classList[0] && !config.classList.includes(classData.classId)) continue;
-            //if (config.classListType == 1 && config.classList.includes(classData.classId)) continue;
-
             result[classInfo.classId] = _makeClassDataRes(classData);
 
         }

@@ -1,6 +1,6 @@
 //TODO: add proper error handling in both functions
 //TODO: use localizations in results using logger
-//TODO: test and make sure these work as expected
+//TODO: test and make sure these work as expected with settings
 
 import { Setting, UpdaterData } from "../models/index.js";
 import { getAllClassGradesData, getAllClassGradesInfo } from "../utils/helpers/renweb/requests/grades.js";

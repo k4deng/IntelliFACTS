@@ -20,5 +20,9 @@ export default {
   "logout.successful": "User logged out successfully.",
 
   "submitUpdaterSettings.provideAllFields": "Please provide all the required fields!",
-  "submitUpdaterSettings.invalidTest": "Please provide a test that is between 3 and 24 letters.",
+  "submitUpdaterSettings.invalidNotificationTitle": "Please provide a title that is longer than 3 letters and shorter than 50 letters.",
+  "submitUpdaterSettings.invalidNotificationUri": "Please provide a valid notification uri.",
+
+  "submitUserSettings.provideAllFields": "Please provide all the required fields!",
+  "submitUserSettings.invalidTest": "Please provide a test that is between 3 and 24 letters.",
 };
