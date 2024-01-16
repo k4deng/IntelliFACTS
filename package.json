@@ -4,7 +4,6 @@
   "description": "facts-gradechecker v2!",
   "main": "app.js",
   "dependencies": {
-    "@novu/node": "^0.22.0",
     "axios": "^1.6.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
