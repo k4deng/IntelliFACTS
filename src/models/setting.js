@@ -60,7 +60,7 @@ const settingSchema = new Schema({
         sentElements: []
       }]
     },
-    checkFrequency: {
+    checkFrequency: { //internal feature, not exposed to user
       type: Number, // in minutes
       default: 30,
       enum: [ 5, 15, 30, 60, 360, 1440 ] // 5 minutes, 15 minutes, 30 minutes, 1 hour, 6 hours, 24 hours

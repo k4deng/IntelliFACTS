@@ -18,8 +18,8 @@ export default async (req, res) => {
             code = 'submitUpdaterSettings.invalidNotificationUri';
         if (error.details[0].message.includes('notifications.sentElements'))
             code = 'submitUpdaterSettings.invalidNotificationSentElements';
-        if (error.details[0].message.includes('checkFrequency'))
-            code = 'submitUpdaterSettings.invalidDataCheckedElements';
+        /*if (error.details[0].message.includes('checkFrequency'))
+            code = 'submitUpdaterSettings.invalidDataCheckedElements';*/
 
         return res.json({
             status: "error",
