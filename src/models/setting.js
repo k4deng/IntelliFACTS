@@ -61,8 +61,8 @@ const settingSchema = new Schema({
       }]
     },
     checkFrequency: { //internal feature, not exposed to user
-      type: Number, // in minutes
-      default: 30,
+      type: Number, // in minutes, make sure added enums are converted to valid cron expressions when ran with makeSchedule() in src/updater/worker.js
+      default: 30,  // below are all valid values
       enum: [ 5, 15, 30, 60, 360, 1440 ] // 5 minutes, 15 minutes, 30 minutes, 1 hour, 6 hours, 24 hours
     }
   },
