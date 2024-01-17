@@ -8,6 +8,11 @@ import equal from "fast-deep-equal";
 import { diff as jsonDiff } from "json-diff";
 import moment from "moment";
 
+/**
+ * Get all changes in a user's classes info object from the saved version
+ * @param userId - The user's id
+ * @returns {Promise} - An object with the type, message, and data
+ */
 export async function getInfoChanges(userId){
 
     try {
@@ -102,6 +107,11 @@ export async function getInfoChanges(userId){
     }
 }
 
+/**
+ * Get all changes in a user's classes data object from the saved version
+ * @param userId - The user's id
+ * @returns {Promise} - An object with the type, message, and data
+ */
 export async function getDataChanges(userId){
     try {
         const result = {};
@@ -143,7 +153,7 @@ export async function getDataChanges(userId){
                 if (checkedElements.includes('Category Added') && cat.endsWith("__added")) {
                     classResult.push({
                         element: "Category Added",
-                        title: cat + " Added",
+                        title: catData.title + " Added",
                         description: "*Category added to FACTS*"
                     })
                     continue;
@@ -151,7 +161,7 @@ export async function getDataChanges(userId){
                 if (checkedElements.includes('Category Removed') && cat.endsWith("__deleted")) {
                     classResult.push({
                         element: "Category Removed",
-                        title: cat + " Removed",
+                        title: catData.title + " Removed",
                         description: "*Category removed from FACTS*"
                     })
                     continue;
