@@ -170,7 +170,7 @@ export async function getAllClassGradesInfo(userId, term, bypassFiltering = fals
         for (const classData of data) {
 
             //hide classes with grades disabled and check whitelist/blacklist
-            if (classData.gradesDisabled == true) continue;
+            if (classData.gradesDisabled === true) continue;
             if (!bypassFiltering) {
                 const { filteringType, list } = (await Setting.findOne({ userId: userId }).exec()).user.classes;
                 if (list[0]) { //if there is a list to start with
@@ -239,7 +239,7 @@ export async function getAllClassGradesData(userId, term, bypassFiltering = fals
         for (const classInfo of  classesInfo) {
 
             //hide classes with grades disabled and check whitelist/blacklist
-            if (classInfo.gradesDisabled == true) continue;
+            if (classInfo.gradesDisabled === true) continue;
             if (!bypassFiltering) {
                 const { filteringType, list } = (await Setting.findOne({ userId: userId }).exec()).user.classes;
                 if (list[0]) { //if there is a list to start with
