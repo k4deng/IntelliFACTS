@@ -1,6 +1,5 @@
 //TODO: add proper error handling in both functions
 //TODO: use localizations in results using logger
-//TODO: test and make sure these work as expected with settings
 
 import { Setting, UpdaterData } from "../models/index.js";
 import { getAllClassGradesData, getAllClassGradesInfo } from "../utils/helpers/renweb/requests/grades.js";
@@ -226,12 +225,11 @@ export async function getDataChanges(userId){
                     }
 
                     //assignment note changed/added
-                    if (checkedElements.includes('Assignment Note Changed') && assignmentData.notes?.__old) {
+                    if (checkedElements.includes('Assignment Note Changed') && assignmentData.notes?.__old !== undefined) {
                         const { notes } = assignmentData;
-                        let desc = "";
-                        if (notes.__old && notes.__new) desc = `Note Changed: \`${notes.__old}\` ⇒ \`${notes.__new}\``
-                        else if (notes.__old && !notes.__new) desc = `Note Deleted: \`${notes.__old}\``
-                        else if (!notes.__old && notes.__new) desc = `Note Added: \`${notes.__new}\``
+                        let desc = `Note Changed: \`${notes.__old}\` ⇒ \`${notes.__new}\``;
+                        if (notes.__new === '') desc = `Note Deleted: \`${notes.__old}\``
+                        if (notes.__old === '') desc = `Note Added: \`${notes.__new}\``
 
                         classResult.push({
                             element: "Assignment Note Changed",
