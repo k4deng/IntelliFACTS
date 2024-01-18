@@ -22,7 +22,7 @@ export default (req, res, next) => {
     .catch(async (err) => {
       return res.status(429).render("error.ejs", {
         site: client,
-        user: req.session.user ? await User.findOne({ _id: req.session.user }) : null,
+        user: req.session.user ? await User.findOne({ _id: req.session.user }).exec() : null,
         errorNum: 429,
         errorDesc: errorHelper('rateLimiter.tooManyRequests', req, err.message).resultMessage.en,
         errorSlug: `Please slow down just a little bit!`,

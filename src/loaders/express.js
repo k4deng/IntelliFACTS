@@ -71,7 +71,7 @@ export default (app) => {
     logger(resultCode, req?.user?._id ?? '', error.message, level, req);
     return res.render("error.ejs", {
       site: client,
-      user: req.session.user ? await User.findOne({ _id: req.session.user }) : null,
+      user: req.session.user ? await User.findOne({ _id: req.session.user }).exec() : null,
       errorNum: error.status || 500,
       errorDesc: error.message,
       errorSlug: `${resultCode}: ${level}`,

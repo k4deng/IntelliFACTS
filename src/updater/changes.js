@@ -19,7 +19,7 @@ export async function getInfoChanges(userId){
         const result = [];
 
         // get settings
-        const settings = (await Setting.findOne({ userId: userId })).updater;
+        const settings = (await Setting.findOne({ userId: userId }).exec()).updater;
         const checkedElements = settings.checkedElements.info;
         if (checkedElements === []) return {
             type: "success",
@@ -27,7 +27,7 @@ export async function getInfoChanges(userId){
             data: result
         }
 
-        const oldData = (await UpdaterData.findOne({ userId: userId})).info;
+        const oldData = (await UpdaterData.findOne({ userId: userId}).exec()).info;
         const newData = await getAllClassGradesInfo(userId);
 
         //check if there are actually changes
@@ -117,7 +117,7 @@ export async function getDataChanges(userId){
         const result = {};
 
         // get settings
-        const settings = (await Setting.findOne({ userId: userId })).updater;
+        const settings = (await Setting.findOne({ userId: userId }).exec()).updater;
         const checkedElements = settings.checkedElements.data;
         if (checkedElements === []) return {
             type: "success",
@@ -125,7 +125,7 @@ export async function getDataChanges(userId){
             data: result
         }
 
-        const { info, data: oldData } = await UpdaterData.findOne({ userId: userId})
+        const { info, data: oldData } = await UpdaterData.findOne({ userId: userId}).exec();
         const newData = await getAllClassGradesData(userId);
 
         //check if there are actually changes

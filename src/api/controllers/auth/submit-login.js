@@ -28,7 +28,7 @@ export default async (req, res) => {
   }
 
   // check for existing user
-  let user = await User.findOne({ personId: loginRes.user.personId })
+  let user = await User.findOne({ personId: loginRes.user.personId }).exec()
     .catch((err) => {
       return res.status(500).json(errorHelper('submitLogin.userSearchError', req, err.message));
     });

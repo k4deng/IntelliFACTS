@@ -13,8 +13,8 @@ export default async (req, res) => {
 
     return res.render('settings/settings.ejs', {
         site: client,
-        user: req.session.user ? await User.findOne({ _id: req.session.user }) : null,
-        settings: await Setting.findOne({ userId: req.session.user }),
+        user: req.session.user ? await User.findOne({ _id: req.session.user }).exec() : null,
+        settings: await Setting.findOne({ userId: req.session.user }).exec(),
         classes: classes,
         enums: {
             checkedElements: {

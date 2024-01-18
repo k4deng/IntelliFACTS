@@ -10,7 +10,7 @@ export default async (req, res) => {
 
   return res.render('grades/overview.ejs', {
     site: client,
-    user: req.session.user ? await User.findOne({ _id: req.session.user }) : null,
+    user: req.session.user ? await User.findOne({ _id: req.session.user }).exec() : null,
     data: JSON.stringify(data),
     terms: ssInfo.studentSchools[0].pwTerms,
     termQuery: req.query.term ?? ssInfo.studentSchools[0].pwDefaultTermId,
