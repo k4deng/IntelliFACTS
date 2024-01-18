@@ -47,8 +47,21 @@ async function _sendDiscordWebhook(url, fields, title) {
     }
 }
 
+export function checkSentElements(sentElements, data) {
+    let result = {};
+    for (let [subject, val] of  Object.entries(data)) {
+        let newElements = [];
+        for (const [key, val2] of Object.entries(val)){
+            if (sentElements.includes(val2.element)) newElements.push(val2);
+        }
+        result[subject] = newElements;
+    }
+    return result;
+}
+
 export async function sendToDiscord(url, data) {
 
+    //TODO: add check for is webhook is valid
     for (let [key, val] of  Object.entries(data)) {
         //send webhook
         await _sendDiscordWebhook(url, val, key !== "info_changes" ? `${key} Data Update` : undefined)

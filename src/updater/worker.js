@@ -1,23 +1,33 @@
-//import cron from 'node-cron';
-import { Setting } from '../models/index.js';
-
-/*
-import { getDataChanges, getInfoChanges } from "./changes.js";
-import { sendToDiscord } from "./notifications.js";
-
-const userSettings = await Setting.findOne({ userId: req.session.user });
-const dataChanges = await getDataChanges(req.session.user);
-await sendToDiscord(userSettings.updater.notifications[0].webhook, dataChanges.data);
-const infoChanges = await getInfoChanges(req.session.user);
-await sendToDiscord(userSettings.updater.notifications[0].webhook, { info_changes: infoChanges.data});
-*/
+import cron from 'node-cron';
+import { Setting, UpdaterData } from '../models/index.js';
+import { checkSentElements, getDataChanges, getInfoChanges, sendToDiscord } from './index.js';
+import { getAllClassGradesData, getAllClassGradesInfo } from "../utils/helpers/renweb/requests/grades.js";
 
 export async function makeSchedule(frequency, users) {
     // Convert frequency to cron expression
-    let cronExpression = `0 0 * * *`; //default to everyday @ 00:00
+    let cronExpression = `0 0 * * *`; //every day @ 00:00
     if (frequency < 60) cronExpression = `*/${frequency} * * * *`; //every Xth minute
         else if (frequency < 1440) cronExpression = `0 */${Math.floor(frequency / 60)} * * *`; //every Xth hour
 
-    console.log(cronExpression);
-    //todo: finish this
+    await cron.schedule(cronExpression, async () => {
+        for (const user of users) await runUpdater(user);
+    });
+}
+
+async function runUpdater(userId) {
+    //get settings & changes
+    const userSettings = await Setting.findOne({ userId: userId }).exec();
+    const { data: dataChanges } = await getDataChanges(userId);
+    const { data: infoChanges } = await getInfoChanges(userId);
+    if (dataChanges === {} && infoChanges === []) return; //no changes
+
+    //loop through array of notifications & send
+    for (const { webhook, sentElements } of userSettings.updater.notifications) {
+        const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges !== [] ? { info_changes: infoChanges } : {}) });
+        await sendToDiscord(webhook, cleansedChanges);
+    }
+
+    //update
+    if (dataChanges !== {}) await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
+    if (infoChanges !== []) await UpdaterData.findOneAndUpdate({ userId: userId }, { info: await getAllClassGradesInfo(userId) });
 }
