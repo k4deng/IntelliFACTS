@@ -18,8 +18,8 @@ export default async (req, res) => {
             code = 'submitUpdaterSettings.invalidNotificationUri';
         if (error.details[0].message.includes('notifications.sentElements'))
             code = 'submitUpdaterSettings.invalidNotificationSentElements';
-        if (error.details[0].message.includes('checkFrequency'))
-            code = 'submitUpdaterSettings.invalidDataCheckedElements';
+        /*if (error.details[0].message.includes('checkFrequency'))
+            code = 'submitUpdaterSettings.invalidDataCheckedElements';*/
 
         return res.json({
             status: "error",
@@ -27,7 +27,13 @@ export default async (req, res) => {
         })
     }
 
-    await Setting.findOneAndUpdate({ userId: req.session.user }, { updater: req.body.data })
+    await Setting.findOneAndUpdate(
+        { userId: req.session.user },
+        { $set: {
+            "updater.enabled": req.body.data.enabled,
+            "updater.checkedElements": req.body.data.checkedElements,
+            "updater.notifications": req.body.data.notifications
+        }})
         .catch((err) => {
             return res.json({
                 status: "error",
