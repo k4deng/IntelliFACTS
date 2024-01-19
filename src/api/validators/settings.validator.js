@@ -30,7 +30,7 @@ export async function validateUpdaterSettings(body) {
         ...(await Setting.schema.path('updater.checkedElements.data').options.enum)
       ))
     })),
-    //checkFrequency: Joi.number().valid(...(await Setting.schema.path('updater.checkFrequency').options.enum))
+    checkFrequency: Joi.number().valid(...(await Setting.schema.path('updater.checkFrequency').options.enum))
   });
   return schema.validate(body);
 }

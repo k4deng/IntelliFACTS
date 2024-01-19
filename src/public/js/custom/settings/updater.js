@@ -64,7 +64,7 @@ $(document).ready(function($) {
                     webhook: $('input[name="notification1Webhook"]').val(),
                     sentElements: $('select[name="notification1SentElements"]').val()
                 }],
-                //checkFrequency: $('select[name="checkFrequency"]').val()
+                checkFrequency: $('select[name="checkFrequency"]').val()
             }
         });
 
