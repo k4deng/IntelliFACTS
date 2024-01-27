@@ -24,7 +24,7 @@ async function runUpdater(userId) {
     //loop through array of notifications & send
     for (const { webhook, sentElements } of userSettings.updater.notifications) {
         const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges !== [] ? { info_changes: infoChanges } : {}) });
-        await sendToDiscord(webhook, cleansedChanges);
+        await sendToDiscord(webhook, cleansedChanges, userId);
     }
 
     //update

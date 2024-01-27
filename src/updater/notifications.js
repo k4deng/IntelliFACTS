@@ -1,10 +1,8 @@
 import { client } from "../config/index.js";
 import fetch from "node-fetch";
+import { errorHelper } from "../utils/index.js";
 
-//TODO: one again add proper error handling 😭
-//TODO: test with info changes
-
-async function _sendDiscordWebhook(url, fields, title) {
+async function _sendDiscordWebhook(url, fields, title, userId) {
 
     try {
         // sort embeds in a better format for fields
@@ -42,8 +40,9 @@ async function _sendDiscordWebhook(url, fields, title) {
                 embeds: embedsResult
             })
         })
-    } catch(e) {
-        console.log(e)
+    } catch (error) {
+        //silently fail
+        errorHelper('updater.notifications.sendDiscordWebhookError', { session: { id: userId }}, error.message)
     }
 }
 
@@ -59,12 +58,12 @@ export function checkSentElements(sentElements, data) {
     return result;
 }
 
-export async function sendToDiscord(url, data) {
+export async function sendToDiscord(url, data, userId) {
 
     //TODO: add check for is webhook is valid
     for (let [key, val] of  Object.entries(data)) {
         //send webhook
-        await _sendDiscordWebhook(url, val, key !== "info_changes" ? `${key} Data Update` : undefined)
+        await _sendDiscordWebhook(url, val, key !== "info_changes" ? `${key} Data Update` : undefined, userId)
     }
 
 }

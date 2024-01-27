@@ -3,8 +3,7 @@ import fetch from 'node-fetch';
 import { load } from 'cheerio';
 import { createHash, randomBytes } from 'crypto';
 import User from "../../../models/user.js";
-
-//TODO: add proper error handling on ALL try catch blocks
+import { errorHelper } from "../../index.js";
 
 // helper functions
 function _base64URLEncode(str) {
@@ -129,7 +128,7 @@ export async function loginUser(districtCode, username, password){
     } catch (error) {
         return {
             type: "error",
-            message: error.toString()
+            message: errorHelper('rw.auth.loginUserError', null, error.message).resultMessage.en
         }
     }
 }
@@ -177,7 +176,7 @@ export async function refreshAuthTokens(userId, refresh_token){
     } catch (error) {
         return {
             type: "error",
-            message: error.toString()
+            message: errorHelper('rw.auth.refreshAuthTokensError', null, error.message).resultMessage.en
         }
     }
 }
@@ -201,7 +200,7 @@ export async function makeAuthRequest(userId, url){
     } catch (error) {
         return {
             type: "error",
-            message: error.toString()
+            message: errorHelper('rw.auth.makeAuthRequestError', null, error.message).resultMessage.en
         }
     }
 }

@@ -1,8 +1,7 @@
 import { makeAuthRequest } from "../authorization.js";
 import { schoolStudentInfo } from "./general.js";
 import { Setting } from "../../../../models/index.js";
-
-//TODO: add proper error handling on ALL try catch blocks
+import { errorHelper } from "../../../index.js";
 
 function _makeClassInfoRes(classData) {
     //get term grade style
@@ -110,10 +109,10 @@ export async function getClassGradesPage(userId, classId, term){
         );
 
         return html.replace(/<script.*>.*<\/script>/ims, " "); //remove script tag that adds querys to the url
-    } catch (e) {
+    } catch (error) {
         return {
             type: "error",
-            message: e.toString()
+            message: errorHelper('rw.grades.getClassGradesPageError', null, error.message).resultMessage.en
         }
     }
 
@@ -140,10 +139,10 @@ export async function getClassGradesInfo(userId, classId, term){
 
         //send it off!
         return _makeClassInfoRes(classData);
-    } catch (e) {
+    } catch (error) {
         return {
             type: "error",
-            message: e.toString()
+            message: errorHelper('rw.grades.getClassGradesInfoError', null, error.message).resultMessage.en
         }
     }
 }
@@ -185,10 +184,10 @@ export async function getAllClassGradesInfo(userId, term, bypassFiltering = fals
 
         //send off result
         return result;
-    } catch (e) {
+    } catch (error) {
         return {
             type: "error",
-            message: e.toString()
+            message: errorHelper('rw.grades.getAllClassGradesInfoError', null, error.message).resultMessage.en
         }
     }
 }
@@ -209,10 +208,10 @@ export async function getClassGradesData(userId, classId, term){
 
         //send it off!
         return _makeClassDataRes(apidata);
-    } catch (e) {
+    } catch (error) {
         return {
             type: "error",
-            message: e.toString()
+            message: errorHelper('rw.grades.getClassGradesDataError', null, error.message).resultMessage.en
         }
     }
 }
@@ -256,10 +255,10 @@ export async function getAllClassGradesData(userId, term, bypassFiltering = fals
 
         //send off result
         return result;
-    } catch (e) {
+    } catch (error) {
         return {
             type: "error",
-            message: e.toString()
+            message: errorHelper('rw.grades.getAllClassGradesInfoError', null, error.message).resultMessage.en
         }
     }
 }

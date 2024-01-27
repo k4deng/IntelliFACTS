@@ -1,11 +1,9 @@
-//TODO: add proper error handling in both functions
-//TODO: use localizations in results using logger
-
 import { Setting, UpdaterData } from "../models/index.js";
 import { getAllClassGradesData, getAllClassGradesInfo } from "../utils/helpers/renweb/requests/grades.js";
 import equal from "fast-deep-equal";
 import { diff as jsonDiff } from "json-diff";
 import moment from "moment";
+import { errorHelper } from "../utils/index.js";
 
 /**
  * Get all changes in a user's classes info object from the saved version
@@ -98,10 +96,10 @@ export async function getInfoChanges(userId){
             data: result
         }
 
-    } catch (e) {
+    } catch (error) {
         return {
             type: "error",
-            message: e.toString()
+            message: errorHelper('updater.changes.getInfoChangesError', { session: { user: userId }}, error.message).resultMessage.en
         }
     }
 }
@@ -259,10 +257,10 @@ export async function getDataChanges(userId){
             data: result
         }
 
-    } catch (e) {
+    } catch (error) {
         return {
             type: "error",
-            message: e.toString()
+            message: errorHelper('updater.changes.getDataChangesError', { session: { user: userId }}, error.message).resultMessage.en
         }
     }
 }
