@@ -151,7 +151,7 @@ export async function getClassGradesInfo(userId, classId, term){
  * Gets all classes grades information
  * @param {string} userId - The user's id
  * @param {string} [term] - The term's id (optional)
- * @param {boolean} [bypassFiltering] - Whether to bypass the user whitelist/blacklist or not
+ * @param {boolean} [bypassFiltering] - Whether to bypass the user whitelist/blacklist or not (optional)
  * @returns {promise} - The JSON of the classes' grades information
  */
 export async function getAllClassGradesInfo(userId, term, bypassFiltering = false){
@@ -220,7 +220,7 @@ export async function getClassGradesData(userId, classId, term){
  * Gets all classes grades data
  * @param {string} userId - The user's id
  * @param {string} [term] - The term's id (optional)
- * @param {boolean} [bypassFiltering] - Whether to bypass the user whitelist/blacklist or not
+ * @param {boolean} [bypassFiltering] - Whether to bypass the user whitelist/blacklist or not (optional)
  * @returns {promise} - The JSON of the classes' grades data
  */
 export async function getAllClassGradesData(userId, term, bypassFiltering = false){
