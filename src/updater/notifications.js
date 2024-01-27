@@ -14,7 +14,7 @@ async function _sendDiscordWebhook(url, fields, title, userId) {
             let chunk = fields.splice(0,25)
             let fieldsResult = [];
 
-            for (const [key, val] of Object.entries(chunk)){
+            for (const [, val] of Object.entries(chunk)){
                 fieldsResult.push({
                     name: val.title,
                     value: val.description
@@ -50,7 +50,7 @@ export function checkSentElements(sentElements, data) {
     let result = {};
     for (let [subject, val] of  Object.entries(data)) {
         let newElements = [];
-        for (const [key, val2] of Object.entries(val)){
+        for (const [, val2] of Object.entries(val)){
             if (sentElements.includes(val2.element)) newElements.push(val2);
         }
         result[subject] = newElements;
