@@ -1,7 +1,8 @@
 export default {
   "generic.internalServerError": "An internal server error occurred, please try again.",
+
   "checkAuth.noSession": "Access denied. No user in session.",
-  "checkAuth.userNotFound": "Could not find user with the given email.",
+  "checkAuth.userNotFound": "Could not find user with the given id.",
   "checkAuth.invalidToken": "Invalid token. the token may have expired.",
 
   "middlewares.auth.noAdminAccess": "Access denied. You do not have permission to access.",
@@ -24,5 +25,4 @@ export default {
   "submitUpdaterSettings.invalidNotificationUri": "Please provide a valid notification uri.",
 
   "submitUserSettings.provideAllFields": "Please provide all the required fields!",
-  "submitUserSettings.invalidTest": "Please provide a test that is between 3 and 24 letters.",
 };
