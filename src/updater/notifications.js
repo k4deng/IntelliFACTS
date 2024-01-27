@@ -60,7 +60,9 @@ export function checkSentElements(sentElements, data) {
 
 export async function sendToDiscord(url, data, userId) {
 
-    //TODO: add check for is webhook is valid
+    //check if webhook is discord webhook
+    if (!url.startsWith("https://discord.com/api/webhooks/") && !url.startsWith("https://discordapp.com/api/webhooks/")) return;
+
     for (let [key, val] of  Object.entries(data)) {
         //send webhook
         await _sendDiscordWebhook(url, val, key !== "info_changes" ? `${key} Data Update` : undefined, userId)
