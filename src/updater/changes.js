@@ -135,6 +135,15 @@ export async function getDataChanges(userId){
         //generate diff
         const diff = jsonDiff(oldData, newData, { full: false });
 
+        //if classes were all added or all removed, ignore
+        const allAdded = Object.keys(diff).every((subject) => subject.endsWith("__added"))
+        const allRemoved = Object.keys(diff).every((subject) => subject.endsWith("__deleted"))
+        if (allAdded || allRemoved) return {
+            type: "success",
+            message: "All classes added or removed",
+            data: result
+        }
+
         //find changed classes (each gets a separate object)
         for (const [ subject, subjectData ] of Object.entries(diff)) {
 

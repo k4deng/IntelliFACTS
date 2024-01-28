@@ -17,9 +17,14 @@ export async function makeSchedule(frequency, users) {
 async function runUpdater(userId) {
     //get settings & changes
     const userSettings = await Setting.findOne({ userId: userId }).exec();
-    const { data: dataChanges } = await getDataChanges(userId);
+    const { data: dataChanges, message } = await getDataChanges(userId);
     const { data: infoChanges } = await getInfoChanges(userId);
-    if (Object.keys(dataChanges).length === 0 && infoChanges.length === 0) return; //no changes
+
+    //silently update stored data even though there were no updates to be sent
+    if (message === 'All classes added or removed') await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
+
+    //if there are no changes to send, return
+    if (Object.keys(dataChanges).length === 0 && infoChanges.length === 0) return;
 
     //loop through array of notifications & send
     for (const { webhook, sentElements } of userSettings.updater.notifications) {
