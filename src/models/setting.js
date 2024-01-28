@@ -29,7 +29,7 @@ const settingSchema = new Schema({
       },
       data: {
         type: [String],
-        default: ['Assignment Added (Graded)', 'Assignment Deleted', 'Assignment Grade Changed'],
+        default: ['Assignment Added (Graded)', 'Assignment Removed', 'Assignment Grade Changed'],
         enum: [
           'Category Added',
           'Category Removed',
