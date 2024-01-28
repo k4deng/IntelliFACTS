@@ -9,7 +9,7 @@ mongoose.set("strictQuery", false);
 const opts = {
   storeClient: mongoose.createConnection(dbUri, { dbName: dbName }),
   tableName: 'rateLimits',
-  points: 150, // x requests
+  points: 200, // x requests
   duration: 60 // per y second by IP
 };
 
