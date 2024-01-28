@@ -38,5 +38,4 @@ There are many improvements to be made to IntelliFACTS before 1.0.0 release, my 
   * update readme with setup instructions
   * use semantic versioning
   * github tags and releases
-  * dockerify stack
   * host locally

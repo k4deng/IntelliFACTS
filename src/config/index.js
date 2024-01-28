@@ -1,11 +1,10 @@
 export { default as swaggerConfig } from './swagger.config.js'
 import { config } from 'dotenv';
 
-//NOTE: If you are running the project in an instance, you should store these secret keys in its configuration settings.
-// This type of storing secret information is only experimental and for the purpose of local running.
-
-const envFound = config();
-if (envFound.error) throw new Error("⚠️  Couldn't find .env file  ⚠️");
+if (process.env.NODE_ENV !== 'production') {
+  const envFound = config();
+  if (envFound.error) throw new Error("⚠️  Couldn't find .env file  ⚠️");
+}
 
 export const nodeEnv = process.env.NODE_ENV || 'production';
 

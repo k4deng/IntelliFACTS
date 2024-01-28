@@ -1,0 +1,36 @@
+version: '3.1'
+
+volumes:
+  mongodb:
+
+services:
+  intellifacts:
+    image: k4deng/intellifacts:latest
+    restart: unless-stopped
+    container_name: IntelliFACTS
+    ports:
+      - 3000:3000
+    environment:
+      # MONGODB
+      DB_URI: mongodb://USERNAME:PASSWORD@mongo:27017
+      DB_NAME: IntelliFACTS
+      # use https, turn this on even if behind a proxy
+      SECURE: true
+      # site domain including port if not 80
+      DOMAIN: localhost:3000
+      # company, aka website name
+      COMPANY: IntelliFACTS
+      # short description of website for meta tags
+      DESCRIPTION: IntelliFACTS is a small program to check the grades of a student and notify them if there are changes!
+      # secure secret for sessions; see https://github.com/expressjs/session/blob/master/README.md#secret
+      SESSION_SECRET: make_me_secure
+
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    container_name: mongodb
+    volumes:
+      - mongodb:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: PASSWORD
