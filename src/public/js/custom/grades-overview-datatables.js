@@ -26,7 +26,7 @@ $(document).ready(function() {
         title: "Grade",
         render: (termGrade, type, row) => {
           let termQuery = term !== null ? `?term=${term}` : '';
-          if (type === 'display') return `<a href="/grades/class/${row['classId']+termQuery}" class="btn btn-${termGrade.style} btn-circle">${termGrade.letter}</a> ${termGrade.average !== "" ? termGrade.average + "%" : ""}`;
+          if (type === 'display') return `<a href="/grades/class/${row['classId']+termQuery}" class="btn btn-${termGrade.style} btn-circle" style="padding: 0px">${termGrade.letter}</a> ${termGrade.average !== "" ? termGrade.average + "%" : ""}`;
           return termGrade.average;
         }
       }, {
