@@ -36,7 +36,7 @@ const settingSchema = new Schema({
           'Category Renamed',
           'Category Weight Changed',
           'Assignment Added (Graded)',
-          'Assignment Deleted',
+          'Assignment Removed',
           'Assignment Grade Changed',
           'Assignment Note Changed',
           'Assignment Due Date Changed',

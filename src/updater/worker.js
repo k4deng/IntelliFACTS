@@ -19,15 +19,15 @@ async function runUpdater(userId) {
     const userSettings = await Setting.findOne({ userId: userId }).exec();
     const { data: dataChanges } = await getDataChanges(userId);
     const { data: infoChanges } = await getInfoChanges(userId);
-    if (dataChanges === {} && infoChanges === []) return; //no changes
+    if (Object.keys(dataChanges).length === 0 && infoChanges.length === 0) return; //no changes
 
     //loop through array of notifications & send
     for (const { webhook, sentElements } of userSettings.updater.notifications) {
-        const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges !== [] ? { info_changes: infoChanges } : {}) });
+        const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges.length !== 0 ? { info_changes: infoChanges } : {}) });
         await sendToDiscord(webhook, cleansedChanges, userId);
     }
 
     //update
-    if (dataChanges !== {}) await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
-    if (infoChanges !== []) await UpdaterData.findOneAndUpdate({ userId: userId }, { info: await getAllClassGradesInfo(userId) });
+    if (Object.keys(dataChanges).length !== 0) await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
+    if (infoChanges.length !== 0) await UpdaterData.findOneAndUpdate({ userId: userId }, { info: await getAllClassGradesInfo(userId) });
 }

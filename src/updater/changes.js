@@ -188,20 +188,20 @@ export async function getDataChanges(userId){
                         if (assignmentData.points.received != assignmentData.grade)
                             desc += ` (\`${assignmentData.points.received}\`/\`${assignmentData.points.max}\`pts)`;
                         classResult.push({
-                            element: "Assignment Added",
+                            element: "Assignment Added (Graded)",
                             title: `**\`${assignment.replace("__added", "")}\` (\`${cat}\`) Added:**`,
                             description: desc
                         })
                     }
 
                     //assignment deleted
-                    if (checkedElements.includes('Assignment Deleted') && assignment.endsWith("__deleted")) {
+                    if (checkedElements.includes('Assignment Removed') && assignment.endsWith("__deleted")) {
                         let desc = `Was: \`${assignmentData.grade}\``;
                         if (assignmentData.points.received != assignmentData.grade)
                             desc += ` (\`${assignmentData.points.received}\`/\`${assignmentData.points.max}\`pts)`;
                         classResult.push({
                             element: "Assignment Removed",
-                            title: `**\`${assignment.replace("__deleted", "")}\` (\`${cat}\`) Deleted:**`,
+                            title: `**\`${assignment.replace("__deleted", "")}\` (\`${cat}\`) Removed:**`,
                             description: desc
                         })
                     }

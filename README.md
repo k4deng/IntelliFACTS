@@ -12,8 +12,6 @@ The program can
 
 There are many improvements to be made to IntelliFACTS before 1.0.0 release, my list is below.
 
-* fix all `//TODO:` comments in code
-
 * Notifications
   * cannot do native notifications, discord is the best option atm
   * discord bot:
