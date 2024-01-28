@@ -41,7 +41,7 @@ const userSchema = new Schema({
   photoUrl: {
     type: String,
     default:
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
+        'https://web.archive.org/web/20240107202959if_/https://upload.wikimedia.org/wikipedia/commons/4/47/HI_all.png',
   },
 
   language: {
