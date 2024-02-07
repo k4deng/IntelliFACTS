@@ -11,50 +11,116 @@
     <meta property="og:description" content="<%= site.desc %>">
 
     <meta property="og:url" content="<%= site.url %>/homework">
+
+    <!-- Custom styles for this page -->
+    <link href="/public/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        .bg-light-gray {
+            background-color: #f7f7f7 !important;
+        }
+    </style>
 </head>
 
 <body id="page-top">
 
-<!-- Page Wrapper -->
-<div id="wrapper">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-    <!-- Sidebar -->
-    <%- include("../_includes/sidebar") %>
-    <!-- End of Sidebar -->
+        <!-- Sidebar -->
+        <%- include("../_includes/sidebar") %>
+        <!-- End of Sidebar -->
 
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Main Content -->
-        <div id="content">
+            <!-- Main Content -->
+            <div id="content">
 
-            <!-- Topbar -->
-            <%- include("../_includes/topbar") %>
-            <!-- End of Topbar -->
+                <!-- Topbar -->
+                <%- include("../_includes/topbar") %>
+                <!-- End of Topbar -->
 
-            <!-- Begin Page Content -->
-            <div class="container-fluid">
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Homework Grid Sheet</h1>
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Homework Grid Sheet</h1>
+
+                    <div class="row">
+
+                        <div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Homework</h6>
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="homeworkTable" class="table table-bordered" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr class="bg-light-gray">
+                                                    <th>Class</th>
+
+                                                    <th>Monday</th>
+                                                    <th>Tuesday</th>
+                                                    <th>Wednesday</th>
+                                                    <th>Thursday</th>
+                                                    <th>Friday</th>
+                                                </tr>
+                                                </thead>
+                                            <tbody>
+                                            <% for (const [, classData] of Object.entries(data)) { %>
+                                                <tr>
+                                                    <td class="bg-light-gray"><strong><%= Object.values(classData)[0].courseTitle %></strong></td>
+
+                                                    <% for (const [, dayHW] of Object.entries(classData)) { %>
+
+                                                        <% if (!Object.values(dayHW)[0]) { %>
+                                                            <td class="bg-light-gray"></td>
+                                                        <% continue; } %>
+
+                                                        <% if (dayHW?.homeworkHTML) {%>
+                                                            <td class="classGridData">
+                                                                <%- dayHW?.homeworkHTML %>
+                                                            </td>
+                                                        <% } %>
+
+                                                    <% } %>
+                                                </tr>
+                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
 
             </div>
-            <!-- /.container-fluid -->
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include("../_includes/footer") %>
+            <!-- End of Footer -->
 
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <%- include("../_includes/footer") %>
-        <!-- End of Footer -->
+        <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Page Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
+    <%- include("../_includes/doc-end") %>
 
-<%- include("../_includes/doc-end") %>
+    <!-- Page level plugins -->
+    <script src="/public/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/public/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/public/js/custom/homework-datatables.js"></script>
 
 </body>
 

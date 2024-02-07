@@ -31,8 +31,6 @@ There are many improvements to be made to IntelliFACTS before 1.0.0 release, my 
   * send notifications
   * get grades / interact with facts api via IntelliFACTS methods
 
-* Add homework grid
-
 * Release oriented
   * discord server for IntelliFACTS
   * update readme with setup instructions
