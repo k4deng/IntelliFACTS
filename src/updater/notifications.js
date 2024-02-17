@@ -8,9 +8,27 @@ async function _sendDiscordWebhook(url, fields, title, userId) {
         // sort embeds in a better format for fields
         let embedsResult =[];
 
-        //split embeds into chunks of 25 as embeds can only have 25 fields
+        // split embeds into chunks of 25 items as a failsafe to never reach limit of 4096 characters in description
+        // (and for looks, long embeds aren't that good-looking)
         while (fields.length > 0) {
+            let chunk = fields.splice(0,25)
+            let description = '';
 
+            for (const [, val] of Object.entries(chunk)) {
+                description += `${val.title}\n${val.description}\n`
+            }
+
+            embedsResult.push({
+                color: 2829617,
+                ...(title ? { title: title } : {}),
+                description: description
+            })
+        }
+
+        // legacy code for fields, looks better in discord but
+        // makes push notifications not have data
+        // split embeds into chunks of 25 as embeds can only have 25 fields
+        /*while (fields.length > 0) {
             let chunk = fields.splice(0,25)
             let fieldsResult = [];
 
@@ -26,8 +44,7 @@ async function _sendDiscordWebhook(url, fields, title, userId) {
                 ...(title ? { title: title } : {}),
                 fields: fieldsResult
             })
-
-        }
+        }*/
 
         //send to the webhook
         await fetch(url, {
