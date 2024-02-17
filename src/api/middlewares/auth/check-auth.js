@@ -2,7 +2,10 @@ import { User } from '../../../models/index.js';
 import { errorHelper } from '../../../utils/index.js';
 
 export default async (req, res, next) => {
-  if (!req.session.user) return res.status(401).json(errorHelper('checkAuth.noSession', req));
+  if (!req.session.user) {
+    errorHelper('checkAuth.noSession', req)
+    return res.redirect(`/auth/login?redirect=${req.originalUrl}`);
+  }
 
   try {
     const exists = await User.exists({ _id: req.session.user })
