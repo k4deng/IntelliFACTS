@@ -1,34 +1,45 @@
 import { User } from '../../../models/index.js';
 import { errorHelper } from '../../../utils/index.js';
+import { client } from "../../../config/index.js";
+
+function _sendError(req, res, user, num, code) {
+  const error = errorHelper(code, req)
+  return res.status(num).render("error.ejs", {
+    site: client,
+    user: user,
+    errorNum: num,
+    errorDesc: error.resultMessage.en,
+    errorSlug: error.resultCode,
+  });
+}
 
 export async function checkAdmin(req, res, next) {
-  const user = await User.findById(req.session.user).select('type').exec()
+  const user = await User.findById(req.session.user).exec()
     .catch(err => {
       return res.status(500).json(errorHelper('middlewares.auth.userAdminSearchError', req, err.message));
     });
 
-  if (user.type !== 'admin') return res.status(403).json(errorHelper('middlewares.auth.noAdminAccess', req));
+  if (user.type !== 'admin') _sendError(req, res, user, 403, 'middlewares.auth.noAdminAccess');
 
   next();
 }
 export async function checkCreator(req, res, next) {
-  const user = await User.findById(req.session.user).select('type').exec()
+  const user = await User.findById(req.session.user).exec()
     .catch(err => {
       return res.status(500).json(errorHelper('middlewares.auth.userCreatorSearchError', req, err.message));
     });
 
-  if (user.type !== 'creator' && user.type !== 'admin')
-    return res.status(403).json(errorHelper('middlewares.auth.noCreatorAccess', req));
+  if (user.type !== 'creator' && user.type !== 'admin') _sendError(req, res, user, 403, 'middlewares.auth.noCreatorAccess');
 
   next();
 }
 export async function checkReader(req, res, next) {
-  const user = await User.findById(req.session.user).select('type').exec()
+  const user = await User.findById(req.session.user).exec()
     .catch(err => {
       return res.status(500).json(errorHelper('middlewares.auth.userReaderSearchError', req, err.message));
     });
 
-  if (user.type === 'user') return res.status(403).json(errorHelper('middlewares.auth.noReaderAccess', req));
+  if (user.type === 'user') _sendError(req, res, user, 403, 'middlewares.auth.noReaderAccess');
 
   next();
 }
