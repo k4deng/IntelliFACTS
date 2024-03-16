@@ -59,13 +59,13 @@ export default (app) => {
 
   app.use(async (error, req, res, _next) => {
     res.status(error.status || 500);
-    let resultCode = '00015';
+    let resultCode = 'expressLoader.externalError';
     let level = 'External Error';
     if (error.status === 500) {
-      resultCode = '00013';
+      resultCode = 'expressLoader.serverError';
       level = 'Server Error';
     } else if (error.status === 404) {
-      resultCode = '00014';
+      resultCode = 'expressLoader.clientError';
       level = 'Client Error';
     }
     logger(resultCode, req?.user?._id ?? '', error.message, level, req);
