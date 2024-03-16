@@ -15,7 +15,7 @@ async function _sendDiscordWebhook(url, fields, title, userId) {
             let description = '';
 
             for (const [, val] of Object.entries(chunk)) {
-                description += `${val.title}\n${val.description}\n`
+                description += `*${val.title}*\n${val.description}\n`
             }
 
             embedsResult.push({
