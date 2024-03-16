@@ -34,6 +34,9 @@ export default async (req, res) => {
       return res.status(500).json(errorHelper('submitLogin.userSearchError', req, err.message));
     });
 
+  // make sure user is a student, not a parent
+  if (loginRes.user.role !== 'student') return res.status(400).render("auth/login.ejs", { message: "You must login with a student account", data: req.body })
+
   const userData = {
     personId: loginRes.user.personId,
     userName: loginRes.user.userName,
