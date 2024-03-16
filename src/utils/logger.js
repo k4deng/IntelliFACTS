@@ -3,7 +3,7 @@ import ipHelper from './helpers/ip-helper.js';
 
 export default async (code, userId, errorMessage, level, req) => {
   let ip = 'no-ip';
-  if (req !== '' && req.headers) ip = ipHelper(req);
+  if (req !== '' && req?.headers) ip = ipHelper(req);
   let log = new Log({
     resultCode: code,
     level: level,
