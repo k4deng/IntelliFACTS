@@ -2,6 +2,7 @@ import { Setting, UpdaterData, User } from '../../../models/index.js';
 import { validateLogin } from '../../validators/user.validator.js';
 import { errorHelper, getText, logger } from '../../../utils/index.js';
 import { loginUser } from '../../../utils/index.js';
+import { schoolStudentInfo } from "../../../utils/helpers/renweb/requests/general.js";
 
 export default async (req, res) => {
   const { error } = validateLogin(req.body);
@@ -70,6 +71,13 @@ export default async (req, res) => {
       return res.status(500).json(errorHelper('submitLogin.updaterDataCreateError', req, err.message));
     });
   }
+
+  // get and update user pfp
+  const { studentSchools: { 0: { students: { 0: { pictureUrl }}}} } = await schoolStudentInfo(user._id).catch();
+  await User.findOneAndUpdate({ personId: loginRes.user.personId }, { photoUrl: pictureUrl })
+    .catch((err) => {
+      return res.status(500).json(errorHelper('submitLogin.userUpdatePhotoUrlError', req, err.message));
+    });
 
   // add the user id to the session, they are logged in
   req.session.regenerate((err) => {
