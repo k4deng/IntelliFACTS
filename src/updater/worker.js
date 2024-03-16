@@ -17,8 +17,10 @@ export async function makeSchedule(frequency, users) {
 async function runUpdater(userId) {
     //get settings & changes
     const userSettings = await Setting.findOne({ userId: userId }).exec();
-    const { data: dataChanges, message } = await getDataChanges(userId);
-    const { data: infoChanges } = await getInfoChanges(userId);
+    const { type: infoType, data: dataChanges, message } = await getDataChanges(userId);
+    const { type: dataType, data: infoChanges } = await getInfoChanges(userId);
+
+    if (infoType === 'error' || dataType === 'error') return; //there was an error so ignore it
 
     //silently update stored data even though there were no updates to be sent
     if (message === 'All classes added or removed') await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
