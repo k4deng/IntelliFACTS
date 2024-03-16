@@ -97,10 +97,8 @@ export async function getInfoChanges(userId){
         }
 
     } catch (error) {
-        return {
-            type: "error",
-            message: errorHelper('updater.changes.getInfoChangesError', { session: { user: userId }}, error.message).resultMessage.en
-        }
+        errorHelper('updater.changes.getInfoChangesError', { session: { user: userId }}, error.message)
+        throw error;
     }
 }
 
@@ -267,9 +265,7 @@ export async function getDataChanges(userId){
         }
 
     } catch (error) {
-        return {
-            type: "error",
-            message: errorHelper('updater.changes.getDataChangesError', { session: { user: userId }}, error.message).resultMessage.en
-        }
+        errorHelper('updater.changes.getDataChangesError', { session: { user: userId }}, error.message)
+        throw error;
     }
 }

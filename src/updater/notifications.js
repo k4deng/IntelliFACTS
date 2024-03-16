@@ -59,7 +59,7 @@ async function _sendDiscordWebhook(url, fields, title, userId) {
         })
     } catch (error) {
         //silently fail
-        errorHelper('updater.notifications.sendDiscordWebhookError', { session: { id: userId }}, error.message)
+        errorHelper('updater.notifications.sendDiscordWebhookError', { session: { user: userId }}, error.message)
     }
 }
 

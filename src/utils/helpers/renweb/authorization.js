@@ -174,10 +174,8 @@ export async function refreshAuthTokens(userId, refresh_token){
         await User.findOneAndUpdate({ _id: userId }, mongooseUpdatedUser);
         return tokensRes;
     } catch (error) {
-        return {
-            type: "error",
-            message: errorHelper('rw.auth.refreshAuthTokensError', null, error.message).resultMessage.en
-        }
+        errorHelper('rw.auth.refreshAuthTokensError', null, error.message)
+        throw error;
     }
 }
 
@@ -198,9 +196,7 @@ export async function makeAuthRequest(userId, url){
 
         return res.data;
     } catch (error) {
-        return {
-            type: "error",
-            message: errorHelper('rw.auth.makeAuthRequestError', null, error.message).resultMessage.en
-        }
+        errorHelper('rw.auth.makeAuthRequestError', null, error.message)
+        throw error;
     }
 }
