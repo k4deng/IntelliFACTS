@@ -18,9 +18,6 @@ There are many improvements to be made to IntelliFACTS before 1.0.0 release, my 
       * link to user with code entered on website
       * creates category for user on public server with channels with options to send specific events to specific channels
 
-* admin
-  * delete user
-
 * PWA
   * Add install popups
 

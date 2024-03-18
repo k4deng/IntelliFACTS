@@ -151,13 +151,29 @@
                                         </span>
                                         <span class="text">Database</span>
                                     </a>
+                                </div>
+                            </div>
 
-                                    <a href="/admin/database?json=true" class="btn btn-primary btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-code"></i>
-                                        </span>
-                                        <span class="text">Database (JSON)</span>
-                                    </a>
+                            <!-- User Delete -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Delete User</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form role="form" id="deleteUserForm">
+
+                                        <div class="form-group">
+                                            <label>User to Delete</label>
+                                            <select class="form-control col-xl-5 col-md-6 col-sm-12" name="userToDelete">
+                                                <% for (const {_id, firstName, lastName} of deleteUserFormUsers) { %>
+                                                    <option value="<%= _id %>"><%= `${firstName} ${lastName}` %></option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success">Delete User</button>
+
+                                    </form>
                                 </div>
                             </div>
 
@@ -181,6 +197,10 @@
     <!-- End of Page Wrapper -->
 
     <%- include("../_includes/doc-end") %>
+
+    <!-- Page level custom scripts -->
+    <script src="/public/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="/public/js/custom/admin/delete-user.js"></script>
 
 </body>
 
