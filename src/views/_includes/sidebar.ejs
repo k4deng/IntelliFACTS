@@ -25,12 +25,14 @@
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
-                    <!-- Nav Item - Dashboard -->
-                    <li class="nav-item loc1">
-                        <a class="nav-link" href="/">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Dashboard</span></a>
-                    </li>
+                    <% if (user.type === "admin") { %>
+                        <!-- Nav Item - Admin Dashboard -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">
+                                <i class="fas fa-fw fa-users-gear"></i>
+                                <span>Admin Dashboard</span></a>
+                        </li>
+                    <% } %>
 
                     <!-- Nav Item - User Settings -->
                     <li class="nav-item">
