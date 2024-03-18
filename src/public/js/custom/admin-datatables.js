@@ -10,6 +10,20 @@ $(document).ready(function() {
     columns: usersColumns
   });
 
+  let settingsColumns = [];
+  for (const key in JSON.parse(data).settings[0]) settingsColumns.push({ data: key, title: key });
+  $('#settingsTable').DataTable({
+    data: JSON.parse(data).settings,
+    columns: settingsColumns
+  });
+
+  let updaterdatasColumns = [];
+  for (const key in JSON.parse(data).updaterdatas[0]) updaterdatasColumns.push({ data: key, title: key });
+  $('#updaterdatasTable').DataTable({
+    data: JSON.parse(data).updaterdatas,
+    columns: updaterdatasColumns
+  });
+
   let sessionsColumns = [];
   for (const key in JSON.parse(data).sessions[0]) sessionsColumns.push({ data: key, title: key });
   $('#sessionsTable').DataTable({
