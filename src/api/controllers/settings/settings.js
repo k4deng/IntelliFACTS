@@ -2,6 +2,7 @@ import { client } from '../../../config/index.js';
 import { Setting, User } from "../../../models/index.js";
 import moment from "moment";
 import { getAllClassGradesInfo } from "../../../utils/helpers/renweb/requests/grades.js";
+import { bot } from '../../../loaders/bot.js';
 
 export default async (req, res) => {
 
@@ -11,9 +12,11 @@ export default async (req, res) => {
         classes[classId] = classObj.class.title;
     }
 
+    const user = req.session.user ? await User.findOne({ _id: req.session.user }).exec() : null;
+
     return res.render('settings/settings.ejs', {
         site: client,
-        user: req.session.user ? await User.findOne({ _id: req.session.user }).exec() : null,
+        user: user,
         settings: await Setting.findOne({ userId: req.session.user }).exec(),
         classes: classes,
         enums: {
@@ -24,6 +27,7 @@ export default async (req, res) => {
             checkFrequency: await Setting.schema.path('updater.checkFrequency').options.enum,
             filteringType: await Setting.schema.path('user.classes.filteringType').options.enum
         },
-        moment: moment
+        moment: moment,
+        discordUsername: user !== null ? bot.users.cache.get(user.discordId)?.displayName || null : null
     });
 };

@@ -12,11 +12,9 @@ The program can
 
 There are many improvements to be made to IntelliFACTS before 1.0.0 release, my list is below.
 
-* Notifications
-  * cannot do native notifications, discord is the best option atm
-  * discord bot:
-      * link to user with code entered on website
-      * creates category for user on public server with channels with options to send specific events to specific channels
+* discord bot todo:
+  * add option in settings for max channels to be created, default at 2! (so I can change setting on per-user basis)
+  * change checked elements to be fetched dynamically from elements selected in notifications
 
 * PWA
   * Add install popups

@@ -50,6 +50,11 @@ const userSchema = new Schema({
     default: 'en',
   },
 
+  discordId: {
+    type: String,
+    default: null,
+  },
+
 },
 {
   timestamps: true

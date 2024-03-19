@@ -80,6 +80,26 @@
                                             </div>
                                         </div>-->
 
+                                        <% if (user.discordId === null) { %>
+                                            <div class="form-group">
+                                                <a href="/auth/discord/login" class="btn btn-primary btn-icon-split">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fab fa-discord"></i>
+                                                    </span>
+                                                    <span class="text">Link to Discord</span>
+                                                </a>
+                                            </div>
+                                        <% } else { %>
+                                            <div class="form-group">
+                                                <a href="javascript:void(0);" class="btn btn-primary btn-icon-split">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fab fa-discord"></i>
+                                                    </span>
+                                                    <span class="text">Linked to Discord as <%= discordUsername %></span>
+                                                </a>
+                                            </div>
+                                        <% } %>
+
                                         <div class="form-group">
                                             <label>Class Info Checked Elements</label>
                                             <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Select to enter classes" name="checkedElements-info">
