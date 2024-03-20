@@ -48,6 +48,18 @@ $(document).ready(function($) {
     $('form[id="updaterSettingsForm"]').on('submit', async (event) => {
         event.preventDefault();
 
+        let notifications = [];
+        $('.notifElement').each(function() {
+            const sentElements = $(this).find('option:selected').map(function() {
+                return this.value;
+            }).get();
+
+            notifications.push({
+                channelId: $(this).attr('name'),
+                sentElements: sentElements
+            });
+        });
+
         await submitUpdaterForm({
             data: {
                 enabled: $('input[id="updaterEnabled"]').is(':checked'),
@@ -55,16 +67,7 @@ $(document).ready(function($) {
                     info: $('select[name="checkedElements-info"]').val(),
                     data: $('select[name="checkedElements-data"]').val()
                 },
-                notifications: [{
-                    title: $('input[name="notification0Title"]').val(),
-                    webhook: $('input[name="notification0Webhook"]').val(),
-                    sentElements: $('select[name="notification0SentElements"]').val()
-                }, {
-                    title: $('input[name="notification1Title"]').val(),
-                    webhook: $('input[name="notification1Webhook"]').val(),
-                    sentElements: $('select[name="notification1SentElements"]').val()
-                }],
-                //checkFrequency: $('select[name="checkFrequency"]').val()
+                notifications: notifications
             }
         });
 

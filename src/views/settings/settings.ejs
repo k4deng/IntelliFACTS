@@ -67,19 +67,6 @@
 
                                     <div id="updaterEnabledShowHide">
 
-                                        <!--<div class="row">
-                                            <div class="form-group col-xl-5 col-md-6 col-sm-12">
-                                                <% moment.updateLocale('en', { relativeTime : { h: "hour", d:  "day" } }); %>
-                                                <label>Frequency</label>
-                                                <select class="custom-select" name="checkFrequency">
-                                                    <% for (const item of enums.checkFrequency) { %>
-                                                        <option value="<%= item %>" <%= settings.updater.checkFrequency === item ? "selected" : "" %>>Every <%= moment.duration(item, 'minutes').humanize() %></option>
-                                                    <% } %>
-                                                </select>
-                                                <p class="help-block">How often should the updater run</p>
-                                            </div>
-                                        </div>-->
-
                                         <% if (user.discordId === null) { %>
                                             <div class="form-group">
                                                 <a href="/auth/discord/login" class="btn btn-primary btn-icon-split">
@@ -129,52 +116,33 @@
                               </form>
 
                           </div>
-                        </div>
 
-                        <!-- Content Column-->
-                        <div class="order-xl-2 col-xl-6">
                             <!-- Notifications Settings-->
+                            <% if (settings.updater.notifications.length > 0) { %>
                             <div id="updaterEnabledShowHide">
                                 <div class="card shadow mb-4">
                                     <form role="form" id="updaterSettingsForm">
                                         <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-primary">Notification Settings</h6>
+                                            <h6 class="m-0 font-weight-bold text-primary">Notification Channel Sent Elements</h6>
                                         </div>
                                         <div class="card-body">
 
-                                            <div class="card border-left-primary my-2">
-                                                <div class="card-body">
-                                                    <div class="form-group">
-                                                        <label>Info Elements</label>
-                                                        <input class="form-control col-xl-5 col-md-6 col-sm-12 mb-3" type="text" placeholder="Notification Group Title" name="notification0Title" hidden="hidden" value="<%= settings.updater.notifications[0].title %>">
-                                                        <input class="form-control" type="text" placeholder="Discord Webhook URL" name="notification0Webhook" value="<%= settings.updater.notifications[0].webhook %>">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Elements sent to webhook" name="notification0SentElements">
-                                                            <% for (const item of enums.checkedElements.info) { %>
-                                                                <option value="<%= item %>" <%= settings.updater.notifications[0].sentElements.includes(item) ? "selected" : "" %>><%= item %></option>
-                                                            <% } %>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="card border-left-primary my-2">
-                                                <div class="card-body">
-                                                    <div class="form-group">
-                                                        <label>Data Elements</label>
-                                                        <input class="form-control col-xl-5 col-md-6 col-sm-12 mb-3" type="text" placeholder="Notification Group Title" name="notification1Title" hidden="hidden" value="<%= settings.updater.notifications[1].title %>">
-                                                        <input class="form-control" type="text" placeholder="Discord Webhook URL" name="notification1Webhook" value="<%= settings.updater.notifications[1].webhook %>">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Elements sent to webhook" name="notification1SentElements">
-                                                            <% for (const item of enums.checkedElements.data) { %>
-                                                                <option value="<%= item %>" <%= settings.updater.notifications[1].sentElements.includes(item) ? "selected" : "" %>><%= item %></option>
-                                                            <% } %>
-                                                        </select>
+                                            <% for (const channel of settings.updater.notifications) { %>
+                                                <div class="card border-left-primary my-2">
+                                                    <div class="card-body">
+                                                        <div class="form-group my-0">
+                                                            <label>#<%= bot.channels.cache.get(channel.channelId).name %></label>
+                                                        </div>
+                                                        <div class="form-group mb-0">
+                                                            <select class="select2bs4 notifElement" multiple="multiple" style="width: 100%;" data-placeholder="Elements sent in channel" name="<%= channel.channelId %>">
+                                                                <% for (const item of [...enums.checkedElements.info, ...enums.checkedElements.data]) { %>
+                                                                    <option value="<%= item %>" <%= channel.sentElements.includes(item) ? "selected" : "" %>><%= item %></option>
+                                                                <% } %>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            <% } %>
 
                                         </div>
                                         <div class="card-footer">
@@ -183,7 +151,11 @@
                                     </form>
                                 </div>
                             </div>
+                            <% } %>
+                        </div>
 
+                        <!-- Content Column-->
+                        <div class="order-xl-2 col-xl-6">
                             <!-- User Settings-->
                             <div class="card shadow mb-4">
                                 <form role="form" id="userSettingsForm">

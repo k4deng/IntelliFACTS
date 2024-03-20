@@ -23,14 +23,12 @@ export async function validateUpdaterSettings(body) {
       ))
     },
     notifications: Joi.array().items(Joi.object({
-      title: Joi.string().min(3).max(50),
-      webhook: Joi.string().uri().allow(''),
+      channelId: Joi.string(),
       sentElements: Joi.array().items(Joi.string().valid(
         ...(await Setting.schema.path('updater.checkedElements.info').options.enum),
         ...(await Setting.schema.path('updater.checkedElements.data').options.enum)
       ))
     })),
-    //checkFrequency: Joi.number().valid(...(await Setting.schema.path('updater.checkFrequency').options.enum))
   });
   return schema.validate(body);
 }

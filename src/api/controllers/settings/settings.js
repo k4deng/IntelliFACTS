@@ -24,10 +24,10 @@ export default async (req, res) => {
                 info: await Setting.schema.path('updater.checkedElements.info').options.enum,
                 data: await Setting.schema.path('updater.checkedElements.data').options.enum
             },
-            checkFrequency: await Setting.schema.path('updater.checkFrequency').options.enum,
             filteringType: await Setting.schema.path('user.classes.filteringType').options.enum
         },
         moment: moment,
-        discordUsername: user !== null ? bot.users.cache.get(user.discordId)?.displayName || null : null
+        discordUsername: user !== null ? bot.users.cache.get(user.discordId)?.displayName || null : null,
+        bot: bot
     });
 };

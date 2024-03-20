@@ -12,14 +12,8 @@ export default async (req, res) => {
             code = 'submitUpdaterSettings.invalidEnabled';
         if (error.details[0].message.includes('checkedElements'))
             code = 'submitUpdaterSettings.invalidCheckedElements';
-        if (error.details[0].message.includes('notifications.title'))
-            code = 'submitUpdaterSettings.invalidNotificationTitle';
-        if (error.details[0].message.includes('.webhook" must be a valid uri'))
-            code = 'submitUpdaterSettings.invalidNotificationUri';
         if (error.details[0].message.includes('notifications.sentElements'))
             code = 'submitUpdaterSettings.invalidNotificationSentElements';
-        /*if (error.details[0].message.includes('checkFrequency'))
-            code = 'submitUpdaterSettings.invalidDataCheckedElements';*/
 
         return res.json({
             status: "error",
@@ -31,8 +25,7 @@ export default async (req, res) => {
         { userId: req.session.user },
         { $set: {
             "updater.enabled": req.body.data.enabled,
-            "updater.checkedElements": req.body.data.checkedElements,
-            "updater.notifications": req.body.data.notifications
+            "updater.checkedElements": req.body.data.checkedElements
         }})
         .catch((err) => {
             return res.json({
@@ -40,6 +33,20 @@ export default async (req, res) => {
                 message: errorHelper('submitUpdaterSettings.userUpdateSettingsError', req, err.message).resultMessage.en
             })
         });
+
+    for (const notification of req.body.data.notifications) {
+        await Setting.findOneAndUpdate(
+            { userId: req.session.user },
+            { $set: { "updater.notifications.$[elem].sentElements": notification.sentElements }},
+            { arrayFilters: [{ "elem.channelId": notification.channelId }]}
+        )
+        .catch((err) => {
+            return res.json({
+                status: "error",
+                message: errorHelper('submitUpdaterSettings.notificationUpdateSettingsError', req, err.message).resultMessage.en
+            })
+        });
+    }
 
     return res.json({
         status: "success",
