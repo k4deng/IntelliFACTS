@@ -9,7 +9,8 @@ export default async (bot) => {
 
     // set activity
     bot.user.setActivity({
-        type: ActivityType.Watching,
-        name: "/start"
+        type: ActivityType.Custom,
+        name: "custom",
+        state: "Scanning your grades..."
     });
 }

@@ -13,7 +13,6 @@ The program can
 There are many improvements to be made to IntelliFACTS before 1.0.0 release, my list is below.
 
 * discord bot todo:
-  * add option in settings for max channels to be created, default at 2! (so I can change setting on per-user basis)
   * change checked elements to be fetched dynamically from elements selected in notifications
 
 * PWA
