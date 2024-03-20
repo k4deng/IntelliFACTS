@@ -57,7 +57,7 @@
                                   </div>
                                   <div class="card-body">
 
-                                    <div class="form-group">
+                                    <div class="form-group mb-0">
                                         <label>Updater Enabled</label>
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" id="updaterEnabled" <%= settings.updater.enabled ? "checked" : "" %>>
@@ -68,7 +68,7 @@
                                     <div id="updaterEnabledShowHide">
 
                                         <% if (user.discordId === null) { %>
-                                            <div class="form-group">
+                                            <div class="form-group mb-0 mt-4">
                                                 <a href="/auth/discord/login" class="btn btn-primary btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fab fa-discord"></i>
@@ -77,7 +77,7 @@
                                                 </a>
                                             </div>
                                         <% } else { %>
-                                            <div class="form-group">
+                                            <div class="form-group mb-0 mt-4">
                                                 <a href="javascript:void(0);" class="btn btn-primary btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fab fa-discord"></i>
@@ -86,26 +86,6 @@
                                                 </a>
                                             </div>
                                         <% } %>
-
-                                        <div class="form-group">
-                                            <label>Class Info Checked Elements</label>
-                                            <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Select to enter classes" name="checkedElements-info">
-                                                <% for (const item of enums.checkedElements.info) { %>
-                                                    <option value="<%= item %>" <%= settings.updater.checkedElements.info.includes(item) ? "selected" : "" %>><%= item %></option>
-                                                <% } %>
-                                            </select>
-                                            <p class="help-block">Enable and disable what elements are checked for when a class is updated.</p>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Class Data Checked Elements</label>
-                                            <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Select to enter classes" name="checkedElements-data">
-                                                <% for (const item of enums.checkedElements.data) { %>
-                                                    <option value="<%= item %>" <%= settings.updater.checkedElements.data.includes(item) ? "selected" : "" %>><%= item %></option>
-                                                <% } %>
-                                            </select>
-                                            <p class="help-block">Enable and disable what elements are checked for when a class is updated.</p>
-                                        </div>
 
                                     </div>
 
@@ -135,7 +115,7 @@
                                                         </div>
                                                         <div class="form-group mb-0">
                                                             <select class="select2bs4 notifElement" multiple="multiple" style="width: 100%;" data-placeholder="Elements sent in channel" name="<%= channel.channelId %>">
-                                                                <% for (const item of [...enums.checkedElements.info, ...enums.checkedElements.data]) { %>
+                                                                <% for (const item of enums.sentElements) { %>
                                                                     <option value="<%= item %>" <%= channel.sentElements.includes(item) ? "selected" : "" %>><%= item %></option>
                                                                 <% } %>
                                                             </select>

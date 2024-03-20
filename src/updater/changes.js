@@ -17,7 +17,7 @@ export async function getInfoChanges(userId){
 
         // get settings
         const settings = (await Setting.findOne({ userId: userId }).exec()).updater;
-        const checkedElements = settings.checkedElements.info;
+        const checkedElements = Array.from(new Set(settings.notifications.map(n => n.sentElements).flat()));
         if (checkedElements === []) return {
             type: "success",
             message: "There are no enabled elements in settings to check",
@@ -113,10 +113,10 @@ export async function getDataChanges(userId){
 
         // get settings
         const settings = (await Setting.findOne({ userId: userId }).exec()).updater;
-        const checkedElements = settings.checkedElements.data;
+        const checkedElements = Array.from(new Set(settings.notifications.map(n => n.sentElements).flat())); //get all elements used in notifications
         if (checkedElements === []) return {
             type: "success",
-            message: "There are no enabled elements in settings to check",
+            message: "There are no elements in settings to check",
             data: result
         }
 

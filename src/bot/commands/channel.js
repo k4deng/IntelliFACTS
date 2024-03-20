@@ -9,6 +9,7 @@ import {
 } from "discord.js";
 import { Setting, User } from "../../models/index.js";
 import { client } from "../../config/index.js";
+import { sentElementsEnum } from "../../models/setting.js";
 
 const commandData = {
     name: "channel",
@@ -156,8 +157,8 @@ async function run(bot, interaction) {
 
         // get info and data sent elements enum
         const elementEnums = {
-            info: await Setting.schema.path('updater.checkedElements.info').options.enum,
-            data: await Setting.schema.path('updater.checkedElements.data').options.enum
+            info: sentElementsEnum.info,
+            data: sentElementsEnum.data
         }
 
         // make select menus for info and data elements

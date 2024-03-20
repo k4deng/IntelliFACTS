@@ -7,7 +7,8 @@ export default async () => {
     for (const user of users) {
         //first exclude users where updater would do nothing
         if (user.updater.notifications === []) return;
-        if (user.updater.checkedElements.info === [] && user.updater.checkedElements.data === []) return;
+        const checkedElements = Array.from(new Set(user.updater.notifications.map(n => n.sentElements).flat()));
+        if (checkedElements === []) return;
 
         //then add user to the scheduled tasks
         if (!scheduledTasks[user.updater.checkFrequency]) scheduledTasks[user.updater.checkFrequency] = [user.userId];

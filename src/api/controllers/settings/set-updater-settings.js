@@ -10,8 +10,6 @@ export default async (req, res) => {
 
         if (error.details[0].message.includes('enabled'))
             code = 'submitUpdaterSettings.invalidEnabled';
-        if (error.details[0].message.includes('checkedElements'))
-            code = 'submitUpdaterSettings.invalidCheckedElements';
         if (error.details[0].message.includes('notifications.sentElements'))
             code = 'submitUpdaterSettings.invalidNotificationSentElements';
 
@@ -24,8 +22,7 @@ export default async (req, res) => {
     await Setting.findOneAndUpdate(
         { userId: req.session.user },
         { $set: {
-            "updater.enabled": req.body.data.enabled,
-            "updater.checkedElements": req.body.data.checkedElements
+            "updater.enabled": req.body.data.enabled
         }})
         .catch((err) => {
             return res.json({

@@ -63,10 +63,6 @@ $(document).ready(function($) {
         await submitUpdaterForm({
             data: {
                 enabled: $('input[id="updaterEnabled"]').is(':checked'),
-                checkedElements: {
-                    info: $('select[name="checkedElements-info"]').val(),
-                    data: $('select[name="checkedElements-data"]').val()
-                },
                 notifications: notifications
             }
         });

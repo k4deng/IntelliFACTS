@@ -12,9 +12,6 @@ The program can
 
 There are many improvements to be made to IntelliFACTS before 1.0.0 release, my list is below.
 
-* discord bot todo:
-  * change checked elements to be fetched dynamically from elements selected in notifications
-
 * PWA
   * Add install popups
 

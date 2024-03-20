@@ -3,6 +3,7 @@ import { Setting, User } from "../../../models/index.js";
 import moment from "moment";
 import { getAllClassGradesInfo } from "../../../utils/helpers/renweb/requests/grades.js";
 import { bot } from '../../../loaders/bot.js';
+import { sentElementsEnum } from "../../../models/setting.js";
 
 export default async (req, res) => {
 
@@ -20,10 +21,7 @@ export default async (req, res) => {
         settings: await Setting.findOne({ userId: req.session.user }).exec(),
         classes: classes,
         enums: {
-            checkedElements: {
-                info: await Setting.schema.path('updater.checkedElements.info').options.enum,
-                data: await Setting.schema.path('updater.checkedElements.data').options.enum
-            },
+            sentElements: [...sentElementsEnum.info, ...sentElementsEnum.data],
             filteringType: await Setting.schema.path('user.classes.filteringType').options.enum
         },
         moment: moment,

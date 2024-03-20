@@ -1,6 +1,27 @@
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
+export const sentElementsEnum = {
+  info: [
+    'Class Added',
+    'Class Removed',
+    'Class Renamed',
+    'Teacher Changed',
+    'Grade Changed',
+  ],
+  data: [
+    'Category Added',
+    'Category Removed',
+    'Category Renamed',
+    'Category Weight Changed',
+    'Assignment Added (Graded)',
+    'Assignment Removed',
+    'Assignment Grade Changed',
+    'Assignment Note Changed',
+    'Assignment Due Date Changed',
+  ]
+};
+
 const settingSchema = new Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, required: true },
   user: {
@@ -15,40 +36,15 @@ const settingSchema = new Schema({
   },
   updater: {
     enabled: { type: Boolean, default: false },
-    checkedElements: {
-      info: {
-        type: [String],
-        default: ['Grade Changed'],
-        enum: [
-          'Class Added',
-          'Class Removed',
-          'Class Renamed',
-          'Teacher Changed',
-          'Grade Changed',
-        ]
-      },
-      data: {
-        type: [String],
-        default: ['Assignment Added (Graded)', 'Assignment Removed', 'Assignment Grade Changed'],
-        enum: [
-          'Category Added',
-          'Category Removed',
-          'Category Renamed',
-          'Category Weight Changed',
-          'Assignment Added (Graded)',
-          'Assignment Removed',
-          'Assignment Grade Changed',
-          'Assignment Note Changed',
-          'Assignment Due Date Changed',
-        ]
-      }
-    },
     notifications: {
       type: [{
         _id: false,
         channelId: String,
         webhook: String,
-        sentElements: [String]
+        sentElements: {
+          type: [String],
+          enum: [...sentElementsEnum.info, ...sentElementsEnum.data]
+        }
       }],
       default: []
     },
