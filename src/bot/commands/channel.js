@@ -5,9 +5,7 @@ import {
     ButtonBuilder,
     ButtonStyle,
     ChannelType, ComponentType,
-    EmbedBuilder,
-    StringSelectMenuBuilder,
-    StringSelectMenuOptionBuilder
+    EmbedBuilder
 } from "discord.js";
 import { Setting, User } from "../../models/index.js";
 import { client } from "../../config/index.js";
@@ -149,11 +147,112 @@ async function run(bot, interaction) {
     } else
 
     if (subcommand === "elements") {
-        // send embed with currently active elements
-        // add 2 action rows each with a multislect menu with info and data elements respectively
-        // (user can select and deselect elements to add and remove which are being sent to current channel)
-        // (embed updates with each change)
-        success("Elements edited!", interaction, true)
+        if (interaction.channel.parentId !== userCategory.id) return error("You must run this in a channel in your user category!", interaction)
+
+        // find sent elements for the current channel
+        const user = await User.findOne({ discordId: interaction.user.id }).exec()
+        const { updater: { notifications } } = await Setting.findOne({ userId: user._id }).exec()
+        const { sentElements } = notifications.find(n => n.channelId === interaction.channel.id)
+
+        // get info and data sent elements enum
+        const elementEnums = {
+            info: await Setting.schema.path('updater.checkedElements.info').options.enum,
+            data: await Setting.schema.path('updater.checkedElements.data').options.enum
+        }
+
+        // make select menus for info and data elements
+        let components = [{
+            type: ComponentType.ActionRow,
+            components: [{
+                type: ComponentType.StringSelect,
+                customId: `infoSelect-${interaction.user.id}-${interaction.channel.id}`,
+                placeholder: "Select info elements",
+                minValues: 0,
+                maxValues: elementEnums.info.length,
+                options: elementEnums.info.map(e => ({
+                    label: e,
+                    value: e,
+                    default: sentElements.includes(e)
+                }))
+            }]
+        }, {
+            type: ComponentType.ActionRow,
+            components: [{
+                type: ComponentType.StringSelect,
+                customId: `dataSelect-${interaction.user.id}-${interaction.channel.id}`,
+                placeholder: "Select data elements",
+                minValues: 0,
+                maxValues: elementEnums.data.length,
+                options: elementEnums.data.map(e => ({
+                    label: e,
+                    value: e,
+                    default: sentElements.includes(e)
+                }))
+            }]
+        }]
+
+        // send initial embed
+        const embed = new EmbedBuilder()
+            .setColor("#0099ff")
+            .setTitle("Edit elements")
+            .setDescription("Select the elements you want to be sent to this channel. Changes are automatically saved.")
+        const initialMessage = await interaction.editReply({ embeds: [embed], components: components });
+
+        const collector = initialMessage.createMessageComponentCollector({
+            componentType: ComponentType.StringSelect,
+            time: 900000
+        });
+
+        let finalInfoElements = sentElements.filter(e => elementEnums.info.includes(e))
+        let finalDataElements = sentElements.filter(e => elementEnums.data.includes(e))
+
+        collector.on('collect', async i => {
+            if (i.customId.startsWith("infoSelect")) finalInfoElements = i.values
+            if (i.customId.startsWith("dataSelect")) finalDataElements = i.values
+
+            // update db with new elements
+            await Setting.findOneAndUpdate(
+                { userId: user._id },
+                { $set: { "updater.notifications.$[elem].sentElements": [...finalInfoElements, ...finalDataElements] }},
+                { arrayFilters: [{ "elem.channelId": interaction.channel.id }] }
+            )
+
+            // update components with new values
+            components[0].components[0].options = elementEnums.info.map(e => ({
+                label: e,
+                value: e,
+                default: finalInfoElements.includes(e)
+            }))
+            components[1].components[0].options = elementEnums.data.map(e => ({
+                label: e,
+                value: e,
+                default: finalDataElements.includes(e)
+            }))
+
+            // send updated components
+            await i.update({ components: components })
+        });
+
+        collector.once('end', async () => {
+            let infoText = "*None*"
+            let dataText = "*None*"
+            if (finalInfoElements.length !== 0) infoText = "• " + finalInfoElements.join("\n• ")
+            if (finalDataElements.length !== 0) dataText = "• " + finalDataElements.join("\n• ")
+
+            const finalEmbed = new EmbedBuilder()
+                .setColor("#0099ff")
+                .setTitle("Elements sent to the current channel:")
+                .setFields([{
+                    name: "Info",
+                    value: infoText,
+                    inline: true
+                }, {
+                    name: "Data",
+                    value: dataText,
+                    inline: true
+                }])
+            return interaction.editReply({ embeds: [finalEmbed], components: [] });
+        });
     }
 }
 
