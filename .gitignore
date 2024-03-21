@@ -159,3 +159,6 @@ Temporary Items
 
 # Intellij Idea
 .idea/
+
+# Visual Studio Code
+.vscode/
