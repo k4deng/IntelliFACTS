@@ -44,7 +44,7 @@ export async function getInfoChanges(userId){
             if (checkedElements.includes('Class Added') && subject.endsWith("__added")) {
                 result.push({
                     element: "Class Added",
-                    title: subjectData.class.title + " Added",
+                    title: `${subjectData.class.title} Added`,
                     description: "*Class added to FACTS or updater settings*"
                 })
                 continue;
@@ -52,7 +52,7 @@ export async function getInfoChanges(userId){
             if (checkedElements.includes('Class Removed') && subject.endsWith("__deleted")) {
                 result.push({
                     element: "Class Removed",
-                    title: subjectData.class.title + " Removed",
+                    title: `${subjectData.class.title} Removed`,
                     description: "*Class removed from FACTS or updater settings*"
                 })
                 continue;
@@ -61,7 +61,7 @@ export async function getInfoChanges(userId){
             //class renamed
             if (checkedElements.includes('Class Renamed') && subjectData.class.title.__old) result.push({
                 element: "Class Renamed",
-                title: subjectData.class.title.__old + " Renamed",
+                title: `${subjectData.class.title.__old} Renamed`,
                 description: `\`${subjectData.class.title.__old}\` ⇒ \`${subjectData.class.title.__new}\``
             })
 
@@ -70,7 +70,7 @@ export async function getInfoChanges(userId){
                 const { firstName, lastName } = subjectData.teacher;
                 result.push({
                     element: "Teacher Changed",
-                    title: subjectData.class.title + " Teacher Changed",
+                    title: `${subjectData.class.title} Teacher Changed`,
                     description: `\`${firstName.__old ? firstName.__old : firstName} ${lastName.__old ? lastName.__old : lastName}\` ⇒ \`${firstName.__new ? firstName.__new : firstName} ${lastName.__new ? lastName.__new : lastName}\``
                 })
             }
@@ -83,7 +83,7 @@ export async function getInfoChanges(userId){
                 if (letter.__new === "N/A") message = `\`${average.__old} (${letter.__old ? letter.__old : letter})\` ⇒ \`${letter.__new}\``;
                 result.push({
                     element: "Grade Changed",
-                    title: subjectData.class.title + " Grade Change",
+                    title: `${subjectData.class.title} Grade Change`,
                     description: message
                 })
             }
@@ -157,7 +157,7 @@ export async function getDataChanges(userId){
                 if (checkedElements.includes('Category Added') && cat.endsWith("__added")) {
                     classResult.push({
                         element: "Category Added",
-                        title: catData.title + " Added",
+                        title:  `${catData.title} Added`,
                         description: "*Category added to FACTS*"
                     })
                     continue;
@@ -165,7 +165,7 @@ export async function getDataChanges(userId){
                 if (checkedElements.includes('Category Removed') && cat.endsWith("__deleted")) {
                     classResult.push({
                         element: "Category Removed",
-                        title: catData.title + " Removed",
+                        title: `${catData.title} Removed`,
                         description: "*Category removed from FACTS*"
                     })
                     continue;
@@ -174,14 +174,14 @@ export async function getDataChanges(userId){
                 //category renamed
                 if (checkedElements.includes('Category Renamed') && catData.title?.__old) classResult.push({
                     element: "Category Renamed",
-                    title: catData.title.__old + " Renamed",
+                    title: `${catData.title.__old} Renamed`,
                     description: `\`${catData.title.__old}\` ⇒ \`${catData.title.__new}\``
                 })
 
                 //category weight changed
                 if (checkedElements.includes('Category Weight Changed') && catData.weight?.__old) classResult.push({
                     element: "Category Weight Changed",
-                    title: newData[subject][cat].title + " Weight Changed",
+                    title: `${newData[subject][cat].title} Weight Changed`,
                     description: `\`${catData.weight.__old}\` ⇒ \`${catData.weight.__new}\``
                 })
 
@@ -196,7 +196,7 @@ export async function getDataChanges(userId){
                             desc += ` (\`${assignmentData.points.received}\`/\`${assignmentData.points.max}\`pts)`;
                         classResult.push({
                             element: "Assignment Added (Graded)",
-                            title: `**\`${assignment.replace("__added", "")}\` (\`${cat}\`) Added:**`,
+                            title: `\`${assignment.replace("__added", "")}\` (\`${cat}\`) Added:`,
                             description: desc
                         })
                     }
@@ -208,7 +208,7 @@ export async function getDataChanges(userId){
                             desc += ` (\`${assignmentData.points.received}\`/\`${assignmentData.points.max}\`pts)`;
                         classResult.push({
                             element: "Assignment Removed",
-                            title: `**\`${assignment.replace("__deleted", "")}\` (\`${cat}\`) Removed:**`,
+                            title: `\`${assignment.replace("__deleted", "")}\` (\`${cat}\`) Removed:`,
                             description: desc
                         })
                     }
@@ -224,7 +224,7 @@ export async function getDataChanges(userId){
                         else message += "`";
                         classResult.push({
                             element: "Assignment Grade Changed",
-                            title: `**\`${assignment}\` (\`${cat}\`) Updated:**`,
+                            title: `\`${assignment}\` (\`${cat}\`) Updated:`,
                             description: message
                         })
                     }
@@ -238,7 +238,7 @@ export async function getDataChanges(userId){
 
                         classResult.push({
                             element: "Assignment Note Changed",
-                            title: `**\`${assignment}\` (\`${cat}\`) Updated:**`,
+                            title: `\`${assignment}\` (\`${cat}\`) Updated:`,
                             description: desc
                         })
                     }
@@ -246,7 +246,7 @@ export async function getDataChanges(userId){
                     //assignment due date changed
                     if (checkedElements.includes('Assignment Due Date Changed') && assignmentData.date?.due?.__old) classResult.push({
                         element: "Assignment Due Date Changed",
-                        title: `**\`${assignment}\` (\`${cat}\`) Updated:**`,
+                        title: `\`${assignment}\` (\`${cat}\`) Updated:`,
                         description: `Due Date: \`${moment(assignmentData.date.due.__old).format("M/D")}\` ⇒ \`${moment(assignmentData.date.due.__new).format("M/D")}\``
                     })
 
