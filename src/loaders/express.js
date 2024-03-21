@@ -11,16 +11,6 @@ import bodyParser from 'body-parser';
 import { User } from '../models/index.js';
 
 export default (app) => {
-  process.on('uncaughtException', async (error) => {
-    // console.log(error);
-    logger('expressLoader.uncaughtException', '', error.message, 'Uncaught Exception', '');
-  });
-
-  process.on('unhandledRejection', async (ex) => {
-    // console.log(ex);
-    logger('expressLoader.unhandledRejection', '', ex.message, 'Unhandled Rejection', '');
-  });
-
   app.enable('trust proxy');
   app.use(cors());
   app.use(bodyParser.urlencoded({ extended: false }));
