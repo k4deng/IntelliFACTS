@@ -258,7 +258,7 @@ export async function getAllClassGradesData(userId, term, bypassFiltering = fals
     } catch (error) {
         return {
             type: "error",
-            message: errorHelper('rw.grades.getAllClassGradesInfoError', null, error.message).resultMessage.en
+            message: errorHelper('rw.grades.getAllClassGradesDataError', null, error.message).resultMessage.en
         }
     }
 }
