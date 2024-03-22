@@ -181,7 +181,8 @@ export async function refreshAuthTokens(userId, refresh_token){
 
 export async function makeAuthRequest(userId, url){
     try {
-        const { access_token } = await getAuthTokens(userId);
+        let { access_token } = await getAuthTokens(userId);
+        if (access_token === undefined) access_token = (await getAuthTokens(userId)).access_token;
 
         const res = await axios.get(url, {
             headers: {
