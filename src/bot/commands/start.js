@@ -48,7 +48,6 @@ async function run(bot, interaction) {
 
     // create webhook for new channel
     const webhook = await newChannel.createWebhook({ name: client.name, reason: `Webhook for ${interaction.user.username}` })
-    //TODO: when sending notification get avatar and username from bot
 
     // update db with new channel
     await Setting.findOneAndUpdate(

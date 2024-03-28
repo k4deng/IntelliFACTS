@@ -1,6 +1,7 @@
 import { client } from "../config/index.js";
 import fetch from "node-fetch";
 import { errorHelper } from "../utils/index.js";
+import { bot } from "../loaders/bot.js";
 
 async function _sendDiscordWebhook(url, fields, title, userId) {
 
@@ -54,6 +55,7 @@ async function _sendDiscordWebhook(url, fields, title, userId) {
             },
             body: JSON.stringify({
                 username: client.name,
+                avatar_url: bot.user.displayAvatarURL(),
                 embeds: embedsResult
             })
         })
