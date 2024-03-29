@@ -28,3 +28,4 @@ export const docsPrefix= '/docs';
 
 export const discordToken = process.env.DISCORD_TOKEN;
 export const discordClientSecret = process.env.DISCORD_CLIENT_SECRET;
+export const discordServerId = process.env.DISCORD_SERVER_ID;
