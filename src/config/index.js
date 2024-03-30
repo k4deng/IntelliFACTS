@@ -18,6 +18,7 @@ export const domain = process.env.DOMAIN || 'localhost:' + this.port;
 export const client = {
   name: process.env.COMPANY,
   desc: process.env.DESCRIPTION,
+  supportEmail: process.env.SUPPORT_EMAIL,
   url: `${secure === true ? 'https' : 'http'}://${domain}`
 };
 

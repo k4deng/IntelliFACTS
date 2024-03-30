@@ -44,63 +44,69 @@
                     <div class="row">
 
                         <!-- Content Column -->
-                        <div class="col-lg-6 mb-4">
+                        <div class="col-lg-6">
 
-                            <!-- Project Card Example -->
+                            <!-- Simple About -->
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                                </div>
                                 <div class="card-body">
-                                    <h4 class="small font-weight-bold">Sales Tracking <span
-                                            class="float-right">40%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Account Setup <span
-                                            class="float-right">Complete!</span></h4>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-12 text-center">
+                                            <img src="/public/img/logo.png" style="height: 192px; width: 192px;" alt="logo">
+                                        </div>
+                                        <div class="col-md-7 col-12 mt-4">
+                                            <h1><b><%= site.name %></b></h1>
+                                            <p class="text-lg text-muted"><%= site.desc %></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Approach -->
+                            <!-- More feat -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">More Features</h6>
                                 </div>
                                 <div class="card-body">
-                                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                        CSS bloat and poor page performance. Custom CSS classes are used to create
-                                        custom components and custom utility classes.</p>
-                                    <p class="mb-0">Before working with this theme, you should become familiar with the
-                                        Bootstrap framework, especially the utility classes.</p>
+                                    <p><%= site.name %> has more features than just updating you!
+                                        Not only can you just <a href="/grades/overview">view your grades</a>, you also get access to a new <a href="/homework">homework viewer</a> which
+                                        sorts homework by class and day in an easy to understand grid.</p>
+                                    <p class="mb-0">You can also blacklist or whitelist certain classes in <a href="/settings">settings</a> so that you can
+                                        remove clutter from the grades overview and from notifications.</p>
                                 </div>
                             </div>
 
                         </div>
 
-                        <div class="col-lg-6 mb-4">
+                        <div class="col-lg-6">
 
-                            <!-- Illustrations -->
+                            <!-- How to use -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">How to use the <%= site.name %> updater</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="text-center">
-                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                            src="/public/img/undraw_posting_photo.svg" alt="...">
-                                    </div>
-                                    <p>Add some quality, svg illustrations to your project courtesy of <a
-                                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                        constantly updated collection of beautiful svg images that you can use
-                                        completely free and without attribution!</p>
-                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                        unDraw &rarr;</a>
+                                    <p>Using <%= site.name %> is actually pretty easy!
+                                        <% if (user === null) { %>
+                                            Get started by <a href="/auth/login">logging in</a> with your FACTS account.
+                                            Make sure to use a student account, as parent accounts are not supported at this time.
+                                            Then, head
+                                        <% } else { %> Get started by going <% } %>
+                                        to <a href="/settings">settings</a> to begin setting up notifications.</p>
+                                    <p>On the settings page, begin by enabling the updater and linking your Discord account.</p>
+                                    <p class="mb-0">Once linked, you'll automatically be joined to the <%= site.name %> server where you can
+                                        set up notifications. You'll find a channel with instructions on how to do so once there.</p>
+                                </div>
+                            </div>
+
+                            <!-- Need help -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Need help?</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-0">You can get support by emailing <span id="emailfill"></span>. If you would rather have instant support, there are
+                                        channels available on the Discord server (automatically joined when you link your account) where members of 
+                                        the community can help!</p>
                                 </div>
                             </div>
 
@@ -126,7 +132,7 @@
     <%- include("../_includes/doc-end") %>
 
     <!-- Page level plugins -->
-    <script src="/public/vendor/chart.js/Chart.min.js"></script>
+    <script src="/public/js/custom/home.js" id="home.js" data="<%= site.supportEmail.split('').reverse().join('') %>"></script>
 
 </body>
 

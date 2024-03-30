@@ -12,9 +12,6 @@ The program can
 
 There are many improvements to be made to IntelliFACTS before 1.0.0 release, my list is below.
 
-* PWA
-  * Add install popups
-
 * API
   * manually trigger updater
   * get user information
@@ -23,9 +20,6 @@ There are many improvements to be made to IntelliFACTS before 1.0.0 release, my 
   * get grades / interact with facts api via IntelliFACTS methods
 
 * Release oriented
-  * make homepage look nice
-  * discord server for IntelliFACTS
   * update readme with setup instructions
   * use semantic versioning
   * github tags and releases
-  * host locally
