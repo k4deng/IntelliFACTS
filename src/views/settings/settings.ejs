@@ -145,7 +145,7 @@
                                     <div class="card-body">
 
                                         <div class="row">
-                                            <div class="form-group col-xl-5 col-md-6 col-sm-12">
+                                            <div class="form-group col-md-6 col-sm-12">
                                                 <label>Filtering Type</label>
                                                 <select class="custom-select" name="filteringType">
                                                     <option value="whitelist" <%= settings.user.classes.filteringType === 'whitelist' ? 'selected' : '' %>>Whitelist</option>
@@ -155,14 +155,17 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group mb-0">
                                             <label>Classes</label>
                                             <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Select to enter classes" name="filteringList">
                                                 <% for (const [classId, className] of Object.entries(classes)) { %>
                                                     <option value="<%= classId %>" <%= settings.user.classes.list.includes(classId) ? 'selected' : '' %>><%= className %></option>
                                                 <% } %>
                                             </select>
-                                            <p class="help-block">Select classes to be affected by the filter type above<br>(Leave blank to do no filtering)</p>
+                                            <p class="help-block mb-0">
+                                                Select classes to be <span id="filteringHelpType"></span>ed
+                                                (Leave blank to <span id="filteringHelpType"></span> nothing)
+                                            </p>
                                         </div>
 
                                     </div>

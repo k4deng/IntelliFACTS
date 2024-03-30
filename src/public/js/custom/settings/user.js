@@ -5,6 +5,16 @@ $(document).ready(function($) {
         theme: 'bootstrap4'
     })
 
+    // fill help text with filtering type
+    function updateFilteringTypeHelpText() {
+        const filteringType = $('select[name="filteringType"]').val();
+        $('span[id="filteringHelpType"]').text(filteringType)
+    }
+    updateFilteringTypeHelpText() // call on load
+    $('select[name="filteringType"]').on('change', () => {
+        updateFilteringTypeHelpText()
+    });
+
     async function submitUserForm(data){
         var Toast = Swal.mixin({
             toast: true,
