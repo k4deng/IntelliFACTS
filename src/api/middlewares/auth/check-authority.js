@@ -23,23 +23,3 @@ export async function checkAdmin(req, res, next) {
 
   next();
 }
-export async function checkCreator(req, res, next) {
-  const user = await User.findById(req.session.user).exec()
-    .catch(err => {
-      return res.status(500).json(errorHelper('middlewares.auth.userCreatorSearchError', req, err.message));
-    });
-
-  if (user.type !== 'creator' && user.type !== 'admin') _sendError(req, res, user, 403, 'middlewares.auth.noCreatorAccess');
-
-  next();
-}
-export async function checkReader(req, res, next) {
-  const user = await User.findById(req.session.user).exec()
-    .catch(err => {
-      return res.status(500).json(errorHelper('middlewares.auth.userReaderSearchError', req, err.message));
-    });
-
-  if (user.type === 'user') _sendError(req, res, user, 403, 'middlewares.auth.noReaderAccess');
-
-  next();
-}
