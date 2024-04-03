@@ -1,6 +1,7 @@
 import express from 'express';
 import { port, secure, domain, nodeEnv } from './config/index.js';
 import loader from './loaders/index.js';
+import { logger } from "./utils/index.js";
 
 const app = express();
 
