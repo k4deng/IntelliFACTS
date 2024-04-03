@@ -12,6 +12,12 @@ The program can
 
 There are many improvements to be made to IntelliFACTS before 1.0.0 release, my list is below.
 
+* relogin if user refresh token expires
+  * send notification
+  * delete logged in sessions
+  * make user relogin to do anything
+  * put on updater blacklist
+
 * API
   * manually trigger updater
   * get user information
