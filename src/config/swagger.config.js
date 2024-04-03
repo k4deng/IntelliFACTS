@@ -1,24 +1,25 @@
+import { config } from 'dotenv';
+
+if (process.env.NODE_ENV !== 'production') {
+  const envFound = config();
+  if (envFound.error) throw new Error("⚠️  Couldn't find .env file  ⚠️");
+}
+
+const port = Number(process.env.PORT) || 3000;
+const secure = process.env.SECURE ? (/true/i).test(process.env.SECURE) : true;
+const domain = process.env.DOMAIN || 'localhost:' + port;
+
 export default {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Nodejs-Starter-Template API',
-      version: '1.0.0',
-      description: 'The API documentation of a boilerplate/starter project for quickly building RESTful APIs using Node.js, Express, and Mongoose.',
-      license: {
-        name: 'MIT',
-        url: 'https://choosealicense.com/licenses/mit/',
-      },
-      contact: {
-        name: 'Bahrican Yesil',
-        url: 'https://github.com/bahricanyesil',
-        email: 'bahricanyesil@gmail.com',
-      },
+      title: 'IntelliFACTS API',
+      version: '1.0.0'
     },
     basePath: '/api',
     servers: [
       {
-        url: 'http://localhost:3000/api/',
+        url: `${secure === true ? 'https' : 'http'}://${domain}/api/`,
       },
     ],
   },
@@ -29,10 +30,7 @@ export default {
     }
   ],
   apis: [
-    "src/models/*.js",
     "src/utils/helpers/*.js",
-    "src/api/controllers/user/*.js",
-    "src/api/controllers/user/edit/*.js",
-    "src/api/controllers/user/auth/*.js"
+    "src/api/controllers/api/*.js",
   ]
 };

@@ -25,7 +25,6 @@ export const client = {
 export const sessionSecret = process.env.SESSION_SECRET;
 
 export const prefix= '/';
-export const docsPrefix= '/docs';
 
 export const discordToken = process.env.DISCORD_TOKEN;
 export const discordClientSecret = process.env.DISCORD_CLIENT_SECRET;

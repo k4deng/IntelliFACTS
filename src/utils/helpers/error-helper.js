@@ -26,21 +26,17 @@ export default (code, req, errorMessage) => {
 };
 
 /**
-* @swagger
-* components:
-*   schemas:
-*     Result:
-*       type: object
-*       properties:
-*         resultMessage:
-*           $ref: '#/components/schemas/ResultMessage'
-*         resultCode:
-*           $ref: '#/components/schemas/ResultCode'
-*     ResultMessage:
-*       type: object
-*       properties:
-*         en:
-*           type: string
-*     ResultCode:
-*       type: string
-*/
+ * @swagger
+ * components:
+ *   schemas:
+ *     Result:
+ *       type: object
+ *       properties:
+ *         resultMessage:
+ *           type: object
+ *           properties:
+ *             en:
+ *               type: string
+ *         resultCode:
+ *           type: string
+ */
