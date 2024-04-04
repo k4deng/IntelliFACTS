@@ -24,8 +24,7 @@ const userSchema = new Schema({
   },
 
   needsLogin: {
-    type: Boolean,
-    default: false,
+    type: Boolean, default: false
   },
   tokens: {
     id_token: String,
@@ -51,8 +50,11 @@ const userSchema = new Schema({
   },
 
   discordId: {
-    type: String,
-    default: null,
+    type: String, default: null
+  },
+
+  apiToken: {
+    type: String, default: null
   },
 
 },

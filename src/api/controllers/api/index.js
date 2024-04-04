@@ -1,2 +1,4 @@
-// TEST
-export { default as test } from './test.js'
+// dashboard
+export { default as dashboard } from './dashboard.js'
+
+//rest of routes

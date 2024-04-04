@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <%- include("../_includes/head") %>
+
+    <title><%= site.name %> - Api Dashboard</title>
+    <meta property="og:title" content="<%= site.name %> - Api Dashboard">
+
+    <meta name="description" content="<%= site.desc %>">
+    <meta property="og:description" content="<%= site.desc %>">
+
+    <meta property="og:url" content="<%= site.url %>/api/dashboard">
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <%- include("../_includes/sidebar") %>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include("../_includes/topbar") %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Api Dashboard</h1>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column-->
+                        <div class="order-xl-2 col-xl-6">
+                            <!-- User Settings-->
+                            <div class="card shadow mb-4">
+                                <form role="form" method="post">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Api Token</h6>
+                                    </div>
+                                    <div class="card-body">
+
+                                        <p>here</p>
+
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-success">Save Settings</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include("../_includes/footer") %>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <%- include("../_includes/doc-end") %>
+
+</body>
+
+</html>
