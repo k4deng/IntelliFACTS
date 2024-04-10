@@ -1,8 +1,6 @@
 import { User } from '../../../models/index.js';
 import { errorHelper } from '../../../utils/index.js';
 
-//todo: add translation keys into lang file
-
 export default async (req, res, next) => {
     //allow for user session to also work (for in browser requests)
     if (req.session.user) {

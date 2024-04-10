@@ -24,8 +24,6 @@ export async function checkAdmin(req, res, next) {
   next();
 }
 
-//todo: add translation keys into lang file (if needed & remove unused ones)
-
 export async function checkApiAdmin(req, res, next) {
   const token = req.header('Authorization').split(' ')[1];
   const user = await User.find({ apiToken: token }).exec()

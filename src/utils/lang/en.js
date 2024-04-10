@@ -5,9 +5,16 @@ export default {
   "checkAuth.userNotFound": "Could not find user with the given id.",
   "checkAuth.invalidToken": "Invalid token. the token may have expired.",
 
+  "checkApiAuth.noCreds": "No credentials provided.",
+  "checkApiAuth.userNotFound": "Could not find user with the given id.",
+  "checkApiAuth.invalidToken": "Invalid token. the token may have expired.",
+  "checkApiAuth.noToken": "No token provided.",
+  "checkApiAuth.userApiTokenNotFound": "Could not find user with the given token.",
+  "checkApiAuth.invalidApiToken": "Invalid token. the token may have been regenerated.",
+
+
   "middlewares.auth.noAdminAccess": "Access denied. You do not have permission to access.",
-  "middlewares.auth.noCreatorAccess": "Access denied. You do not have permission to access.",
-  "middlewares.auth.noReaderAccess": "Access denied. You do not have permission to access.",
+  "middlewares.auth.noApiTokenAdminAccess": "Access denied. You do not have permission to access.",
 
   "rateLimiter.tooManyRequests": "Too many requests.",
 
