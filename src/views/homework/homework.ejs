@@ -46,51 +46,48 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">Homework Grid Sheet</h1>
 
-                    <div class="row">
+                    <div class="row" >
 
-                        <div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Homework</h6>
+                        <div class="card shadow mb-4" style="overflow-x: scroll;">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Homework</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="homeworkTable" class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr class="bg-light-gray">
+                                                <th>Class</th>
 
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table id="homeworkTable" class="table table-bordered" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr class="bg-light-gray">
-                                                    <th>Class</th>
+                                                <th>Monday</th>
+                                                <th>Tuesday</th>
+                                                <th>Wednesday</th>
+                                                <th>Thursday</th>
+                                                <th>Friday</th>
+                                            </tr>
+                                            </thead>
+                                        <tbody>
+                                        <% for (const [, classData] of Object.entries(data)) { %>
+                                            <tr>
+                                                <td class="bg-light-gray"><strong><%= Object.values(classData)[0].courseTitle %></strong></td>
 
-                                                    <th>Monday</th>
-                                                    <th>Tuesday</th>
-                                                    <th>Wednesday</th>
-                                                    <th>Thursday</th>
-                                                    <th>Friday</th>
-                                                </tr>
-                                                </thead>
-                                            <tbody>
-                                            <% for (const [, classData] of Object.entries(data)) { %>
-                                                <tr>
-                                                    <td class="bg-light-gray"><strong><%= Object.values(classData)[0].courseTitle %></strong></td>
+                                                <% for (const [, dayHW] of Object.entries(classData)) { %>
 
-                                                    <% for (const [, dayHW] of Object.entries(classData)) { %>
+                                                    <% if (!Object.values(dayHW)[0]) { %>
+                                                        <td class="bg-light-gray"></td>
+                                                    <% continue; } %>
 
-                                                        <% if (!Object.values(dayHW)[0]) { %>
-                                                            <td class="bg-light-gray"></td>
-                                                        <% continue; } %>
-
-                                                        <% if (dayHW?.homeworkHTML) {%>
-                                                            <td class="classGridData">
-                                                                <%- dayHW?.homeworkHTML %>
-                                                            </td>
-                                                        <% } %>
-
+                                                    <% if (dayHW?.homeworkHTML) {%>
+                                                        <td class="classGridData">
+                                                            <%- dayHW?.homeworkHTML %>
+                                                        </td>
                                                     <% } %>
-                                                </tr>
-                                            <% } %>
-                                            </tbody>
-                                        </table>
-                                    </div>
+
+                                                <% } %>
+                                            </tr>
+                                        <% } %>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
