@@ -216,11 +216,12 @@ export async function getDataChanges(userId){
                     //pts/grade changed
                     if (checkedElements.includes('Assignment Grade Changed') && (assignmentData.grade?.__old && assignmentData.grade?.__new)) {
                         const { grade, points } = assignmentData;
+                        const oldPoints = oldData[subject][cat].assignments[assignment].points;
                         let message = `\`${grade.__old}`;
-                        if (points.received.__old != grade.__old) message += ` (${points.received.__old}/${points.max?.__old ?? points.max})\``;
+                        if (points.received.__old != grade.__old) message += ` (${points.received.__old}/${points.max?.__old ? points.max.__old : oldPoints.max})\``;
                         else message += "`";
                         message += ` ⇒ \`${grade.__new}`;
-                        if (points.received.__new != grade.__new) message += ` (${points.received.__new}/${points.max?.__new ?? points.max})\``;
+                        if (points.received.__new != grade.__new) message += ` (${points.received.__new}/${points.max?.__new ? points.max.__new : oldPoints.max})\``;
                         else message += "`";
                         classResult.push({
                             element: "Assignment Grade Changed",
