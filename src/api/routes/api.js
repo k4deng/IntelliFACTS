@@ -2,7 +2,7 @@ import { Router } from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { serve, setup } from 'swagger-ui-express';
 import { swaggerConfig } from '../../config/index.js';
-import { dashboard, dashboardPost } from '../controllers/api/index.js';
+import { dashboard, dashboardPost, updater } from '../controllers/api/index.js';
 import checkAuth from '../middlewares/auth/check-auth.js';
 import checkApiAuth from "../middlewares/auth/check-api-auth.js";
 import { checkAdmin, checkApiAdmin } from "../middlewares/index.js";
@@ -19,7 +19,7 @@ router.get('/dashboard', checkAuth, dashboard);
 router.post('/dashboard', checkAuth, dashboardPost);
 
 // Actual api routes
-//router.get('/updater', checkApiAuth, checkApiAdmin, test); //admin only
+router.get('/updater', checkApiAuth, checkApiAdmin, updater); //admin only
 //router.get('/logs', checkApiAuth, checkApiAdmin, test); //admin only
 //router.get('/notifications', checkApiAuth, checkApiAdmin, test); //admin only
 //router.get('/users', checkApiAuth, checkApiAdmin, test); //admin only

@@ -19,7 +19,6 @@ There are many improvements to be made to IntelliFACTS before 1.0.0 release, my 
   * put on updater blacklist
 
 * API
-  * manually trigger updater
   * get user information
   * get logs
   * send notifications

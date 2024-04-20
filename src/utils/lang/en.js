@@ -12,7 +12,6 @@ export default {
   "checkApiAuth.userApiTokenNotFound": "Could not find user with the given token.",
   "checkApiAuth.invalidApiToken": "Invalid token. the token may have been regenerated.",
 
-
   "middlewares.auth.noAdminAccess": "Access denied. You do not have permission to access.",
   "middlewares.auth.noApiTokenAdminAccess": "Access denied. You do not have permission to access.",
 
@@ -32,4 +31,7 @@ export default {
   "submitUpdaterSettings.invalidNotificationUri": "Please provide a valid notification uri.",
 
   "submitUserSettings.provideAllFields": "Please provide all the required fields!",
+
+  "api.updater.success": "Updater run successfully.",
+  "api.updater.userNotFound": "Could not find user with the given id.",
 };

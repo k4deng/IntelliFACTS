@@ -15,7 +15,7 @@ export async function makeSchedule(frequency, users) {
     });
 }
 
-async function runUpdater(userId) {
+export async function runUpdater(userId) {
     try {
         //get settings & changes
         const userSettings = await Setting.findOne({ userId: userId }).exec();
