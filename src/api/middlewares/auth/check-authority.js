@@ -14,7 +14,7 @@ function _sendError(req, res, user, num, code) {
 }
 
 export async function checkAdmin(req, res, next) {
-  const user = await User.findById(req.session.user).exec()
+  const user = await User.findOne({ _id: req.session.user }).exec()
     .catch(err => {
       return res.status(500).json(errorHelper('middlewares.auth.userAdminSearchError', req, err.message));
     });
@@ -26,7 +26,7 @@ export async function checkAdmin(req, res, next) {
 
 export async function checkApiAdmin(req, res, next) {
   const token = req.header('Authorization').split(' ')[1];
-  const user = await User.find({ apiToken: token }).exec()
+  const user = await User.findOne({ apiToken: token }).exec()
       .catch(err => {
         return res.status(500).json(errorHelper('middlewares.auth.userApiTokenAdminSearchError', req, err.message));
       });

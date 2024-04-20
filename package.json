@@ -30,7 +30,8 @@
     "randomstring": "^1.1.5",
     "rate-limiter-flexible": "^2.2.1",
     "swagger-jsdoc": "^6.0.8",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-ui-express": "^4.1.6",
+    "uuid": "^9.0.1"
   },
   "scripts": {
     "start-prod": "NODE_ENV=production node src/app.js",

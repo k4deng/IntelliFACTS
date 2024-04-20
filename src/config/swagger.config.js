@@ -13,24 +13,21 @@ export default {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'IntelliFACTS API',
+      title: `${process.env.COMPANY} API`,
       version: '1.0.0'
     },
     basePath: '/api',
-    servers: [
-      {
-        url: `${secure === true ? 'https' : 'http'}://${domain}/api/`,
-      },
-    ],
+    servers: [{
+      url: `${secure === true ? 'https' : 'http'}://${domain}/api/`,
+    }],
   },
-  tags: [
-    {
-      "name": "User",
-      "description": "API for users"
-    }
-  ],
+  tags: [{
+      "name": "Admin Only",
+      "description": "Routes that require admin access"
+  }],
   apis: [
     "src/utils/helpers/*.js",
+    "src/api/middlewares/auth/*.js",
     "src/api/controllers/api/*.js",
   ]
 };

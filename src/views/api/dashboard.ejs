@@ -44,17 +44,23 @@
                         <div class="order-xl-2 col-xl-6">
                             <!-- User Settings-->
                             <div class="card shadow mb-4">
-                                <form role="form" method="post">
+                                <form role="form" method="post" id="tokenForm">
                                     <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold text-primary">Api Token</h6>
                                     </div>
                                     <div class="card-body">
 
-                                        <p>here</p>
+                                        <p class="mb-0">Your API Token is</p>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-primary" id="copyTokenButton"><i class="fa fa-copy"></i></button>
+                                            </div>
+                                            <input type="text" class="form-control" id="tokenFormInput" value="<%= user.apiToken %>" readonly>
+                                        </div>
 
                                     </div>
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-success">Save Settings</button>
+                                        <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#regenerateTokenModal">Regenerate Token</a>
                                     </div>
                                 </form>
                             </div>
@@ -78,6 +84,29 @@
     <!-- End of Page Wrapper -->
 
     <%- include("../_includes/doc-end") %>
+
+    <!-- Page level custom scripts -->
+    <script src="/public/js/custom/api-dashboard.js"></script>
+
+    <div class="modal fade" id="regenerateTokenModal" tabindex="-1" role="dialog" aria-labelledby="regenerateTokenModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="regenerateTokenModalLabel">Regenerate Token?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Are you sure you want to regenerate your token?
+                    This will invalidate your old token, and it will no longer be usable.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a id="regenerateTokenModalSubmitButton" class="btn btn-danger" href="#">Regenerate</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 
