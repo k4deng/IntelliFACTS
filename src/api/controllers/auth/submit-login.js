@@ -43,7 +43,8 @@ export default async (req, res) => {
     firstName: loginRes.user.firstName,
     lastName: loginRes.user.lastName,
     role: loginRes.user.role,
-    tokens: loginRes.tokens
+    tokens: loginRes.tokens,
+    needsLogin: false,
   }
 
   // exists, update user from login

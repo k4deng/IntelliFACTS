@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import { Setting, UpdaterData } from '../models/index.js';
+import { Setting, UpdaterData, User } from '../models/index.js';
 import { checkSentElements, getDataChanges, getInfoChanges, sendToDiscord } from './index.js';
 import { getAllClassGradesData, getAllClassGradesInfo } from "../utils/helpers/renweb/requests/grades.js";
 import { errorHelper } from "../utils/index.js";
@@ -19,6 +19,8 @@ export async function runUpdater(userId) {
     try {
         //get settings & changes
         const userSettings = await Setting.findOne({ userId: userId }).exec();
+        const user = await User.findOne({ _id: userId }).exec();
+        if (user.needsLogin === true) return; //skip if user needs to login
         const { data: dataChanges, message } = await getDataChanges(userId);
         const { data: infoChanges } = await getInfoChanges(userId);
 

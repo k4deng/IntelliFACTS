@@ -20,7 +20,7 @@ export default async (req, res) => {
     }
 
     return res.status(200).json({
-      resultMessage: getText(null,"api.updater.success"),
+      resultMessage: getText(null, "api.updater.success"),
       resultCode: "api.updater.success"
     });
   } catch (error) {

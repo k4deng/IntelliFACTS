@@ -12,11 +12,15 @@ The program can
 
 There are many improvements to be made to IntelliFACTS before 1.0.0 release, my list is below.
 
-* relogin if user refresh token expires
-  * send notification
-  * delete logged in sessions
-  * make user relogin to do anything
-  * put on updater blacklist
+* notifications system revamp
+  * allow user to choose discord/pwa/both
+  * pwa notifications
+    * prompt to add pwa (send popup when opened on ios/android)
+    * when pwa added, send to link page
+    * user has to accept notifications
+    * send generated keys to server and add to user settings
+    * send user back to homepage
+    * update updater to also send pwa notifications if configured
 
 * API
   * get user information

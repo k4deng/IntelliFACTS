@@ -140,10 +140,8 @@ export async function getClassGradesInfo(userId, classId, term){
         //send it off!
         return _makeClassInfoRes(classData);
     } catch (error) {
-        return {
-            type: "error",
-            message: errorHelper('rw.grades.getClassGradesInfoError', null, error.message).resultMessage.en
-        }
+        errorHelper('rw.grades.getClassGradesInfoError', { session: { user: userId }}, error.message)
+        throw error;
     }
 }
 
@@ -185,10 +183,8 @@ export async function getAllClassGradesInfo(userId, term, bypassFiltering = fals
         //send off result
         return result;
     } catch (error) {
-        return {
-            type: "error",
-            message: errorHelper('rw.grades.getAllClassGradesInfoError', null, error.message).resultMessage.en
-        }
+        errorHelper('rw.grades.getAllClassGradesInfoError', { session: { user: userId }}, error.message)
+        throw error;
     }
 }
 
@@ -209,10 +205,8 @@ export async function getClassGradesData(userId, classId, term){
         //send it off!
         return _makeClassDataRes(apidata);
     } catch (error) {
-        return {
-            type: "error",
-            message: errorHelper('rw.grades.getClassGradesDataError', null, error.message).resultMessage.en
-        }
+        errorHelper('rw.grades.getClassGradesDataError', { session: { user: userId }}, error.message)
+        throw error;
     }
 }
 
@@ -256,9 +250,7 @@ export async function getAllClassGradesData(userId, term, bypassFiltering = fals
         //send off result
         return result;
     } catch (error) {
-        return {
-            type: "error",
-            message: errorHelper('rw.grades.getAllClassGradesDataError', null, error.message).resultMessage.en
-        }
+        errorHelper('rw.grades.getAllClassGradesDataError', { session: { user: userId }}, error.message)
+        throw error;
     }
 }

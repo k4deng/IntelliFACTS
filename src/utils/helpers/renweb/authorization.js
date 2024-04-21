@@ -4,6 +4,11 @@ import { load } from 'cheerio';
 import { createHash, randomBytes } from 'crypto';
 import User from "../../../models/user.js";
 import { errorHelper } from "../../index.js";
+import { Setting } from "../../../models/index.js";
+import { bot } from "../../../loaders/bot.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js";
+import { client } from "../../../config/index.js";
+import mongoose from "mongoose";
 
 // helper functions
 function _base64URLEncode(str) {
@@ -150,6 +155,7 @@ export async function refreshAuthTokens(userId, refresh_token){
         const res = await axios({
             method: "post",
             url: "https://accounts.renweb.com/connect/token",
+            validateStatus: status => (status >= 200 && status < 300) || status === 400,
             headers: {
                 "Accept": "*/*",
                 "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -159,6 +165,12 @@ export async function refreshAuthTokens(userId, refresh_token){
             },
             data: `refresh_token=${refresh_token}&client_id=aware3&grant_type=refresh_token`
         });
+
+        // the refresh token is invalid
+        if (res.data.error === 'invalid_grant') {
+            await _notifyTokenExpired(userId);
+            throw new Error('Invalid refresh token');
+        }
 
         const tokensRes = _makeTokensRes(res.data)
 
@@ -200,4 +212,39 @@ export async function makeAuthRequest(userId, url){
         errorHelper('rw.auth.makeAuthRequestError', null, error.message)
         throw error;
     }
+}
+
+async function _notifyTokenExpired(userId){
+    await User.findOneAndUpdate({ _id: userId }, { needsLogin: true }).exec();
+    const userSettings = await Setting.findOne({ userId: userId }).exec();
+
+    // if there is a channel setup for notifs, send a message
+    const channelId = userSettings.updater.notifications[0]?.channelId;
+    if (channelId) {
+        const message = new EmbedBuilder()
+            .setTitle("RenWeb Login Expired")
+            .setDescription(`Your RenWeb login has expired. Please login again to continue getting notifications from ${client.name}.`)
+            .setColor(15158332)
+        const button = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setLabel("Log In")
+                    .setStyle(ButtonStyle.Link)
+                    .setURL(`${client.url}/auth/login`)
+            );
+        const channel = await bot.channels.cache.get(channelId);
+        await channel.send({ embeds: [message], components: [button] });
+    }
+
+    //delete sessions so users have to log in again
+    const Session = mongoose.connection.db.collection("sessions")
+    const allSessions = await Session.find({}).toArray();
+    const userSessions = allSessions.filter(session => {
+        const sessionData = JSON.parse(session.session);
+        return sessionData.user == userId;
+    })
+    for (const session of userSessions) {
+        await Session.deleteOne({ _id: session._id });
+    }
+
 }
