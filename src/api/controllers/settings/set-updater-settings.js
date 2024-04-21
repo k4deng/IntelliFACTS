@@ -34,7 +34,7 @@ export default async (req, res) => {
     for (const notification of req.body.data.notifications) {
         await Setting.findOneAndUpdate(
             { userId: req.session.user },
-            { $set: { "updater.notifications.$[elem].sentElements": notification.sentElements }},
+            { $set: { "updater.discordNotifications.$[elem].sentElements": notification.sentElements }},
             { arrayFilters: [{ "elem.channelId": notification.channelId }]}
         )
         .catch((err) => {

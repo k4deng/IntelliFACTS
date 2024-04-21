@@ -219,7 +219,7 @@ async function _notifyTokenExpired(userId){
     const userSettings = await Setting.findOne({ userId: userId }).exec();
 
     // if there is a channel setup for notifs, send a message
-    const channelId = userSettings.updater.notifications[0]?.channelId;
+    const channelId = userSettings.updater.discordNotifications[0]?.channelId;
     if (channelId) {
         const message = new EmbedBuilder()
             .setTitle("RenWeb Login Expired")

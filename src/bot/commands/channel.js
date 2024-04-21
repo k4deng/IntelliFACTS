@@ -83,7 +83,7 @@ async function run(bot, interaction) {
         await Setting.findOneAndUpdate(
             { userId: user._id },
             { $push: {
-                "updater.notifications": {
+                "updater.discordNotifications": {
                     channelId: newChannel.id,
                     webhook: webhook.url,
                     sentElements: []
@@ -121,7 +121,7 @@ async function run(bot, interaction) {
         await Setting.findOneAndUpdate(
             { userId: user._id },
             { $pull: {
-                    "updater.notifications": {
+                    "updater.discordNotifications": {
                         channelId: interaction.channel.id
                     }
                 }},
@@ -152,8 +152,8 @@ async function run(bot, interaction) {
 
         // find sent elements for the current channel
         const user = await User.findOne({ discordId: interaction.user.id }).exec()
-        const { updater: { notifications } } = await Setting.findOne({ userId: user._id }).exec()
-        const { sentElements } = notifications.find(n => n.channelId === interaction.channel.id)
+        const { updater: { discordNotifications } } = await Setting.findOne({ userId: user._id }).exec()
+        const { sentElements } = discordNotifications.find(n => n.channelId === interaction.channel.id)
 
         // get info and data sent elements enum
         const elementEnums = {
@@ -214,7 +214,7 @@ async function run(bot, interaction) {
             // update db with new elements
             await Setting.findOneAndUpdate(
                 { userId: user._id },
-                { $set: { "updater.notifications.$[elem].sentElements": [...finalInfoElements, ...finalDataElements] }},
+                { $set: { "updater.discordNotifications.$[elem].sentElements": [...finalInfoElements, ...finalDataElements] }},
                 { arrayFilters: [{ "elem.channelId": interaction.channel.id }] }
             )
 

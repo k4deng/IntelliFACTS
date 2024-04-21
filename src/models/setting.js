@@ -36,7 +36,7 @@ const settingSchema = new Schema({
   },
   updater: {
     enabled: { type: Boolean, default: false },
-    notifications: {
+    discordNotifications: {
       type: [{
         _id: false,
         channelId: String,
@@ -44,6 +44,18 @@ const settingSchema = new Schema({
         sentElements: {
           type: [String],
           enum: [...sentElementsEnum.info, ...sentElementsEnum.data]
+        }
+      }],
+      default: []
+    },
+    pushSubscriptions: {
+      type: [{
+        _id: false,
+        endpoint: String,
+        expirationTime: String,
+        keys: {
+          p256dh: String,
+          auth: String
         }
       }],
       default: []

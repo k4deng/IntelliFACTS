@@ -26,6 +26,9 @@ export const sessionSecret = process.env.SESSION_SECRET;
 
 export const prefix= '/';
 
+export const vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
+export const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
+
 export const discordToken = process.env.DISCORD_TOKEN;
 export const discordClientSecret = process.env.DISCORD_CLIENT_SECRET;
 export const discordServerId = process.env.DISCORD_SERVER_ID;

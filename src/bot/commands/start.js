@@ -53,7 +53,7 @@ async function run(bot, interaction) {
     await Setting.findOneAndUpdate(
         { userId: user._id },
         { $push: {
-            "updater.notifications": {
+            "updater.discordNotifications": {
                 channelId: newChannel.id,
                 webhook: webhook.url,
                 sentElements: []

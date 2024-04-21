@@ -31,7 +31,7 @@ export async function runUpdater(userId) {
         if (Object.keys(dataChanges).length === 0 && infoChanges.length === 0) return;
 
         //loop through array of notifications & send
-        for (const { webhook, sentElements } of userSettings.updater.notifications) {
+        for (const { webhook, sentElements } of userSettings.updater.discordNotifications) {
             const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges.length !== 0 ? { info_changes: infoChanges } : {}) });
             await sendToDiscord(webhook, cleansedChanges, userId);
         }
