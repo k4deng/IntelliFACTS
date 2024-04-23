@@ -56,6 +56,10 @@ const settingSchema = new Schema({
         keys: {
           p256dh: String,
           auth: String
+        },
+        sentElements: {
+          type: [String],
+          enum: [...sentElementsEnum.info, ...sentElementsEnum.data]
         }
       }],
       default: []

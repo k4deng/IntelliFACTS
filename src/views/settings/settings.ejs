@@ -98,7 +98,7 @@
                           </div>
 
                             <!-- Notifications Settings-->
-                            <% if (settings.updater.notifications.length > 0) { %>
+                            <% if (settings.updater.discordNotifications.length > 0) { %>
                             <div id="updaterEnabledShowHide">
                                 <div class="card shadow mb-4">
                                     <form role="form" id="updaterSettingsForm">
@@ -107,7 +107,7 @@
                                         </div>
                                         <div class="card-body">
 
-                                            <% for (const channel of settings.updater.notifications) { %>
+                                            <% for (const channel of settings.updater.discordNotifications) { %>
                                                 <div class="card border-left-primary my-2">
                                                     <div class="card-body">
                                                         <div class="form-group my-0">

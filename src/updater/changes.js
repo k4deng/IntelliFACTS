@@ -40,6 +40,8 @@ export async function getInfoChanges(userId){
         //find changed classes
         for (const [ subject, subjectData ] of Object.entries(diff)) {
 
+            //todo: add title/description with and without formatting
+
             //class was added/removed
             if (checkedElements.includes('Class Added') && subject.endsWith("__added")) {
                 result.push({
@@ -152,6 +154,8 @@ export async function getDataChanges(userId){
 
             //get changes in each category that was changed
             for (const [ cat, catData ] of Object.entries(subjectData)) {
+
+                //todo: add title/description with and without formatting
 
                 //category was added/removed
                 if (checkedElements.includes('Category Added') && cat.endsWith("__added")) {
