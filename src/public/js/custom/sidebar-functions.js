@@ -16,9 +16,13 @@ jQuery(function($){
         target.parent().parent().addClass('show');
     } else
 
-        // Add active class to regular nav item
+    // Add active class to regular nav item
     if (target.parent().hasClass('nav-item')) target.parent().addClass('active');
+        // else dashboard item gets active
+        else target.addClass('active');
 
-    // else dashboard item gets active
-    else target.addClass('active');
+    // if the pwa is installed, add the notifications link
+    if (window.navigator.standalone) {
+        $('#notificationsNavLink').removeAttr('hidden');
+    }
 });

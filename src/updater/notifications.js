@@ -1,7 +1,14 @@
-import { client } from "../config/index.js";
+import { client, vapidPrivateKey, vapidPublicKey } from "../config/index.js";
 import fetch from "node-fetch";
 import { errorHelper } from "../utils/index.js";
 import { bot } from "../loaders/bot.js";
+import webpush from "web-push";
+
+webpush.setVapidDetails(
+    client.url,
+    vapidPublicKey,
+    vapidPrivateKey
+);
 
 async function _sendDiscordWebhook(url, fields, title, userId) {
 
@@ -85,6 +92,47 @@ export async function sendToDiscord(url, data, userId) {
     for (let [key, val] of  Object.entries(data)) {
         //send webhook
         await _sendDiscordWebhook(url, val, key !== "info_changes" ? `${key} Data Update` : undefined, userId)
+    }
+
+}
+
+export async function sendToPush(endpoint, keys, data, userId) {
+
+    //get each class of datachanges / infochanges
+    for (let [key, val] of  Object.entries(data)) {
+
+        //get each individual change
+        for (const [, val2] of Object.entries(val)){
+
+           let res = {}
+            if (key === "info_changes") res = {
+                type: 'info',
+                title: val2.title,
+                body: val2.description.split('*').join('').split('`').join('')
+            }
+            else res = {
+                type: 'data',
+                title: `${key} Data Update`,
+                body: `${val2.title.split('*').join('').split('`').join('')}\n${val2.description.split('*').join('').split('`').join('')}`
+            }
+
+            //cleanse formatting, remove asterisks and backticks
+            const pushData = JSON.stringify({
+                title: res.title,
+                body: res.body,
+                data: {
+                    url: `${client.url}/notifications/view?type=${res.type}&title=${encodeURIComponent(val2.title)}&body=${encodeURIComponent(val2.description)}`
+                }
+            })
+
+            //send push notification
+            try {
+                await webpush.sendNotification({ endpoint, keys }, pushData)
+            } catch (error) {
+                //silently fail
+                errorHelper('updater.notifications.sendPushError', { session: { user: userId }}, error.message)
+            }
+        }
     }
 
 }

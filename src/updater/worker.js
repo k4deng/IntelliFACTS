@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import { Change, Setting, UpdaterData, User } from '../models/index.js';
-import { checkSentElements, getDataChanges, getInfoChanges, sendToDiscord } from './index.js';
+import { checkSentElements, getDataChanges, getInfoChanges, sendToDiscord, sendToPush } from './index.js';
 import { getAllClassGradesData, getAllClassGradesInfo } from "../utils/helpers/renweb/requests/grades.js";
 import { errorHelper } from "../utils/index.js";
 
@@ -49,10 +49,10 @@ export async function runUpdater(userId) {
         }
 
         //same but with push notifications
-        /*for (const { endpoint, keys, sentElements } of userSettings.updater.pushSubscriptions) {
+        for (const { endpoint, keys, sentElements } of userSettings.updater.pushSubscriptions) {
             const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges.length !== 0 ? { info_changes: infoChanges } : {}) });
-            await sendToPush(endpoint, cleansedChanges, userId);
-        }*/
+            await sendToPush(endpoint, keys, cleansedChanges, userId);
+        }
 
         //update storage with new data
         if (Object.keys(dataChanges).length !== 0) await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
