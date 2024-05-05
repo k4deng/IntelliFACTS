@@ -23,6 +23,8 @@ There are many improvements to be made to IntelliFACTS before 1.0.0 release, my 
     * text only for best looking notifications
     * /channel edit type command
 
+* fix hotlinking profile pictures
+
 * API
   * get user information
   * get logs
