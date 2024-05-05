@@ -55,8 +55,8 @@ export async function runUpdater(userId) {
         }
 
         //update storage with new data
-        if (Object.keys(dataChanges).length !== 0) await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
-        if (infoChanges.length !== 0) await UpdaterData.findOneAndUpdate({ userId: userId }, { info: await getAllClassGradesInfo(userId) });
+        //if (Object.keys(dataChanges).length !== 0) await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
+        //if (infoChanges.length !== 0) await UpdaterData.findOneAndUpdate({ userId: userId }, { info: await getAllClassGradesInfo(userId) });
     } catch (error) {
         //updater error, just log it
         errorHelper('updater.worker.runUpdaterError', { session: { user: userId }}, error.message)

@@ -16,10 +16,12 @@ There are many improvements to be made to IntelliFACTS before 1.0.0 release, my 
   * allow user to choose discord/pwa/both
   * pwa notifications
     * https://github.com/andreinwald/webpush-ios-example/blob/main/backend-sender.js
-    * prompt to add pwa (send popup when opened on ios/android)
-    * when pwa added, send to link page
-    * update updater to also send pwa notifications if configured
     * implement pushsubscriptionchange event
+  * different discord notification types
+    * current, for notifications and embeds
+    * old, with better looking embeds
+    * text only for best looking notifications
+    * /channel edit type command
 
 * API
   * get user information

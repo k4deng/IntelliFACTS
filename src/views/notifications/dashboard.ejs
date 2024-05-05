@@ -4,13 +4,17 @@
 <head>
     <%- include("../_includes/head") %>
 
-    <title><%= site.name %> - Notifications Dashboard</title>
-    <meta property="og:title" content="<%= site.name %> - Notifications Dashboard">
+    <title><%= site.name %> - Notifications</title>
+    <meta property="og:title" content="<%= site.name %> - Notifications">
 
     <meta name="description" content="<%= site.desc %>">
     <meta property="og:description" content="<%= site.desc %>">
 
-    <meta property="og:url" content="<%= site.url %>/notifications/dashboard">
+    <meta property="og:url" content="<%= site.url %>/notifications">
+
+    <!-- Custom styles for this page -->
+    <link href="/public/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
+    <link href="/public/vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -41,30 +45,32 @@
                     <!-- Content Row -->
                     <div class="row">
                         <!-- Content Column-->
-                        <div class="order-xl-2 col-xl-6">
-                            <!-- User Settings-->
+                        <div class="col-lg-8 col-xl-5">
+                            <!-- Status / Subscribe -->
+                            <div class="card shadow mb-4 border-left-primary" id="status-card">
+                                <div class="card-body">
+                                    <p class="mb-0" id="text-block">You are not subscribed to notifications. In order to get push notifications, you need to allow permission below.</p>
+                                    <a href="#" class="btn btn-primary btn-icon-split btn-lg mt-3" id="subscribe-btn">
+                                        <span class="icon text-white-50">
+                                            <i class="fa fa-bell"></i>
+                                        </span>
+                                        <span class="text">Subscribe to Notifications</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column-->
+                        <div class="col-xl-7">
                             <div class="card shadow mb-4">
-                                <form role="form" method="post" id="tokenForm">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Notification Status</h6>
-                                    </div>
-                                    <div class="card-body">
-
-                                        <p id="add-to-home-screen" class="mb-0" style="display: none;">
-                                            For WebPush work you may need to add this website to Home Screen at your iPhone or iPad.
-                                        </p>
-
-                                        <a href="#" class="btn btn-primary btn-icon-split btn-lg" id="subscribe_btn">
-                                            <span class="icon text-white-50">
-                                                <i class="fa fa-bell"></i>
-                                            </span>
-                                            <span class="text">Subscribe to Notifications</span>
-                                        </a>
-
-                                        <p class="mb-0" id="text_block"></p>
-
-                                    </div>
-                                </form>
+                                <div class="card-body">
+                                    <ul class="pagination"></ul>
+                                    <div id="page-content" class="mb-3"></div>
+                                    <ul class="pagination mb-0"></ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -89,7 +95,10 @@
 
     <!-- Page level custom scripts -->
     <script src="/public/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-    <script src="/public/js/custom/notifications-dashboard.js" id="notifications-dashboard.js" vapidKey="<%= vapidKey %>"></script>
+    <script src="/public/vendor/twbs-pagination/jquery.twbsPagination.min.js"></script>
+    <script src="/public/vendor/moment/moment.min.js"></script>
+    <script src="/public/vendor/moment/moment-timezone-with-data-10-year-range.min.js"></script>
+    <script src="/public/js/custom/notifications.js" id="notifications.js" vapidKey="<%= vapidKey %>"></script>
 
 </body>
 

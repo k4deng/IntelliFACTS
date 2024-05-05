@@ -11,6 +11,8 @@
     <meta property="og:description" content="<%= site.desc %>">
 
     <meta property="og:url" content="<%= site.url %>">
+
+    <link rel="stylesheet" href="/public/vendor/add-to-homescreen/add-to-homescreen.min.css">
 </head>
 
 <body id="page-top">
@@ -132,7 +134,8 @@
     <%- include("../_includes/doc-end") %>
 
     <!-- Page level plugins -->
-    <script src="/public/js/custom/home.js" id="home.js" data="<%= site.supportEmail.split('').reverse().join('') %>"></script>
+    <script src="/public/vendor/add-to-homescreen/add-to-homescreen.min.js"></script>
+    <script src="/public/js/custom/home.js" id="home.js" email="<%= site.supportEmail.split('').reverse().join('') %>" name="<%= site.name %>"></script>
 
 </body>
 
