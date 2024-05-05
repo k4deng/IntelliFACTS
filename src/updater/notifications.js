@@ -89,7 +89,7 @@ async function _sendPushNotification(endpoint, authKeys, key, change, userId) {
             }
         })
 
-        const test = await webpush.sendNotification({ endpoint, keys: authKeys }, pushData)
+        await webpush.sendNotification({ endpoint, keys: authKeys }, pushData)
     } catch (error) {
         //silently fail
         errorHelper('updater.notifications.sendPushError', { session: { user: userId }}, error.message)
