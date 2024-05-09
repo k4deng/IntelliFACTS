@@ -260,11 +260,10 @@ async function _notifyTokenExpired(userId){
     //delete sessions so users have to log in again
     const Session = mongoose.connection.db.collection("sessions")
     const allSessions = await Session.find({}).toArray();
-    const userSessions = allSessions.filter(session => {
+
+    for (const session of allSessions) {
         const sessionData = JSON.parse(session.session);
-        return sessionData.user == userId;
-    })
-    for (const session of userSessions) {
+        if (sessionData.user !== userId) continue;
         await Session.deleteOne({ _id: session._id });
     }
 

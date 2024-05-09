@@ -80,16 +80,13 @@ async function _sendPushNotification(endpoint, authKeys, key, change, userId) {
             body: `${clearFormatting(change.title)}\n${clearFormatting(change.description)}`
         }
 
-        //cleanse formatting, remove asterisks and backticks
-        const pushData = JSON.stringify({
+        await webpush.sendNotification({ endpoint, keys: authKeys }, JSON.stringify({
             title: res.title,
             body: res.body,
             data: {
                 url: `${client.url}/notifications?type=${res.type}&title=${encodeURIComponent(clearFormatting(change.title))}&body=${encodeURIComponent(clearFormatting(change.description))}`
             }
-        })
-
-        await webpush.sendNotification({ endpoint, keys: authKeys }, pushData)
+        }))
     } catch (error) {
         //silently fail
         errorHelper('updater.notifications.sendPushError', { session: { user: userId }}, error.message)
