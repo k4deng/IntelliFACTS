@@ -7,7 +7,8 @@ import { errorHelper } from "../../index.js";
 import { Setting } from "../../../models/index.js";
 import { bot } from "../../../loaders/bot.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js";
-import { client } from "../../../config/index.js";
+import { client, vapidPrivateKey, vapidPublicKey } from "../../../config/index.js";
+import webpush from "web-push";
 import mongoose from "mongoose";
 
 // helper functions
@@ -234,6 +235,26 @@ async function _notifyTokenExpired(userId){
             );
         const channel = await bot.channels.cache.get(channelId);
         await channel.send({ embeds: [message], components: [button] });
+    }
+
+    // send push  if there are any subscriptions
+    for (const { endpoint, keys } of userSettings.updater.pushSubscriptions) {
+        const pushData = JSON.stringify({
+            title: "RenWeb Login Expired",
+            body: `Your RenWeb login has expired. Please login again to continue getting notifications from ${client.name}.`,
+            data: { url: `${client.url}/auth/login` }
+        });
+
+        const options = {
+            vapidDetails: {
+                subject: client.url,
+                publicKey: vapidPublicKey,
+                privateKey: vapidPrivateKey,
+            },
+            urgency: "high"
+        }
+
+        await webpush.sendNotification({ endpoint, keys }, pushData, options);
     }
 
     //delete sessions so users have to log in again
