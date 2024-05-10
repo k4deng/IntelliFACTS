@@ -91,6 +91,17 @@ if (navigator.serviceWorker) {
 }
 
 // ============================================= notifications pages =============================================
+
+const waitForEl = (selector, callback) => {
+    if (jQuery(selector).length) {
+        callback();
+    } else {
+        setTimeout(function() {
+            waitForEl(selector, callback);
+        }, 100);
+    }
+};
+
 async function getItems(page, limit) {
     const response = await fetch(`/notifications/get?dummy=true${page ? '&page='+page : ''}${limit ? '&limit='+limit : ''}`);
     const data = await response.json();
@@ -100,18 +111,14 @@ async function getItems(page, limit) {
 const clearFormatting = (str) => str.split('*').join('').split('`').join('');
 const formatDate = (date) => moment(date).tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format('MM/DD/YYYY hh:mm A');;
 
-(async () => {
-    // if push notification was clicked on highlight the one
-    const allUrlParams = new URLSearchParams(window.location.search);
-    const urlParams = {
-        type: allUrlParams?.get('type'),
-        title: allUrlParams?.get('title'),
-        body: allUrlParams?.get('body'),
-    }
+const allUrlParams = new URLSearchParams(window.location.search);
+const urlParams = {
+    type: allUrlParams?.get('type'),
+    title: allUrlParams?.get('title'),
+    body: allUrlParams?.get('body'),
+};
 
-    if (urlParams.type !== null) {
-
-    }
+$(document).ready(async () => {
 
     const { data: { totalPages } } = await getItems(1, 10)
 
@@ -160,5 +167,13 @@ const formatDate = (date) => moment(date).tz(Intl.DateTimeFormat().resolvedOptio
             $('#page-content').html(html);
         }
     }
-    $pagination.twbsPagination(defaultOpts);
-})()
+    $pagination.twbsPagination(defaultOpts)
+
+    if (urlParams.title) {
+        waitForEl('.card .border-left-warning', () => {
+            $('html, body').animate({
+                scrollTop: $('.card .border-left-warning').offset().top - 65
+            }, 1000);
+        });
+    }
+})
