@@ -43,9 +43,9 @@ export async function runUpdater(userId) {
         }
 
         //loop through array of notifications & send to discord
-        for (const { webhook, sentElements } of userSettings.updater.discordNotifications) {
+        for (const { webhook, sentElements, style } of userSettings.updater.discordNotifications) {
             const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges.length !== 0 ? { info_changes: infoChanges } : {}) });
-            await sendToDiscord(webhook, cleansedChanges, userId);
+            await sendToDiscord(webhook, cleansedChanges, style, userId);
         }
 
         //same but with push notifications

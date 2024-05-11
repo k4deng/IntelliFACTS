@@ -22,6 +22,8 @@ export const sentElementsEnum = {
   ]
 };
 
+export const styleEnum = ['fancy', 'optimized', 'plain'];
+
 const settingSchema = new Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, required: true },
   user: {
@@ -44,7 +46,12 @@ const settingSchema = new Schema({
         sentElements: {
           type: [String],
           enum: [...sentElementsEnum.info, ...sentElementsEnum.data]
-        }
+        },
+        style: {
+          type: String,
+          enum: styleEnum,
+          default: 'optimized'
+        },
       }],
       default: []
     },

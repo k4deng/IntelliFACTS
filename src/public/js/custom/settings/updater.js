@@ -49,14 +49,15 @@ $(document).ready(function($) {
         event.preventDefault();
 
         let notifications = [];
-        $('.notifElement').each(function() {
-            const sentElements = $(this).find('option:selected').map(function() {
-                return this.value;
+        $('div #discordNotifications').each((index, element) => {
+            const sentElements = $(element).find('select[name="sentElements"] option:selected').map((num, option) => {
+                return $(option).val();
             }).get();
 
             notifications.push({
-                channelId: $(this).attr('name'),
-                sentElements: sentElements
+                channelId: $(element).attr('name'),
+                sentElements: sentElements,
+                style: $(element).find('select[name="messageStyle"] option:selected').val()
             });
         });
 

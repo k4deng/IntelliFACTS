@@ -9,7 +9,7 @@ import {
 } from "discord.js";
 import { Setting, User } from "../../models/index.js";
 import { client } from "../../config/index.js";
-import { sentElementsEnum } from "../../models/setting.js";
+import { sentElementsEnum, styleEnum } from "../../models/setting.js";
 
 const commandData = {
     name: "channel",
@@ -48,6 +48,11 @@ const commandData = {
                 description: "Name to rename to.",
                 required: true,
             }],
+        }, {
+            name: "style",
+            type: ApplicationCommandOptionType.Subcommand,
+            description: "Change the style of messages in the current channel.",
+            options: [],
         }],
     }]
 }
@@ -145,6 +150,89 @@ async function run(bot, interaction) {
         })
 
         return success(`Channel renamed to \`${newName}\``, interaction)
+    } else
+
+    if (subcommand === "style") {
+        if (interaction.channel.parentId !== userCategory.id) return error("You must run this in a channel in your user category!", interaction)
+
+        // find settings for current channel
+        const user = await User.findOne({ discordId: interaction.user.id }).exec()
+        const { updater: { discordNotifications } } = await Setting.findOne({ userId: user._id }).exec()
+        const { style } = discordNotifications.find(n => n.channelId === interaction.channel.id)
+
+        const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
+        let styleChoices = [];
+        for (const item of styleEnum) {
+            styleChoices.push({ name: capitalize(item), value: item })
+        }
+
+        // make select menu for style
+        const components = [{
+            type: ComponentType.ActionRow,
+            components: [{
+                type: ComponentType.StringSelect,
+                customId: `styleSelect-${interaction.user.id}-${interaction.channel.id}`,
+                placeholder: "Select style",
+                options: styleChoices.map(s => ({
+                    label: s.name,
+                    value: s.value,
+                    default: s.value === style
+                }))
+            }]
+        }, {
+            type: ComponentType.ActionRow,
+            components: [{
+                type: ComponentType.Button,
+                style: ButtonStyle.Primary,
+                label: "Send Test",
+                customId: `testStyle-${interaction.user.id}-${interaction.channel.id}`
+            }]
+        }]
+
+        // send initial embed
+        const embed = new EmbedBuilder()
+            .setColor("#0099ff")
+            .setTitle("Edit Message Style")
+            .setDescription("Select the style you want for messages in this channel. Changes are automatically saved.\n\n" +
+                "• **Fancy**: Each message in Discord is sent with the most formatting, but notifications on devices are useless and show no information.\n" +
+                "• **Optimized**: Best of both worlds. Messages are sent as embeds with some formatting, and notifications work well, but they have formatting characters in them.\n" +
+                "• **Plain**: Each message is sent without embeds, and notifications work well with very few formatting characters in them. (Formatting is required for readability in messages)\n\n" +
+                "*For notifications only, `Plain` works the best. If you want to be able to read history in Discord, `Optimized` or `Fancy` will be better.*")
+        const initialMessage = await interaction.editReply({ embeds: [embed], components: components });
+
+        const selectCollector = initialMessage.createMessageComponentCollector({
+            componentType: ComponentType.StringSelect,
+            time: 900000
+        });
+
+        let finalStyle = style;
+
+        selectCollector.on('collect', async i => {
+            // update db with new style
+            await Setting.findOneAndUpdate(
+                { userId: user._id },
+                { $set: { "updater.discordNotifications.$[elem].style": i.values[0] }},
+                { arrayFilters: [{ "elem.channelId": interaction.channel.id }] }
+            )
+
+            finalStyle = i.values[0];
+
+            // update components with new values
+            components[0].components[0].options = styleChoices.map(s => ({
+                label: s.name,
+                value: s.value,
+                default: s.value === finalStyle
+            }))
+
+            // send updated components
+            await i.update({ components: components })
+        });
+
+        selectCollector.once('end', async () => {
+            const finalEmbed = success(`Style set to \`${capitalize(finalStyle)}\``, interaction, true, true)
+            return interaction.editReply({ embeds: [finalEmbed], components: [] });
+        });
+
     } else
 
     if (subcommand === "elements") {

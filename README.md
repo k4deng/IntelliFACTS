@@ -13,17 +13,12 @@ The program can
 There are many improvements to be made to IntelliFACTS before 1.0.0 release, my list is below.
 
 * notifications system revamp
-  * allow user to choose discord/pwa/both
   * pwa notifications
     * https://github.com/andreinwald/webpush-ios-example/blob/main/backend-sender.js
     * implement pushsubscriptionchange event
-  * different discord notification types
-    * current, for notifications and embeds
-    * old, with better looking embeds
-    * text only for best looking notifications
-    * /channel edit type command
 
 * fix hotlinking profile pictures
+* remove updater enabled setting (if there are channels set up it is enabled and if there are none it is disabled)
 
 * API
   * get user information

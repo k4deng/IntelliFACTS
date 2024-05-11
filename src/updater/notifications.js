@@ -2,6 +2,8 @@ import { client } from "../config/index.js";
 import { errorHelper, sendDiscordWebhook, sendWebPushNotification } from "../utils/index.js";
 import webpush from "web-push";
 
+const clearFormatting = (str) => str.split('*').join('').split('`').join('');
+
 export function checkSentElements(sentElements, data) {
     let result = {};
     for (let [subject, val] of  Object.entries(data)) {
@@ -14,7 +16,7 @@ export function checkSentElements(sentElements, data) {
     return result;
 }
 
-export async function sendToDiscord(url, data, userId) {
+export async function sendToDiscord(url, data, style, userId) {
 
     //check if webhook is discord webhook
     if (!url.startsWith("https://discord.com/api/webhooks/") && !url.startsWith("https://discordapp.com/api/webhooks/")) return;
@@ -23,27 +25,58 @@ export async function sendToDiscord(url, data, userId) {
         const title = key !== "info_changes" ? `${key} Data Update` : undefined;
         try {
             // sort embeds in a better format for fields
-            let embedsResult =[];
+            let embedsResult = [];
 
             // split embeds into chunks of 25 items as a failsafe to never reach limit of 4096 characters in description
             // (and for looks, long embeds aren't that good-looking)
             while (fields.length > 0) {
                 let chunk = fields.splice(0,25)
-                let description = '';
 
-                for (const [, val] of Object.entries(chunk)) {
-                    description += `**${val.title}**\n${val.description}\n`
+                if (style === 'fancy') {
+                    let fieldsResult = [];
+
+                    for (const [, val] of Object.entries(chunk)){
+                        fieldsResult.push({
+                            name: val.title,
+                            value: val.description
+                        })
+                    }
+
+                    embedsResult.push({
+                        color: 2829617,
+                        ...(title ? { title: title } : {}),
+                        fields: fieldsResult
+                    })
                 }
 
-                embedsResult.push({
-                    color: 2829617,
-                    ...(title ? { title: title } : {}),
-                    description: description
-                })
+                else if (style === 'optimized') {
+                    let description = '';
+
+                    for (const [, val] of Object.entries(chunk)) {
+                        description += `**${val.title}**\n${val.description}\n`
+                    }
+
+                    embedsResult.push({
+                        color: 2829617,
+                        ...(title ? { title: title } : {}),
+                        description: description
+                    })
+                }
+
+                else if (style === 'plain') {
+                    let description = '';
+
+                    for (const [, val] of Object.entries(chunk)) {
+                        description += `${clearFormatting(val.title)}\n*${clearFormatting(val.description)}*\n`
+                    }
+
+                    await sendDiscordWebhook(url, null, `${title ? '**'+title+'**\n' : ''}${description}`)
+                }
+
             }
 
             //send to the webhook
-            await sendDiscordWebhook(url, embedsResult)
+            if (embedsResult.length > 0) await sendDiscordWebhook(url, embedsResult)
         } catch (error) {
             //silently fail
             errorHelper('updater.notifications.sendDiscordWebhookError', { session: { user: userId }}, error.message)

@@ -12,6 +12,8 @@ export default async (req, res) => {
             code = 'submitUpdaterSettings.invalidEnabled';
         if (error.details[0].message.includes('notifications.sentElements'))
             code = 'submitUpdaterSettings.invalidNotificationSentElements';
+        if (error.details[0].message.includes('notifications.style'))
+            code = 'submitUpdaterSettings.invalidNotificationStyle';
 
         return res.json({
             status: "error",
@@ -34,7 +36,10 @@ export default async (req, res) => {
     for (const notification of req.body.data.notifications) {
         await Setting.findOneAndUpdate(
             { userId: req.session.user },
-            { $set: { "updater.discordNotifications.$[elem].sentElements": notification.sentElements }},
+            { $set: {
+                "updater.discordNotifications.$[elem].sentElements": notification.sentElements,
+                "updater.discordNotifications.$[elem].style": notification.style
+            }},
             { arrayFilters: [{ "elem.channelId": notification.channelId }]}
         )
         .catch((err) => {
