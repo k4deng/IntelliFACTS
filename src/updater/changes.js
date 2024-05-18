@@ -17,7 +17,7 @@ export async function getInfoChanges(userId){
 
         // get settings
         const settings = (await Setting.findOne({ userId: userId }).exec()).updater;
-        const checkedElements = Array.from(new Set(settings.notifications.map(n => n.sentElements).flat()));
+        const checkedElements = Array.from(new Set(settings.discordNotifications.map(n => n.sentElements).flat()));
         if (checkedElements.length === 0) return {
             type: "success",
             message: "There are no enabled elements in settings to check",
@@ -39,6 +39,8 @@ export async function getInfoChanges(userId){
 
         //find changed classes
         for (const [ subject, subjectData ] of Object.entries(diff)) {
+
+            //todo: add title/description with and without formatting
 
             //class was added/removed
             if (checkedElements.includes('Class Added') && subject.endsWith("__added")) {
@@ -113,7 +115,7 @@ export async function getDataChanges(userId){
 
         // get settings
         const settings = (await Setting.findOne({ userId: userId }).exec()).updater;
-        const checkedElements = Array.from(new Set(settings.notifications.map(n => n.sentElements).flat())); //get all elements used in notifications
+        const checkedElements = Array.from(new Set(settings.discordNotifications.map(n => n.sentElements).flat())); //get all elements used in notifications
         if (checkedElements.length === 0) return {
             type: "success",
             message: "There are no elements in settings to check",
@@ -152,6 +154,8 @@ export async function getDataChanges(userId){
 
             //get changes in each category that was changed
             for (const [ cat, catData ] of Object.entries(subjectData)) {
+
+                //todo: add title/description with and without formatting
 
                 //category was added/removed
                 if (checkedElements.includes('Category Added') && cat.endsWith("__added")) {

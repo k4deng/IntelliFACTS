@@ -31,7 +31,8 @@
     "rate-limiter-flexible": "^2.2.1",
     "swagger-jsdoc": "^6.0.8",
     "swagger-ui-express": "^4.1.6",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "web-push": "^3.6.7"
   },
   "scripts": {
     "start-prod": "NODE_ENV=production node src/app.js",

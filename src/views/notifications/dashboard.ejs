@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <%- include("../_includes/head") %>
+
+    <title><%= site.name %> - Notifications</title>
+    <meta property="og:title" content="<%= site.name %> - Notifications">
+
+    <meta name="description" content="<%= site.desc %>">
+    <meta property="og:description" content="<%= site.desc %>">
+
+    <meta property="og:url" content="<%= site.url %>/notifications">
+
+    <!-- Custom styles for this page -->
+    <link href="/public/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
+    <link href="/public/vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <%- include("../_includes/sidebar") %>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include("../_includes/topbar") %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Notifications Dashboard</h1>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column-->
+                        <div class="col-lg-8 col-xl-5">
+                            <!-- Status / Subscribe -->
+                            <div class="card shadow mb-4 border-left-primary" id="status-card">
+                                <div class="card-body">
+                                    <p class="mb-0" id="text-block">You are not subscribed to notifications. In order to get push notifications, you need to allow permission below.</p>
+                                    <a href="#" class="btn btn-primary btn-icon-split btn-lg mt-3" id="subscribe-btn">
+                                        <span class="icon text-white-50">
+                                            <i class="fa fa-bell"></i>
+                                        </span>
+                                        <span class="text">Subscribe to Notifications</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column-->
+                        <div class="col-xl-7">
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <ul class="pagination"></ul>
+                                    <div id="page-content" class="mb-3"></div>
+                                    <ul class="pagination mb-0"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include("../_includes/footer") %>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <%- include("../_includes/doc-end") %>
+
+    <!-- Page level custom scripts -->
+    <script src="/public/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="/public/vendor/twbs-pagination/jquery.twbsPagination.min.js"></script>
+    <script src="/public/vendor/moment/moment.min.js"></script>
+    <script src="/public/vendor/moment/moment-timezone-with-data-10-year-range.min.js"></script>
+    <script src="/public/js/custom/notifications.js" id="notifications.js" vapidKey="<%= vapidKey %>"></script>
+
+</body>
+
+</html>

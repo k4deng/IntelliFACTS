@@ -40,7 +40,6 @@ export default async (req, res) => {
             "Content-Type": "application/json"
         }})
         .catch((err) => {
-            console.log(err);
             return res.status(500).json(errorHelper('discordOauthCallback.userJoinServerError', req, err.message))
         });
 

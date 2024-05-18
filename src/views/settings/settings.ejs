@@ -98,7 +98,7 @@
                           </div>
 
                             <!-- Notifications Settings-->
-                            <% if (settings.updater.notifications.length > 0) { %>
+                            <% if (settings.updater.discordNotifications.length > 0) { %>
                             <div id="updaterEnabledShowHide">
                                 <div class="card shadow mb-4">
                                     <form role="form" id="updaterSettingsForm">
@@ -107,16 +107,25 @@
                                         </div>
                                         <div class="card-body">
 
-                                            <% for (const channel of settings.updater.notifications) { %>
-                                                <div class="card border-left-primary my-2">
+                                            <% for (const channel of settings.updater.discordNotifications) { %>
+                                                <div class="card border-left-primary my-2" id="discordNotifications" name="<%= channel.channelId %>">
                                                     <div class="card-body">
                                                         <div class="form-group my-0">
                                                             <label>#<%= bot.channels.cache.get(channel.channelId).name %></label>
                                                         </div>
-                                                        <div class="form-group mb-0">
-                                                            <select class="select2bs4 notifElement" multiple="multiple" style="width: 100%;" data-placeholder="Elements sent in channel" name="<%= channel.channelId %>">
+                                                        <div class="form-group">
+                                                            <select class="select2bs4" multiple="multiple" style="width: 100%;" data-placeholder="Elements sent in channel" name="sentElements">
                                                                 <% for (const item of enums.sentElements) { %>
                                                                     <option value="<%= item %>" <%= channel.sentElements.includes(item) ? "selected" : "" %>><%= item %></option>
+                                                                <% } %>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group mb-0">
+                                                            <label>Message Style</label>
+                                                            <select class="custom-select" name="messageStyle">
+                                                                <% const capitalize = s => s && s[0].toUpperCase() + s.slice(1) %>
+                                                                <% for (const item of enums.style) { %>
+                                                                    <option value="<%= item %>" <%= channel.style === item ? "selected" : "" %> style="text-transform: capitalize;"><%= capitalize(item) %></option>
                                                                 <% } %>
                                                             </select>
                                                         </div>

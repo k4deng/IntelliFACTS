@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import { load } from 'cheerio';
 import { createHash, randomBytes } from 'crypto';
 import User from "../../../models/user.js";
-import { errorHelper } from "../../index.js";
+import { errorHelper, sendWebPushNotification } from "../../index.js";
 import { Setting } from "../../../models/index.js";
 import { bot } from "../../../loaders/bot.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js";
@@ -219,7 +219,7 @@ async function _notifyTokenExpired(userId){
     const userSettings = await Setting.findOne({ userId: userId }).exec();
 
     // if there is a channel setup for notifs, send a message
-    const channelId = userSettings.updater.notifications[0]?.channelId;
+    const channelId = userSettings.updater.discordNotifications[0]?.channelId;
     if (channelId) {
         const message = new EmbedBuilder()
             .setTitle("RenWeb Login Expired")
@@ -236,14 +236,23 @@ async function _notifyTokenExpired(userId){
         await channel.send({ embeds: [message], components: [button] });
     }
 
+    // send push  if there are any subscriptions
+    for (const { endpoint, keys } of userSettings.updater.pushSubscriptions) {
+        const pushData = {
+            title: "RenWeb Login Expired",
+            body: `Your RenWeb login has expired. Please login again to continue getting notifications from ${client.name}.`,
+            data: { url: `${client.url}/auth/login` }
+        };
+        await sendWebPushNotification(endpoint, keys, pushData, { urgency: "high" });
+    }
+
     //delete sessions so users have to log in again
     const Session = mongoose.connection.db.collection("sessions")
     const allSessions = await Session.find({}).toArray();
-    const userSessions = allSessions.filter(session => {
+
+    for (const session of allSessions) {
         const sessionData = JSON.parse(session.session);
-        return sessionData.user == userId;
-    })
-    for (const session of userSessions) {
+        if (sessionData.user !== userId) continue;
         await Session.deleteOne({ _id: session._id });
     }
 

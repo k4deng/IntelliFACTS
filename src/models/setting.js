@@ -22,6 +22,8 @@ export const sentElementsEnum = {
   ]
 };
 
+export const styleEnum = ['fancy', 'optimized', 'plain'];
+
 const settingSchema = new Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, required: true },
   user: {
@@ -36,11 +38,32 @@ const settingSchema = new Schema({
   },
   updater: {
     enabled: { type: Boolean, default: false },
-    notifications: {
+    discordNotifications: {
       type: [{
         _id: false,
         channelId: String,
         webhook: String,
+        sentElements: {
+          type: [String],
+          enum: [...sentElementsEnum.info, ...sentElementsEnum.data]
+        },
+        style: {
+          type: String,
+          enum: styleEnum,
+          default: 'optimized'
+        },
+      }],
+      default: []
+    },
+    pushSubscriptions: {
+      type: [{
+        _id: false,
+        endpoint: String,
+        expirationTime: String,
+        keys: {
+          p256dh: String,
+          auth: String
+        },
         sentElements: {
           type: [String],
           enum: [...sentElementsEnum.info, ...sentElementsEnum.data]

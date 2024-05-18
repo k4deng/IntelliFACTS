@@ -1,8 +1,11 @@
 import { Setting, UpdaterData, User } from '../../../models/index.js';
 import { validateLogin } from '../../validators/user.validator.js';
-import { errorHelper, getText, logger } from '../../../utils/index.js';
+import { errorHelper, getText, logger, sendWebPushNotification } from '../../../utils/index.js';
 import { loginUser } from '../../../utils/index.js';
 import { schoolStudentInfo } from "../../../utils/helpers/renweb/requests/general.js";
+import { EmbedBuilder } from "discord.js";
+import { client } from "../../../config/index.js";
+import { bot } from "../../../loaders/bot.js";
 
 export default async (req, res) => {
   const { error } = validateLogin(req.body);
@@ -36,6 +39,30 @@ export default async (req, res) => {
 
   // make sure user is a student, not a parent
   if (loginRes.user.role !== 'student') return res.status(400).render("auth/login.ejs", { message: "You must login with a student account", data: req.body })
+
+  // if the user logged in after needing to login, send notif
+  if (user && user.needsLogin) {
+    const userSettings = await Setting.findOne({ userId: user._id }).exec();
+
+    // if there is a channel setup for notifs, send a message
+    const channelId = userSettings.updater.discordNotifications[0]?.channelId;
+    if (channelId) {
+      const message = new EmbedBuilder()
+        .setTitle("Logged back in!")
+        .setDescription(`Your RenWeb login has been refreshed. You will now continue to receive notifications from ${client.name}.`)
+        .setColor(3066993)
+      await bot.channels.cache.get(channelId).send({ embeds: [message] });
+    }
+
+    // send push if there are any subscriptions
+    for (const { endpoint, keys } of userSettings.updater.pushSubscriptions) {
+      await sendWebPushNotification(endpoint, keys, {
+        title: "Logged back in!",
+        body: `Your RenWeb login has been refreshed. You will now continue to receive notifications from ${client.name}.`,
+        data: { url: client.url }
+      });
+    }
+  }
 
   const userData = {
     personId: loginRes.user.personId,

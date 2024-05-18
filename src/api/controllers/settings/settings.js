@@ -3,7 +3,7 @@ import { Setting, User } from "../../../models/index.js";
 import moment from "moment";
 import { getAllClassGradesInfo } from "../../../utils/helpers/renweb/requests/grades.js";
 import { bot } from '../../../loaders/bot.js';
-import { sentElementsEnum } from "../../../models/setting.js";
+import { sentElementsEnum, styleEnum } from "../../../models/setting.js";
 
 export default async (req, res) => {
 
@@ -22,7 +22,8 @@ export default async (req, res) => {
         classes: classes,
         enums: {
             sentElements: [...sentElementsEnum.info, ...sentElementsEnum.data],
-            filteringType: await Setting.schema.path('user.classes.filteringType').options.enum
+            filteringType: await Setting.schema.path('user.classes.filteringType').options.enum,
+            style: styleEnum
         },
         moment: moment,
         discordUsername: user !== null ? bot.users.cache.get(user.discordId)?.displayName || null : null,

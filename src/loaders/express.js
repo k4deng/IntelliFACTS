@@ -16,7 +16,14 @@ export default (app) => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(morgan('dev'));
-  if (secure === true) app.use(helmet());
+  if (secure === true) app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "img-src": ["'self'", "renweb1.renweb.com"],
+      },
+    },
+  }));
   app.use(compression());
   app.disable('x-powered-by');
   app.disable('etag');

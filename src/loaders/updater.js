@@ -6,8 +6,8 @@ export default async () => {
     const scheduledTasks = {};
     for (const user of users) {
         //first exclude users where updater would do nothing
-        if (user.updater.notifications === []) return;
-        const checkedElements = Array.from(new Set(user.updater.notifications.map(n => n.sentElements).flat()));
+        if (user.updater.discordNotifications === []) return;
+        const checkedElements = Array.from(new Set(user.updater.discordNotifications.map(n => n.sentElements).flat()));
         if (checkedElements === []) return;
 
         //then add user to the scheduled tasks

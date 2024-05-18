@@ -1,6 +1,6 @@
 import cron from 'node-cron';
-import { Setting, UpdaterData, User } from '../models/index.js';
-import { checkSentElements, getDataChanges, getInfoChanges, sendToDiscord } from './index.js';
+import { Change, Setting, UpdaterData, User } from '../models/index.js';
+import { checkSentElements, getDataChanges, getInfoChanges, sendToDiscord, sendToPush } from './index.js';
 import { getAllClassGradesData, getAllClassGradesInfo } from "../utils/helpers/renweb/requests/grades.js";
 import { errorHelper } from "../utils/index.js";
 
@@ -25,18 +25,36 @@ export async function runUpdater(userId) {
         const { data: infoChanges } = await getInfoChanges(userId);
 
         //silently update stored data even though there were no updates to be sent
-        if (message === 'All classes added or removed') await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
+        if (message === 'All classes added or removed') return await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
 
         //if there are no changes to send, return
         if (Object.keys(dataChanges).length === 0 && infoChanges.length === 0) return;
 
-        //loop through array of notifications & send
-        for (const { webhook, sentElements } of userSettings.updater.notifications) {
-            const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges.length !== 0 ? { info_changes: infoChanges } : {}) });
-            await sendToDiscord(webhook, cleansedChanges, userId);
+        //save changes to db
+        if (Object.keys(dataChanges).length !== 0) {
+            const dataChangesToSave = Object.keys(dataChanges).flatMap(key =>
+                dataChanges[key].map(data => ({ userId, type: 'data', class: key, data }))
+            );
+            await Change.insertMany(dataChangesToSave);
+        }
+        if (infoChanges.length !== 0) {
+            const infoChangesToSave = infoChanges.map(info => ({ userId, type: 'info', class: null, data: info }));
+            await Change.insertMany(infoChangesToSave);
         }
 
-        //update
+        //loop through array of notifications & send to discord
+        for (const { webhook, sentElements, style } of userSettings.updater.discordNotifications) {
+            const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges.length !== 0 ? { info_changes: infoChanges } : {}) });
+            await sendToDiscord(webhook, cleansedChanges, style, userId);
+        }
+
+        //same but with push notifications
+        for (const { endpoint, keys, sentElements } of userSettings.updater.pushSubscriptions) {
+            const cleansedChanges = checkSentElements(sentElements, { ...dataChanges, ...(infoChanges.length !== 0 ? { info_changes: infoChanges } : {}) });
+            await sendToPush(endpoint, keys, cleansedChanges, userId);
+        }
+
+        //update storage with new data
         if (Object.keys(dataChanges).length !== 0) await UpdaterData.findOneAndUpdate({ userId: userId }, { data: await getAllClassGradesData(userId) });
         if (infoChanges.length !== 0) await UpdaterData.findOneAndUpdate({ userId: userId }, { info: await getAllClassGradesInfo(userId) });
     } catch (error) {
