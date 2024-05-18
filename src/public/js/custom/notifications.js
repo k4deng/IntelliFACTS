@@ -1,4 +1,5 @@
 const VAPID_PUBLIC_KEY = document.getElementById('notifications.js').getAttribute('vapidKey');
+const URL = document.getElementById('notifications.js').getAttribute('url');
 
 function _editCard(showBtn, text, cardStyle) {
     document.getElementById('subscribe-btn').style.display = showBtn === true ? 'block' : 'none'
@@ -38,7 +39,7 @@ async function _sendDataToBackend(subscription){
 }
 
 async function initServiceWorker() {
-    let swRegistration = await navigator.serviceWorker.register('https://intellifactsdev.k4deng.net/serviceworker.js', { scope: '/' });
+    let swRegistration = await navigator.serviceWorker.register(`${URL}/serviceworker.js`, { scope: '/' });
     let pushManager = swRegistration.pushManager;
 
     if (!isPushManagerActive(pushManager)) return;
