@@ -16,7 +16,6 @@ There are many improvements to be made to IntelliFACTS before 1.0.0 release, my 
   * https://github.com/andreinwald/webpush-ios-example/blob/main/backend-sender.js
   * implement pushsubscriptionchange event
 
-* fix hotlinking profile pictures
 * remove updater enabled setting (if there are channels set up it is enabled and if there are none it is disabled)
 
 * API

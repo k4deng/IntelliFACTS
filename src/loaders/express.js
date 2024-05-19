@@ -17,10 +17,11 @@ export default (app) => {
   app.use(bodyParser.json());
   app.use(morgan('dev'));
   if (secure === true) app.use(helmet({
+    crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        "img-src": ["'self'", "renweb1.renweb.com"],
+        "img-src": ["'self'", "renweb1.renweb.com", "web.archive.org"],
       },
     },
   }));
