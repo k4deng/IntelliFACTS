@@ -91,7 +91,8 @@ async function run(bot, interaction) {
                 "updater.discordNotifications": {
                     channelId: newChannel.id,
                     webhook: webhook.url,
-                    sentElements: []
+                    sentElements: [],
+                    style: "optimized"
                 }
             }}
         )
