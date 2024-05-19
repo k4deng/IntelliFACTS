@@ -26,3 +26,14 @@ export async function validateUpdaterSettings(body) {
   });
   return schema.validate(body);
 }
+
+export async function validatePushNotificationsSentElements(body) {
+  const schema = Joi.object({
+    endpoint: Joi.string(),
+    sentElements: Joi.array().items(Joi.string().valid(
+        ...(sentElementsEnum.info),
+        ...(sentElementsEnum.data)
+    ))
+  });
+  return schema.validate(body);
+}

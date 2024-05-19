@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, dashboard, get } from '../controllers/notifications/index.js';
+import { register, dashboard, get, setSentElements, getSentElements } from '../controllers/notifications/index.js';
 import { auth } from '../middlewares/index.js';
 
 const router = Router();
@@ -10,5 +10,8 @@ router.post('/register', auth, register)
 
 router.get('/', auth, dashboard)
 router.get('/get', auth, get)
+
+router.post('/setSentElements', auth, setSentElements)
+router.post('/getSentElements', auth, getSentElements)
 
 export default router

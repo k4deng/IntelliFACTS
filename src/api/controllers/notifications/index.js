@@ -1,3 +1,5 @@
 export { default as register } from './register.js'
 export { default as get } from './get.js'
 export { default as dashboard } from './dashboard.js'
+export { default as setSentElements } from './set-sent-elements.js'
+export { default as getSentElements } from './get-sent-elements.js'

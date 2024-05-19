@@ -1,125 +1,199 @@
 const VAPID_PUBLIC_KEY = document.getElementById('notifications.js').getAttribute('vapidKey');
 const URL = document.getElementById('notifications.js').getAttribute('url');
+let pushData = {}
 
-function _editCard(showBtn, text, cardStyle) {
-    document.getElementById('subscribe-btn').style.display = showBtn === true ? 'block' : 'none'
-    document.getElementById('text-block').innerHTML = text;
-    document.getElementById('status-card').classList.remove('border-left-primary');
-    document.getElementById('status-card').classList.add(`border-left-${cardStyle}`);
-}
+$(document).ready(async () => {
 
-async function _sendDataToBackend(subscription){
-    var Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000
-    });
+    // ============================================= form =============================================
 
-    try {
-        const response = await fetch('/notifications/register', {
+    async function updateSentElements(endpoint) {
+        const response = await fetch('/notifications/getSentElements', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(subscription)
+            body: JSON.stringify({ endpoint: endpoint })
         });
 
         const json = await response.json();
 
-        Toast.fire({
-            icon: json.status,
-            title: json.message,
-            position: 'bottom-left'
-        })
-    } catch (error) {
-        Toast.fire({
-            icon: 'error',
-            title: error.message
-        })
+        if (json.status === 'success') $('select[name="sentElements"]').val(json.data).trigger('change');
     }
-}
 
-async function initServiceWorker() {
-    let swRegistration = await navigator.serviceWorker.register(`${URL}/serviceworker.js`, { scope: '/' });
-    let pushManager = swRegistration.pushManager;
+    async function submitNewSentElements(data){
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
 
-    if (!isPushManagerActive(pushManager)) return;
+        try {
+            const response = await fetch('/notifications/setSentElements', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-    let permissionState = await pushManager.permissionState({userVisibleOnly: true});
-    switch (permissionState) {
-        case 'prompt':
-            break;
-        case 'granted':
-            _editCard(false, 'You are subscribed to notifications!', 'success')
-            break;
-        case 'denied':
+            const json = await response.json();
+
+            Toast.fire({
+                icon: json.status,
+                title: json.message,
+                position: 'bottom-left'
+            })
+        } catch (error) {
+            Toast.fire({
+                icon: 'error',
+                title: error.message
+            })
+        }
+    }
+
+    $('form[id="notifications-form"]').on('submit', async (event) => {
+        event.preventDefault();
+
+        const sentElements = $('select[name="sentElements"] option:selected').map((num, option) => {
+            return $(option).val();
+        }).get();
+
+        await submitNewSentElements({
+            data: {
+                endpoint: pushData.endpoint,
+                sentElements: sentElements
+            }
+        });
+
+    });
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
+
+    // ============================================= Push Notifications =============================================
+
+    function _editCard(showBtn, text, cardStyle, showElements = false) {
+        document.getElementById('subscribe-btn').style.display = showBtn === true ? 'block' : 'none'
+        document.getElementById('text-block').innerHTML = text;
+        document.getElementById('status-card').classList.remove('border-left-primary');
+        if (showElements === false) document.getElementById('status-card').classList.add(`border-left-${cardStyle}`);
+        document.getElementById('elements-select').style.display = showElements === true ? 'block' : 'none';
+        document.getElementById('main-card-header').style.display = showElements === true ? 'block' : 'none';
+        document.getElementById('main-card-footer').style.display = showElements === true ? 'block' : 'none';
+    }
+
+    async function _sendDataToBackend(subscription){
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+        try {
+            const response = await fetch('/notifications/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(subscription)
+            });
+
+            const json = await response.json();
+
+            Toast.fire({
+                icon: json.status,
+                title: json.message,
+                position: 'bottom-left'
+            })
+        } catch (error) {
+            Toast.fire({
+                icon: 'error',
+                title: error.message
+            })
+        }
+    }
+
+    async function initServiceWorker() {
+        let swRegistration = await navigator.serviceWorker.register(`${URL}/serviceworker.js`, { scope: '/' });
+        let pushManager = swRegistration.pushManager;
+
+        if (!isPushManagerActive(pushManager)) return;
+
+        let permissionState = await pushManager.permissionState({userVisibleOnly: true});
+        switch (permissionState) {
+            case 'prompt':
+                break;
+            case 'granted':
+                _editCard(false, 'Select elements to be sent to this device', 'success', true)
+                pushData = await pushManager.getSubscription();
+                await updateSentElements(pushData.endpoint)
+                break;
+            case 'denied':
+                _editCard(false, 'You denied push permission. Please enable it in your browser settings.', 'danger');
+                break;
+        }
+    }
+
+    function isPushManagerActive(pushManager) {
+        if (pushManager) return true;
+
+        if (window.navigator.standalone) _editCard(false, 'For WebPush work you may need to add this website to Home Screen at your iPhone or iPad.', 'warning');
+        else throw new Error('PushManager is not active');
+
+        return false;
+    }
+
+    async function subscribeToPush() {
+
+        const swRegistration = await navigator.serviceWorker.getRegistration();
+        const pushManager = swRegistration.pushManager;
+        if (!isPushManagerActive(pushManager)) return;
+        const subscriptionOptions = {
+            userVisibleOnly: true,
+            applicationServerKey: VAPID_PUBLIC_KEY
+        };
+        try {
+            pushData = await pushManager.subscribe(subscriptionOptions);
+            _editCard(false, 'Select elements to be sent to this device', 'success', true)
+
+            // Send subscription to the server
+            await _sendDataToBackend(pushData);
+            await updateSentElements(pushData.endpoint)
+        } catch (error) {
             _editCard(false, 'You denied push permission. Please enable it in your browser settings.', 'danger');
-            break;
+        }
     }
-}
 
-function isPushManagerActive(pushManager) {
-    if (pushManager) return true;
+    if (navigator.serviceWorker) {
+        initServiceWorker()
+        $('#subscribe-btn').on('click', async () => await subscribeToPush());
+    }
 
-    if (window.navigator.standalone) _editCard(false, 'For WebPush work you may need to add this website to Home Screen at your iPhone or iPad.', 'warning');
-    else throw new Error('PushManager is not active');
+    // ============================================= changes card w/ pagination =============================================
 
-    return false;
-}
-
-async function subscribeToPush() {
-
-    const swRegistration = await navigator.serviceWorker.getRegistration();
-    const pushManager = swRegistration.pushManager;
-    if (!isPushManagerActive(pushManager)) return;
-    const subscriptionOptions = {
-        userVisibleOnly: true,
-        applicationServerKey: VAPID_PUBLIC_KEY
+    const waitForEl = (selector, callback) => {
+        if (jQuery(selector).length) {
+            callback();
+        } else {
+            setTimeout(function() {
+                waitForEl(selector, callback);
+            }, 100);
+        }
     };
-    try {
-        const subscription = await pushManager.subscribe(subscriptionOptions);
-        _editCard(false, 'You are now subscribed to notifications!', 'success')
 
-        // Send subscription to the server
-        await _sendDataToBackend(subscription);
-    } catch (error) {
-        _editCard(false, 'You denied push permission. Please enable it in your browser settings.', 'danger');
+    async function getItems(page, limit) {
+        const response = await fetch(`/notifications/get?dummy=true${page ? '&page='+page : ''}${limit ? '&limit='+limit : ''}`);
+        const data = await response.json();
+        return data;
     }
-}
 
-if (navigator.serviceWorker) {
-    initServiceWorker()
-    $('#subscribe-btn').on('click', async () => await subscribeToPush());
-}
+    const clearFormatting = (str) => str.split('*').join('').split('`').join('');
+    const formatDate = (date) => moment(date).tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format('MM/DD/YYYY hh:mm A');;
 
-// ============================================= notifications pages =============================================
-
-const waitForEl = (selector, callback) => {
-    if (jQuery(selector).length) {
-        callback();
-    } else {
-        setTimeout(function() {
-            waitForEl(selector, callback);
-        }, 100);
-    }
-};
-
-async function getItems(page, limit) {
-    const response = await fetch(`/notifications/get?dummy=true${page ? '&page='+page : ''}${limit ? '&limit='+limit : ''}`);
-    const data = await response.json();
-    return data;
-}
-
-const clearFormatting = (str) => str.split('*').join('').split('`').join('');
-const formatDate = (date) => moment(date).tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format('MM/DD/YYYY hh:mm A');;
-
-const allUrlParams = new URLSearchParams(window.location.search);
-const urlParams = {
-    type: allUrlParams?.get('type'),
-    title: allUrlParams?.get('title'),
-    body: allUrlParams?.get('body'),
-};
-
-$(document).ready(async () => {
+    const allUrlParams = new URLSearchParams(window.location.search);
+    const urlParams = {
+        type: allUrlParams?.get('type'),
+        title: allUrlParams?.get('title'),
+        body: allUrlParams?.get('body'),
+    };
 
     const { data: { totalPages } } = await getItems(1, 10)
 
@@ -168,7 +242,11 @@ $(document).ready(async () => {
             $('#page-content').html(html);
         }
     }
-    $pagination.twbsPagination(defaultOpts)
+
+    if (totalPages !== 0) {
+        $pagination.twbsPagination(defaultOpts)
+        $('.paginationcard').show()
+    }
 
     if (urlParams.title) {
         waitForEl('.card .border-left-warning', () => {
@@ -177,4 +255,6 @@ $(document).ready(async () => {
             }, 1000);
         });
     }
+
+
 })
