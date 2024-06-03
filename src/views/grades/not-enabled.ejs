@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+        <%- include("../_includes/head") %>
+
+        <title><%= site.name %> - Grades Overview</title>
+        <meta property="og:title" content="<%= site.name %> - Grades Overview">
+
+        <meta name="description" content="<%= site.desc %>">
+        <meta property="og:description" content="<%= site.desc %>">
+
+        <meta property="og:url" content="<%= site.url %>/grades/overview">
+    </head>
+
+    <body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <%- include("../_includes/sidebar") %>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include("../_includes/topbar") %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Grades Overview</h1>
+
+                    <div class="row">
+
+                        <div class="col-xl-7 col-lg-9 col-md-12">
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <p class="mb-0">Gradebook viewing has been disabled by the school.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include("../_includes/footer") %>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <%- include("../_includes/doc-end") %>
+
+    </body>
+
+</html>

@@ -5,14 +5,22 @@ import { schoolStudentInfo } from "../../../utils/helpers/renweb/requests/genera
 
 export default async (req, res) => {
 
-  const data = await getAllClassGradesInfo(req.session.user, req.query.term);
-  const ssInfo = await schoolStudentInfo(req.session.user)
+  try {
+    const data = await getAllClassGradesInfo(req.session.user, req.query.term);
+    const ssInfo = await schoolStudentInfo(req.session.user)
 
-  return res.render('grades/overview.ejs', {
-    site: client,
-    user: req.session.user ? await User.findOne({ _id: req.session.user }).exec() : null,
-    data: JSON.stringify(data),
-    terms: ssInfo.studentSchools[0].pwTerms,
-    termQuery: req.query.term ?? ssInfo.studentSchools[0].pwDefaultTermId,
-  });
+    return res.render('grades/overview.ejs', {
+      site: client,
+      user: req.session.user ? await User.findOne({ _id: req.session.user }).exec() : null,
+      data: JSON.stringify(data),
+      terms: ssInfo.studentSchools[0].pwTerms,
+      termQuery: req.query.term ?? ssInfo.studentSchools[0].pwDefaultTermId,
+    });
+  } catch (e) {
+    return res.render('grades/not-enabled.ejs', {
+      site: client,
+      user: req.session.user ? await User.findOne({ _id: req.session.user }).exec() : null
+    });
+  }
+
 };
