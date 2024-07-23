@@ -24,6 +24,10 @@ export default {
   tags: [{
       "name": "Admin Only",
       "description": "Routes that require admin access"
+    },
+    {
+      "name": "General",
+      "description": "Routes that only need an api key"
   }],
   apis: [
     "src/utils/helpers/*.js",

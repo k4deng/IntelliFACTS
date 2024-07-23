@@ -2,10 +2,8 @@ import { Router } from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { serve, setup } from 'swagger-ui-express';
 import { swaggerConfig } from '../../config/index.js';
-import { dashboard, dashboardPost, updater } from '../controllers/api/index.js';
-import checkAuth from '../middlewares/auth/check-auth.js';
-import checkApiAuth from "../middlewares/auth/check-api-auth.js";
-import { checkAdmin, checkApiAdmin } from "../middlewares/index.js";
+import { dashboard, dashboardPost, factsClasses, updater } from '../controllers/api/index.js';
+import { checkApiAdmin, checkApiAuth, checkAuth } from "../middlewares/index.js";
 
 const router = Router();
 
@@ -24,7 +22,7 @@ router.get('/updater', checkApiAuth, checkApiAdmin, updater); //admin only
 //router.get('/notifications', checkApiAuth, checkApiAdmin, test); //admin only
 //router.get('/users', checkApiAuth, checkApiAdmin, test); //admin only
 //router.get('/me', checkApiAuth, test);
-//router.get('/facts/grades', checkApiAuth, test);
+router.get('/facts/classes', checkApiAuth, factsClasses);
 //router.get('/facts/homework', checkApiAuth, test);
 
 router.all('*', (req, res) => {

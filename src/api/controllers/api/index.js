@@ -4,3 +4,4 @@ export { default as dashboardPost } from './dashboard-post.js'
 
 //rest of routes
 export { default as updater } from './updater.js'
+export { default as factsClasses } from './facts-classes.js'
