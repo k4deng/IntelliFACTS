@@ -78,7 +78,7 @@ export async function getInfoChanges(userId){
             }
 
             //grade changed
-            if (checkedElements.includes('Grade Changed') && subjectData.termGrade.average.__old) {
+            if (checkedElements.includes('Grade Changed') && (subjectData.termGrade?.average ? '__old' in subjectData.termGrade.average : false)) {
                 const { letter, average} = subjectData.termGrade;
                 let message = `\`${average.__old} (${letter.__old ? letter.__old : letter})\` ⇒ \`${average.__new} (${letter.__old ? letter.__new : letter})\``;
                 if (letter.__old === "N/A") message = `\`${letter.__old}\` ⇒ \`${average.__new} (${letter.__old ? letter.__new : letter})\``;
