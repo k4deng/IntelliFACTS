@@ -36,7 +36,7 @@ function _makeClassInfoRes(classData) {
             lastName: classData.staffLastName
         },
         termGrade: {
-            average: classData.gradebookAverage == "" ? "" : classData.gradebookAverage,
+            average: classData.gradebookAverage == "" ? "N/A" : classData.gradebookAverage,
             letter: classData.gradebookLetter == "" ? "N/A" : classData.gradebookLetter,
             style: termGradeStyle
         },
