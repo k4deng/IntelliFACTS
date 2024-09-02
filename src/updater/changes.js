@@ -196,8 +196,11 @@ export async function getDataChanges(userId){
                     //assignment added
                     if (checkedElements.includes('Assignment Added (Graded)') && assignment.endsWith("__added")) {
                         let desc = `Grade: \`${assignmentData.grade}\``;
-                        if (assignmentData.points.received != assignmentData.grade)
-                            desc += ` (\`${assignmentData.points.received}\`/\`${assignmentData.points.max}\`pts)`;
+                        if (assignmentData.points.received != assignmentData.grade) {
+                            desc += ` (\`${assignmentData.points.received}\`/\`${assignmentData.points.max}\`pts`;
+                            if (assignmentData.points.bonus) desc += ` +${assignmentData.points.bonus} bonus`
+                            desc += ")"
+                        }
                         classResult.push({
                             element: "Assignment Added (Graded)",
                             title: `\`${assignment.replace("__added", "")}\` (\`${cat}\`) Added:`,
@@ -208,8 +211,11 @@ export async function getDataChanges(userId){
                     //assignment deleted
                     if (checkedElements.includes('Assignment Removed') && assignment.endsWith("__deleted")) {
                         let desc = `Was: \`${assignmentData.grade}\``;
-                        if (assignmentData.points.received != assignmentData.grade)
-                            desc += ` (\`${assignmentData.points.received}\`/\`${assignmentData.points.max}\`pts)`;
+                        if (assignmentData.points.received != assignmentData.grade) {
+                            desc += ` (\`${assignmentData.points.received}\`/\`${assignmentData.points.max}\`pts`;
+                            if (assignmentData.points.bonus) desc += ` +${assignmentData.points.bonus} bonus`
+                            desc += ")"
+                        }
                         classResult.push({
                             element: "Assignment Removed",
                             title: `\`${assignment.replace("__deleted", "")}\` (\`${cat}\`) Removed:`,
@@ -221,12 +227,22 @@ export async function getDataChanges(userId){
                     if (checkedElements.includes('Assignment Grade Changed') && (assignmentData.grade?.__old && assignmentData.grade?.__new)) {
                         const { grade, points } = assignmentData;
                         const oldPoints = oldData[subject][cat].assignments[assignment].points;
+                        const newPoints = newData[subject][cat].assignments[assignment].points;
+
                         let message = `\`${grade.__old}`;
-                        if (points.received.__old != grade.__old) message += ` (${points.received.__old}/${points.max?.__old ? points.max.__old : oldPoints.max})\``;
-                        else message += "`";
-                        message += ` ⇒ \`${grade.__new}`;
-                        if (points.received.__new != grade.__new) message += ` (${points.received.__new}/${points.max?.__new ? points.max.__new : oldPoints.max})\``;
-                        else message += "`";
+                        if (oldPoints.received != grade.__old) {
+                            message += ` (${oldPoints.received}/${points.max?.__old ? points.max.__old : oldPoints.max}`
+                            if (oldPoints.bonus) message += ` +${oldPoints.bonus} bonus`
+                            message += ")"
+                        }
+                        message += `\` ⇒ \`${grade.__new}`;
+                        if (newPoints.received != grade.__new) {
+                            message += ` (${newPoints.received}/${points.max?.__new ? points.max.__new : oldPoints.max}`
+                            if (newPoints.bonus) message += ` +${newPoints.bonus} bonus`
+                            message += ")"
+                        }
+                        message += "`";
+
                         classResult.push({
                             element: "Assignment Grade Changed",
                             title: `\`${assignment}\` (\`${cat}\`) Updated:`,
@@ -270,6 +286,7 @@ export async function getDataChanges(userId){
         }
 
     } catch (error) {
+        console.log(error)
         errorHelper('updater.changes.getDataChangesError', { session: { user: userId }}, error.message)
         throw error;
     }
