@@ -1,4 +1,4 @@
-import { Setting, UpdaterData } from "../models/index.js";
+import { Change, Setting, UpdaterData } from "../models/index.js";
 import { getAllClassGradesData, getAllClassGradesInfo } from "../utils/helpers/renweb/requests/grades.js";
 import equal from "fast-deep-equal";
 import { diff as jsonDiff } from "json-diff";
@@ -122,7 +122,7 @@ export async function getDataChanges(userId){
             data: result
         }
 
-        const { info, data: oldData } = await UpdaterData.findOne({ userId: userId}).exec();
+        let { info, data: oldData } = await UpdaterData.findOne({ userId: userId}).exec();
         const newData = await getAllClassGradesData(userId);
 
         //check if there are actually changes
@@ -130,6 +130,11 @@ export async function getDataChanges(userId){
             type: "success",
             message: "There were no changes",
             data: result
+        }
+
+        //info not generated, do that first
+        if (Object.keys(info).length === 0) {
+            info = await getAllClassGradesInfo(userId);
         }
 
         //generate diff
@@ -149,6 +154,9 @@ export async function getDataChanges(userId){
 
             //class was added/removed (ignore as data is sent in info update)
             if (subject.endsWith("__deleted") || subject.endsWith("__added")) continue;
+
+            //class has no categories/is not set up, ignore
+            if (Object.keys(subjectData).length === 0) continue;
 
             let classResult = [];
 
