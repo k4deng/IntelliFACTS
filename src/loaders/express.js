@@ -21,7 +21,7 @@ export default (app) => {
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        "img-src": ["'self'", "renweb1.renweb.com", "web.archive.org"],
+        "img-src": ["'self'", "*.client.factsmgt.com", "web.archive.org"],
       },
     },
   }));
