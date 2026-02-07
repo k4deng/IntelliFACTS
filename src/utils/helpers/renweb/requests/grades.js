@@ -62,7 +62,7 @@ function _makeClassDataRes(classData) {
 
             data[category.title]["assignments"][assignment.title] = {
                 title: assignment.title,
-                notes: assignment.notes,
+                notes: assignment.notes ?? null,
                 grade: assignment.grade,
                 date: {
                     due: assignment.dateDue,
